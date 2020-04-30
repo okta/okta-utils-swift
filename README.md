@@ -263,9 +263,9 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
 ## Usage
 ```
 let sdk = OktaLoggingSDK()
-        let oktaLogger = OktaLogger(loggerIdentfier: "OktaLogger", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), sdk: sdk)
-        let firebaseLogger1 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger1", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), logger: oktaLogger, sdk: sdk)
-        let firebaseLogger2 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger2", config: OktaLoggerConfiguration(logLevel: .error, outputDestination: .all), sdk: sdk)
-        firebaseLogger1.addLogger(logger: firebaseLogger2)
+let oktaLogger = OktaLogger(loggerIdentfier: "OktaLogger", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), sdk: sdk)
+let firebaseLogger1 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger1", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), logger: oktaLogger, sdk: sdk)
+let firebaseLogger2 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger2", config: OktaLoggerConfiguration(logLevel: .error, outputDestination: .all), sdk: sdk)
+firebaseLogger1.addLogger(logger: firebaseLogger2)
 ```
 firebaseLogger1 -> oktaLogger -> firebaseLogger2

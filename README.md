@@ -54,3 +54,142 @@ public class OktaLogOutputDestination: OptionSet {
 }
 
 ```
+### OktaLoggerConfiguration
+```
+public class OktaLoggerConfiguration {
+    public internal(set) var logLevel: OktaLogLevel
+    public internal(set) var outputDestination: OktaLogOutputDestination
+    
+    public init(logLevel: OktaLogLevel = .all, outputDestination: OktaLogOutputDestination = .all) {
+        self.logLevel = logLevel
+        self.outputDestination = outputDestination
+    }
+    
+    public init(logger: OktaLoggingProtocol) {
+        self.logLevel = logger.config.logLevel
+        self.outputDestination = logger.config.outputDestination
+    }
+}
+```
+### OktaLoggingSDK
+Set up the logging SDK in the AppDelegate
+```
+class OktaLoggingSDK {
+    init(properties: [AnyHashable: Any]? = nil) {
+    }
+    
+    func addProperties(properties: [AnyHashable: Any]) {
+    }
+    
+    func removeProperty(for key: AnyHashable) {
+    }
+}
+```
+### OktaLoggingProtocol
+```
+public protocol OktaLoggingProtocol {
+    var config: OktaLoggerConfiguration {get}
+    var loggerIdentfier: String {get}
+    
+    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
+    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
+    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
+    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
+}
+```
+### OktaLoggingOperationProtocol
+```
+protocol OktaLoggingOperationProtocol {
+    func addLogger(logger: OktaLoggingProtocol) -> Bool
+    func removeLogger(logger: OktaLoggingProtocol) -> Bool
+}
+```
+### OktaLogger
+Log to console/IDE
+```
+class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
+    let config: OktaLoggerConfiguration
+    let decoratedLogger: OktaLoggingProtocol?
+    let loggerIdentfier: String
+    
+    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil) {
+        self.loggerIdentfier = loggerIdentfier
+        self.config = config
+        self.decoratedLogger = logger
+    }
+    
+    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    }
+    
+    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    }
+    
+    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    }
+    
+    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+        if config.logLevel.contains(.error) {
+            if loggerIdentfier == self.loggerIdentfier {
+               if config.outputDestination.contains(.ideOnly) {
+                   //Log to ide
+               }
+               if config.outputDestination.contains(.console) {
+                   //Log to console
+               }
+            }
+            decoratedLogger?.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
+        }
+    }
+    
+    //Add logger to the end of the linkedlist
+    @discardableResult
+    func addLogger(logger: OktaLoggingProtocol) -> Bool {
+        //If loggerIdentfier, type of the logger, configuration are same, should return false
+        //Else return true
+        return true
+    }
+    
+    //remove logger from the linkedlist
+    @discardableResult
+    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
+        //If can't find it from the linkedlist, return false
+        //Else return true
+        return true
+    }
+}
+```
+### OktaFirebaseLogger
+```
+class OktaFirebaseLogger: OktaLoggingProtocol {
+    let decoratedLogger: OktaLoggingProtocol?
+    let config: OktaLoggerConfiguration
+    let loggerIdentfier: String
+
+    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil) {
+        self.loggerIdentfier = loggerIdentfier
+        self.config = config
+        self.decoratedLogger = logger
+    }
+
+    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+        
+    }
+    
+    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+        
+    }
+    
+    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+        
+    }
+    
+    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+        if config.logLevel.contains(.error) {
+            if loggerIdentfier == self.loggerIdentfier {
+               //Log to Firebase
+            }
+            decoratedLogger?.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
+        }
+    }
+}
+```

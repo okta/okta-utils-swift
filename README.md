@@ -20,3 +20,37 @@ PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"va
 ```
 Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
 ```
+## Interface
+### OktaLogLevel
+```
+public class OktaLogLevel: OptionSet {
+    public let rawValue: Int
+
+    required public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let off = OktaLogLevel(rawValue: 0)
+    public static let debug = OktaLogLevel(rawValue: 1 << 3)
+    public static let info = OktaLogLevel(rawValue: 1 << 2)
+    public static let warning = OktaLogLevel(rawValue: 1 << 1)
+    public static let error = OktaLogLevel(rawValue: 1 << 0)
+    public static let all: OktaLogLevel = [.debug, .info, .warning, .error]
+}
+```
+### OktaLogOutputDestination
+```
+public class OktaLogOutputDestination: OptionSet {
+    public let rawValue: Int
+
+    required public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    public static let none = OktaLogOutputDestination(rawValue: 0)
+    public static let ideOnly = OktaLogOutputDestination(rawValue: 1 << 0)
+    public static let console = OktaLogOutputDestination(rawValue: 1 << 1)
+    public static let all: OktaLogOutputDestination = [.ideOnly, .console]
+}
+
+```

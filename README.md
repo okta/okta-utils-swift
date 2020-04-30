@@ -20,6 +20,8 @@ PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"va
 ```
 Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
 ```
+## UML diagram
+
 ## Interface
 ### OktaLogLevel
 ```
@@ -75,6 +77,7 @@ public class OktaLoggerConfiguration {
 Set up the logging SDK in the AppDelegate
 ```
 class OktaLoggingSDK {
+    //Default properties, will be used for all logs
     init(properties: [AnyHashable: Any]? = nil) {
     }
     
@@ -111,11 +114,13 @@ class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     let config: OktaLoggerConfiguration
     let decoratedLogger: OktaLoggingProtocol?
     let loggerIdentfier: String
+    let sdk: OktaLoggingSDK
     
-    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil) {
+    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil, sdk: OktaLoggingSDK) {
         self.loggerIdentfier = loggerIdentfier
         self.config = config
         self.decoratedLogger = logger
+        self.sdk = sdk
     }
     
     func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
@@ -164,11 +169,13 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
     let decoratedLogger: OktaLoggingProtocol?
     let config: OktaLoggerConfiguration
     let loggerIdentfier: String
+    let sdk: OktaLoggingSDK
 
-    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil) {
+    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil, sdk: OktaLoggingSDK) {
         self.loggerIdentfier = loggerIdentfier
         self.config = config
         self.decoratedLogger = logger
+        self.sdk = sdk
     }
 
     func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {

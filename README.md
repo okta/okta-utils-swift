@@ -78,6 +78,8 @@ Set up the logging SDK in the AppDelegate
 ```
 class OktaLoggingSDK {
     //Default properties, will be used for all logs
+    var properties: [AnyHashable: Any]?
+    
     init(properties: [AnyHashable: Any]? = nil) {
     }
     
@@ -92,7 +94,7 @@ class OktaLoggingSDK {
 ```
 public protocol OktaLoggingProtocol {
     var config: OktaLoggerConfiguration {get}
-    var loggerIdentfier: String {get}
+    var decoratedLogger: OktaLoggingProtocol? {get}
     
     func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
     func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
@@ -150,15 +152,17 @@ class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     @discardableResult
     func addLogger(logger: OktaLoggingProtocol) -> Bool {
         //If loggerIdentfier, type of the logger, configuration are same, should return false
-        //Else return true
+        //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return true
+        //Else pass to decoratedLogger
         return true
     }
     
     //remove logger from the linkedlist
     @discardableResult
     func removeLogger(logger: OktaLoggingProtocol) -> Bool {
-        //If can't find it from the linkedlist, return false
-        //Else return true
+        //If self.decoratedLogger is nil, return false
+        //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
+        //Else return false
         return true
     }
 }

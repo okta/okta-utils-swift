@@ -113,8 +113,8 @@ protocol OktaLoggingOperationProtocol {
 Log to console/IDE
 ```
 class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
-    let config: OktaLoggerConfiguration
-    let decoratedLogger: OktaLoggingProtocol?
+    public let config: OktaLoggerConfiguration
+    public let decoratedLogger: OktaLoggingProtocol?
     let loggerIdentfier: String
     let sdk: OktaLoggingSDK
     
@@ -125,16 +125,16 @@ class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
         self.sdk = sdk
     }
     
-    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    public func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
     }
     
-    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    public func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
     }
     
-    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    public func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
     }
     
-    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    public func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
         if config.logLevel.contains(.error) {
             if loggerIdentfier == self.loggerIdentfier {
                if config.outputDestination.contains(.ideOnly) {

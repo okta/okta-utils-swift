@@ -207,14 +207,16 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
 ### OktaMutableLogger
 ```
 class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
-    var loggerIdentfier: String
+    let loggerIdentfier: String
     let loggerList: [OktaLoggingProtocol]
     let config: OktaLoggerConfiguration
+    let decoratedLogger: OktaLoggingProtocol?
 
     init(loggerList: [OktaLoggingProtocol]) {
         self.loggerList = loggerList
         self.config = OktaLoggerConfiguration()
         self.loggerIdentfier = ""
+        self.decoratedLogger = nil
     }
     
     func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {

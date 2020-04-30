@@ -183,15 +183,12 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
     }
 
     func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
-        
     }
     
     func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
-        
     }
     
     func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
-        
     }
     
     func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
@@ -201,6 +198,24 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
             }
             decoratedLogger?.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
         }
+    }
+    
+    //Add logger to the end of the linkedlist
+    @discardableResult
+    func addLogger(logger: OktaLoggingProtocol) -> Bool {
+        //If loggerIdentfier, type of the logger, configuration are same, should return false
+        //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return true
+        //Else pass to decoratedLogger
+        return true
+    }
+    
+    //remove logger from the linkedlist
+    @discardableResult
+    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
+        //If self.decoratedLogger is nil, return false
+        //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
+        //Else return false
+        return true
     }
 }
 ```
@@ -245,3 +260,12 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     }
 }
 ```
+## Usage
+```
+let sdk = OktaLoggingSDK()
+        let oktaLogger = OktaLogger(loggerIdentfier: "OktaLogger", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), sdk: sdk)
+        let firebaseLogger1 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger1", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), logger: oktaLogger, sdk: sdk)
+        let firebaseLogger2 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger2", config: OktaLoggerConfiguration(logLevel: .error, outputDestination: .all), sdk: sdk)
+        firebaseLogger1.addLogger(logger: firebaseLogger2)
+```
+firebaseLogger1 -> oktaLogger -> firebaseLogger2

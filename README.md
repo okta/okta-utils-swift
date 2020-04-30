@@ -11,3 +11,12 @@ We want to build a logging SDK and have the ability to log event to IDE, Pendo, 
 - Some loggers might have their own unique identifier and we should have a way to pass that identifier to either User-agent or other loggers 
 - Need a way to dynamically change the log level 
 - Need a way to dynamically add a new logger while the app is running. 
+## API example
+### Pendo
+```
+PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"val2"])
+```
+### Firebase
+```
+Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
+```

@@ -25,81 +25,91 @@ Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_t
 ## Interface
 ### OktaLogLevel
 ```
-public class OktaLogLevel: OptionSet {
+@objc
+public class OktaLogLevel: NSObject, OptionSet {
     public let rawValue: Int
 
     required public init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
-    public static let off = OktaLogLevel(rawValue: 0)
-    public static let debug = OktaLogLevel(rawValue: 1 << 3)
-    public static let info = OktaLogLevel(rawValue: 1 << 2)
-    public static let warning = OktaLogLevel(rawValue: 1 << 1)
-    public static let error = OktaLogLevel(rawValue: 1 << 0)
-    public static let all: OktaLogLevel = [.debug, .info, .warning, .error]
+    @objc public static let off = OktaLogLevel(rawValue: 0)
+    @objc public static let debug = OktaLogLevel(rawValue: 1 << 0)
+    @objc public static let info = OktaLogLevel(rawValue: 1 << 1)
+    @objc public static let warning = OktaLogLevel(rawValue: 1 << 2)
+    @objc public static let uiEvent = OktaLogLevel(rawValue: 1 << 3)
+    @objc public static let error = OktaLogLevel(rawValue: 1 << 4)
+    @objc public static let all: OktaLogLevel = [.debug, .info, .warning, .uiEvent, .error]
+
+    static func == (lhs: OktaLogLevel, rhs: OktaLogLevel) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 }
 ```
 ### OktaLogOutputDestination
 ```
-public class OktaLogOutputDestination: OptionSet {
+@objc
+public class OktaLogOutputDestination: NSObject, OptionSet {
     public let rawValue: Int
 
     required public init(rawValue: Int) {
         self.rawValue = rawValue
     }
 
-    public static let none = OktaLogOutputDestination(rawValue: 0)
-    public static let ideOnly = OktaLogOutputDestination(rawValue: 1 << 0)
-    public static let console = OktaLogOutputDestination(rawValue: 1 << 1)
-    public static let all: OktaLogOutputDestination = [.ideOnly, .console]
+    @objc public static let none = OktaLogOutputDestination(rawValue: 0)
+    @objc public static let ideOnly = OktaLogOutputDestination(rawValue: 1 << 0)
+    @objc public static let console = OktaLogOutputDestination(rawValue: 1 << 1)
+    @objc public static let all: OktaLogOutputDestination = [.ideOnly, .console]
 }
-
 ```
 ### OktaLoggerConfiguration
 ```
-public class OktaLoggerConfiguration {
-    public internal(set) var logLevel: OktaLogLevel
-    public internal(set) var outputDestination: OktaLogOutputDestination
+@objc
+public class OktaLoggerConfiguration: NSObject {
+    public let logLevel: OktaLogLevel
+    public let outputDestination: OktaLogOutputDestination
     
-    public init(logLevel: OktaLogLevel = .all, outputDestination: OktaLogOutputDestination = .all) {
+    @objc public init(logLevel: OktaLogLevel = .all, outputDestination: OktaLogOutputDestination = .all) {
         self.logLevel = logLevel
         self.outputDestination = outputDestination
     }
     
-    public init(logger: OktaLoggingProtocol) {
+    @objc public init(logger: OktaLoggingProtocol) {
         self.logLevel = logger.config.logLevel
         self.outputDestination = logger.config.outputDestination
     }
 }
 ```
-### OktaLoggingSDK
-Set up the logging SDK in the AppDelegate
+### OktaFirebaseLoggerConfiguration
 ```
-class OktaLoggingSDK {
-    //Default properties, will be used for all logs
-    var properties: [AnyHashable: Any]?
-    
-    init(properties: [AnyHashable: Any]? = nil) {
+@objc
+public class OktaFirebaseLoggerConfiguration: OktaLoggerConfiguration {
+    @objc override public init(logLevel: OktaLogLevel = .all, outputDestination: OktaLogOutputDestination = .all) {
+        super.init(logLevel: logLevel, outputDestination: outputDestination)
     }
     
-    func addProperties(properties: [AnyHashable: Any]) {
-    }
-    
-    func removeProperty(for key: AnyHashable) {
+    @objc override public init(logger: OktaLoggingProtocol) {
+        super.init(logger: logger)
     }
 }
 ```
 ### OktaLoggingProtocol
 ```
+@objc
 public protocol OktaLoggingProtocol {
-    var config: OktaLoggerConfiguration {get}
-    var decoratedLogger: OktaLoggingProtocol? {get}
+    @objc var config: OktaLoggerConfiguration {get}
+    @objc var decoratedLogger: OktaLoggingProtocol? {get}
+    @objc var sharedProperties: [AnyHashable: Any]? {get}
+    @objc var queue: DispatchQueue {get}
     
-    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
-    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
-    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
-    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?)
+    @objc func addDefaultProperties(properties: [AnyHashable: Any])
+    @objc func removeDefaultProperties(for key: AnyHashable)
+    
+    @objc func debug(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?)
+    @objc func info(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?)
+    @objc func warning(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?)
+    @objc func uiEvent(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?)
+    @objc func error(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?)
 }
 ```
 ### OktaLoggingOperationProtocol
@@ -112,160 +122,152 @@ protocol OktaLoggingOperationProtocol {
 ### OktaLogger
 Log to console/IDE
 ```
-class OktaLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
+@objc
+public class OktaLogger: NSObject, OktaLoggingProtocol, OktaLoggingOperationProtocol {
     public let config: OktaLoggerConfiguration
+    public let queue: DispatchQueue
+    private let loggerIdentfier: String?
     public let decoratedLogger: OktaLoggingProtocol?
-    let loggerIdentfier: String
-    let sdk: OktaLoggingSDK
+    private(set) public var sharedProperties: [AnyHashable: Any]?
     
-    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil, sdk: OktaLoggingSDK) {
-        self.loggerIdentfier = loggerIdentfier
+    @objc init(config: OktaLoggerConfiguration, queue: DispatchQueue, loggerIdentfier: String? = nil, logger: OktaLoggingProtocol? = nil, sharedProperties: [AnyHashable: Any]? = nil) {
         self.config = config
+        self.queue = queue
+        self.loggerIdentfier = loggerIdentfier
         self.decoratedLogger = logger
-        self.sdk = sdk
+        self.sharedProperties = sharedProperties
     }
     
-    public func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func debug(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    public func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func info(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    public func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func warning(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    public func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
-        if config.logLevel.contains(.error) {
-            if loggerIdentfier == self.loggerIdentfier {
-               if config.outputDestination.contains(.ideOnly) {
-                   //Log to ide
-               }
-               if config.outputDestination.contains(.console) {
-                   //Log to console
-               }
+    @objc public func uiEvent(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
+    }
+    
+    @objc public func error(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
+        queue.async {
+            if self.config.logLevel.contains(.error) {
+                if loggerIdentfier == nil || loggerIdentfier == self.loggerIdentfier {
+                    if self.config.outputDestination.contains(.ideOnly) {
+                       //Log to ide
+                   }
+                    if self.config.outputDestination.contains(.console) {
+                       //Log to console
+                   }
+                }
+                self.decoratedLogger?.error(loggerIdentfier: loggerIdentfier, eventName: eventName, file: file, line: line, column: column, funcName: funcName, sharedProperties: sharedProperties, properties: properties)
             }
-            decoratedLogger?.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
         }
     }
     
     //Add logger to the end of the linkedlist
-    @discardableResult
-    func addLogger(logger: OktaLoggingProtocol) -> Bool {
-        //If loggerIdentfier, type of the logger, configuration are same, should return false
-        //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return true
-        //Else pass to decoratedLogger
-        return true
+    @objc public func addLogger(logger: OktaLoggingProtocol, completion: (OktaLoggingProtocol?) -> Void) {
+        queue.async(flags: .barrier) {
+            //If loggerIdentfier, type of the logger, configuration are same, should return nil
+            //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return logger
+            //Else pass to decoratedLogger
+        }
     }
     
     //remove logger from the linkedlist
-    @discardableResult
-    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
-        //If self.decoratedLogger is nil, return false
-        //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
-        //Else return false
-        return true
+    @objc public func removeLogger(logger: OktaLoggingProtocol, completion: (Bool) -> Void) {
+        queue.async(flags: .barrier) {
+            //If self.decoratedLogger is nil, return false
+            //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
+            //Else return false
+        }
+    }
+    
+    //Default properties would be used across all functions within the current logger object
+    @objc public func addDefaultProperties(properties: [AnyHashable: Any]) {
+        
+    }
+    
+    @objc public func removeDefaultProperties(for key: AnyHashable) {
+        
     }
 }
 ```
 ### OktaFirebaseLogger
 ```
-class OktaFirebaseLogger: OktaLoggingProtocol {
-    let decoratedLogger: OktaLoggingProtocol?
-    let config: OktaLoggerConfiguration
-    let loggerIdentfier: String
-    let sdk: OktaLoggingSDK
+class OktaFirebaseLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
+    @objc public let config: OktaLoggerConfiguration
+    public let queue: DispatchQueue
+    private let loggerIdentfier: String?
+    @objc public let decoratedLogger: OktaLoggingProtocol?
+    @objc private(set) public var sharedProperties: [AnyHashable: Any]?
 
-    init(loggerIdentfier: String, config: OktaLoggerConfiguration, logger: OktaLoggingProtocol? = nil, sdk: OktaLoggingSDK) {
-        self.loggerIdentfier = loggerIdentfier
+    @objc init(config: OktaLoggerFirebaseConfiguration, queue: DispatchQueue, loggerIdentfier: String? = nil, logger: OktaLoggingProtocol? = nil, sharedProperties: [AnyHashable: Any]? = nil) {
         self.config = config
+        self.queue = queue
+        self.loggerIdentfier = loggerIdentfier
         self.decoratedLogger = logger
-        self.sdk = sdk
+        self.sharedProperties = sharedProperties
     }
 
-    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func debug(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func info(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func warning(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
     }
     
-    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable: Any]?) {
+    @objc public func uiEvent(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
+    }
+    
+    @objc public func error(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, sharedProperties: [AnyHashable: Any]?, properties: [AnyHashable: Any]?) {
         if config.logLevel.contains(.error) {
-            if loggerIdentfier == self.loggerIdentfier {
+            if loggerIdentfier == nil || loggerIdentfier == self.loggerIdentfier {
                //Log to Firebase
             }
-            decoratedLogger?.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
+            decoratedLogger?.error(loggerIdentfier: loggerIdentfier, eventName: eventName, file: file, line: line, column: column, funcName: funcName, sharedProperties: sharedProperties, properties: properties)
         }
     }
     
     //Add logger to the end of the linkedlist
-    @discardableResult
-    func addLogger(logger: OktaLoggingProtocol) -> Bool {
-        //If loggerIdentfier, type of the logger, configuration are same, should return false
-        //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return true
-        //Else pass to decoratedLogger
-        return true
+    @objc public func addLogger(logger: OktaLoggingProtocol, completion: (OktaLoggingProtocol?) -> Void) {
+        queue.async(flags: .barrier) {
+            //If loggerIdentfier, type of the logger, configuration are same, should return nil
+            //If self.decoratedLogger is nil, set logger to self.decoratedLogger, return logger
+            //Else pass to decoratedLogger
+        }
     }
-    
+   
     //remove logger from the linkedlist
-    @discardableResult
-    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
-        //If self.decoratedLogger is nil, return false
-        //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
-        //Else return false
-        return true
-    }
-}
-```
-### OktaMutableLogger
-```
-class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
-    let loggerIdentfier: String
-    let loggerList: [OktaLoggingProtocol]
-    let config: OktaLoggerConfiguration
-    let decoratedLogger: OktaLoggingProtocol?
-
-    init(loggerList: [OktaLoggingProtocol]) {
-        self.loggerList = loggerList
-        self.config = OktaLoggerConfiguration()
-        self.loggerIdentfier = ""
-        self.decoratedLogger = nil
-    }
-    
-    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
-    }
-    
-    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
-    }
-    
-    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
-    }
-    
-    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
-        for logger in loggerList {
-            logger.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
+    @objc public func removeLogger(logger: OktaLoggingProtocol, completion: (Bool) -> Void) {
+        queue.async(flags: .barrier) {
+            //If self.decoratedLogger is nil, return false
+            //If self.decoratedLogger equals to logger, self.decoratedLogger = self.decoratedLogger.decoratedLogger, return true
+            //Else return false
         }
     }
     
-    func addLogger(logger: OktaLoggingProtocol) -> Bool {
-        //Add logger to the list
-        return true
+    @objc public func addDefaultProperties(properties: [AnyHashable: Any]) {
+        
     }
     
-    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
-        //Remove logger from the list
-        return true
+    @objc public func removeDefaultProperties(for key: AnyHashable) {
+        
     }
 }
 ```
+
 ## Usage
 ```
-let sdk = OktaLoggingSDK()
-let oktaLogger = OktaLogger(loggerIdentfier: "OktaLogger", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), sdk: sdk)
-let firebaseLogger1 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger1", config: OktaLoggerConfiguration(logLevel: .all, outputDestination: .all), logger: oktaLogger, sdk: sdk)
-let firebaseLogger2 = OktaFirebaseLogger(loggerIdentfier: "FireBaseLogger2", config: OktaLoggerConfiguration(logLevel: .error, outputDestination: .all), sdk: sdk)
-firebaseLogger1.addLogger(logger: firebaseLogger2)
+let queue = DispatchQueue(label: "com.okta.comcurrent", attributes: .concurrent)
+let config = OktaLoggerConfiguration(logLevel: .all, outputDestination: .all)
+let oktaLogger = OktaLogger(config: config, queue: queue)
+let firebaseConfig = OktaFirebaseLoggerConfiguration(logLevel: .all, outputDestination: .all)
+let firebaseLogger1 = OktaFirebaseLogger(config: firebaseConfig, queue: queue, loggerIdentfier: nil, logger: oktaLogger, sharedProperties: nil)
+let firebaseLogger2 = OktaFirebaseLogger(config: firebaseConfig, queue: queue)
+firebaseLogger1.addLogger(logger: firebaseLogger2) { (logger) in}
 ```
 firebaseLogger1 -> oktaLogger -> firebaseLogger2

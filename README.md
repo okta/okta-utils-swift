@@ -21,7 +21,7 @@ PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"va
 Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
 ```
 ## UML diagram
-![Okta Logging Framework (4)](https://user-images.githubusercontent.com/48165682/81422537-ef12b280-9107-11ea-87cb-ba833aebc655.png)
+![Okta Logging Framework (5)](https://user-images.githubusercontent.com/48165682/81440618-36f40280-9125-11ea-906d-72cd6c6446d1.png)
 ## Interface
 ### OktaLogLevel
 ```

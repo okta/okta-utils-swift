@@ -259,7 +259,47 @@ class OktaFirebaseLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     }
 }
 ```
+### OktaMutableLogger
+```
+class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
+    let loggerIdentfier: String
+    let loggerList: [OktaLoggingProtocol]
+    let config: OktaLoggerConfiguration
+    let decoratedLogger: OktaLoggingProtocol?
 
+    init(loggerList: [OktaLoggingProtocol]) {
+        self.loggerList = loggerList
+        self.config = OktaLoggerConfiguration()
+        self.loggerIdentfier = ""
+        self.decoratedLogger = nil
+    }
+    
+    func debug(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
+    }
+    
+    func info(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
+    }
+    
+    func warning(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
+    }
+    
+    func error(eventName: String, loggerIdentfier: String, file: String?, line: Int?, column: Int?, funcName: String?, properties: [AnyHashable : Any]?) {
+        for logger in loggerList {
+            logger.error(eventName: eventName, loggerIdentfier: loggerIdentfier, file: file, line: line, column: column, funcName: funcName, properties: properties)
+        }
+    }
+    
+    func addLogger(logger: OktaLoggingProtocol) -> Bool {
+        //Add logger to the list
+        return true
+    }
+    
+    func removeLogger(logger: OktaLoggingProtocol) -> Bool {
+        //Remove logger from the list
+        return true
+    }
+}
+```
 ## Usage
 ```
 let queue = DispatchQueue(label: "com.okta.comcurrent", attributes: .concurrent)

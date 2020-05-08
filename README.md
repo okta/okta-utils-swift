@@ -212,17 +212,13 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
 ### OktaMutableLogger
 ```
 class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
-    let loggerIdentfier: String
-    let loggerList: [OktaLoggingProtocol]
     let config: OktaLoggerConfiguration
-    let decoratedLogger: OktaLoggingProtocol?
+    let loggerList: [OktaLoggingProtocol]
     private let serialQueue = DispatchQueue(label: "okta.logger.serial")
 
     @objc public init(loggerList: [OktaLoggingProtocol]) {
         self.loggerList = loggerList
         self.config = OktaLoggerConfiguration()
-        self.loggerIdentfier = ""
-        self.decoratedLogger = nil
     }
   
     @objc public func debug(loggerIdentfier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {

@@ -123,12 +123,12 @@ Log to console/IDE
 @objc
 public class OktaLogger: NSObject, OktaLoggingProtocol {
     public let config: OktaLoggerConfiguration
-    private let loggerIdentfier: String?
+    private let loggerIdentifier: String?
     private var defaultProperties: [AnyHashable: Any]?
     
-    @objc init(config: OktaLoggerConfiguration, loggerIdentfier: String? = nil) {
+    @objc init(config: OktaLoggerConfiguration, loggerIdentifier: String? = nil) {
         self.config = config
-        self.loggerIdentfier = loggerIdentfier
+        self.loggerIdentifier = loggerIdentifier
     }
     
     @objc public func debug(loggerIdentifier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {
@@ -144,7 +144,7 @@ public class OktaLogger: NSObject, OktaLoggingProtocol {
     }
     
     @objc public func error(loggerIdentifier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {
-        if (loggerIdentfier == nil || loggerIdentfier == self.loggerIdentfier) && self.config.logLevel.contains(.error) {
+        if (loggerIdentfier == nil || loggerIdentifier == self.loggerIdentifier) && self.config.logLevel.contains(.error) {
             if self.config.outputDestination.contains(.ideOnly) {
                //Log to ide
             }
@@ -155,13 +155,13 @@ public class OktaLogger: NSObject, OktaLoggingProtocol {
     }
     
     @objc public func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?) {
-        if identifier == nil || identifier == self.loggerIdentfier {
+        if identifier == nil || identifier == self.loggerIdentifier {
             //add properties to self.defaultProperties
         }
     }
     
     @objc public func removeDefaultProperties(for key: AnyHashable, identifier: String?) {
-        if identifier == nil || identifier == self.loggerIdentfier {
+        if identifier == nil || identifier == self.loggerIdentifier {
             //remove properties to self.defaultProperties
         }
     }
@@ -171,11 +171,11 @@ public class OktaLogger: NSObject, OktaLoggingProtocol {
 ```
 class OktaFirebaseLogger: OktaLoggingProtocol {
     @objc public let config: OktaLoggerConfiguration
-    private let loggerIdentfier: String?
+    private let loggerIdentifier: String?
 
-    @objc init(config: OktaFirebaseLoggerConfiguration, loggerIdentfier: String? = nil) {
+    @objc init(config: OktaFirebaseLoggerConfiguration, loggerIdentifier: String? = nil) {
         self.config = config
-        self.loggerIdentfier = loggerIdentfier
+        self.loggerIdentifier = loggerIdentifier
     }
     
     @objc public func debug(loggerIdentifier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {
@@ -191,19 +191,19 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
     }
     
     @objc public func error(loggerIdentifier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {
-        if (loggerIdentfier == nil || loggerIdentfier == self.loggerIdentfier) && self.config.logLevel.contains(.error) {
+        if (loggerIdentifier == nil || loggerIdentifier == self.loggerIdentifier) && self.config.logLevel.contains(.error) {
             //Log to Firebase
         }
     }
     
     @objc public func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?) {
-        if identifier == nil || identifier == self.loggerIdentfier {
+        if identifier == nil || identifier == self.loggerIdentifier {
             //add properties to self.defaultProperties
         }
     }
     
     @objc public func removeDefaultProperties(for key: AnyHashable, identifier: String?) {
-        if identifier == nil || identifier == self.loggerIdentfier {
+        if identifier == nil || identifier == self.loggerIdentifier {
             //remove properties to self.defaultProperties
         }
     }
@@ -236,7 +236,7 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     @objc public func error(loggerIdentifier: String?, eventName: String, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?, properties: [AnyHashable : Any]?) {
         serialQueue.async {
             for logger in self.loggerList {
-                logger.error(loggerIdentfier: loggerIdentfier, eventName: eventName, file: file, line: line, column: column, funcName: funcName, properties: properties)
+                logger.error(loggerIdentifier: loggerIdentifier, eventName: eventName, file: file, line: line, column: column, funcName: funcName, properties: properties)
             }
         }
     }
@@ -259,14 +259,14 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
     
     @objc public func addLogger(logger: OktaLoggingProtocol) {
         serialQueue.async {
-            //If loggerIdentfier, type of the logger, configuration are same, should not add to the loggerList
+            //If loggerIdentifier, type of the logger, configuration are same, should not add to the loggerList
             //Else add to the loggerList
         }
     }
     
     @objc public func removeLogger(logger: OktaLoggingProtocol) {
         serialQueue.async {
-            //If loggerIdentfier, type of the logger, configuration are same, remove logger from the loggerList
+            //If loggerIdentifier, type of the logger, configuration are same, remove logger from the loggerList
             //Else keep the logger
         }
     }
@@ -277,8 +277,8 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaLoggingOperationProtocol {
 let config = OktaLoggerConfiguration(logLevel: .all, outputDestination: .all)
 let oktaLogger = OktaLogger(config: config)
 let firebaseConfig = OktaFirebaseLoggerConfiguration(logLevel: .all, outputDestination: .all)
-let firebaseLogger1 = OktaFirebaseLogger(config: firebaseConfig, loggerIdentfier: "com.okta.firebaselogger")
+let firebaseLogger1 = OktaFirebaseLogger(config: firebaseConfig, loggerIdentifier: "com.okta.firebaselogger")
 let firebaseLogger2 = OktaFirebaseLogger(config: firebaseConfig)
 let loggerManager = OktaMutableLogger(loggerList: [oktaLogger, firebaseLogger1, firebaseLogger2])
-loggerManager.error(loggerIdentfier:eventName:file:line:column:funcName:properties:)
+loggerManager.error(loggerIdentifier:eventName:file:line:column:funcName:properties:)
 ```

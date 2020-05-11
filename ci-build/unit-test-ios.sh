@@ -9,7 +9,7 @@ echo "============================================="
 
 xcodebuild \
     -workspace "${PROJECT_NAME}.xcworkspace" \
-    -scheme "${SCHEME_NAME}" \
+    -scheme "${PROJECT_NAME}" \
     -destination 'platform=macOS,arch=x86_64' \
     test
 

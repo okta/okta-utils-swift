@@ -13,11 +13,11 @@ We want to build a logging SDK and have the ability to log events to IDE, Pendo,
 - A configuration object that could be passed to all loggers or can be customized for one logger. hierarchy of logger configuration. 
 ## API example
 ### Pendo
-```
+```swift
 PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"val2"])
 ```
 ### Firebase
-```
+```swift
 Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
 ```
 ## UML diagram

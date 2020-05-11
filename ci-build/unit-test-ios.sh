@@ -4,7 +4,7 @@ CI_DIRECTORY=$(cd `dirname $0` && pwd)
 source "${CI_DIRECTORY}/setup.sh"
 
 echo "============================================="
-echo "starting unit test suite
+echo "building and running unit test suite on macOS"
 echo "============================================="
 
 xcodebuild \

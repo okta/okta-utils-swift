@@ -1,10 +1,3 @@
-//
-//  OktaLogger.h
-//  OktaLogger
-//
-//  Created by Steve Lind on 5/11/20.
-//  Copyright © 2020 Okta, Inc. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 

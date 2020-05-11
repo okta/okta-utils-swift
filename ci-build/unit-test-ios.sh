@@ -7,6 +7,10 @@ echo "============================================="
 echo "starting iphone simulator unit test suite"
 echo "============================================="
 
-echo "BUILD SUCCEEDED: (NOT YET IMPLEMENTED)"
+xcodebuild \
+    -workspace "${PROJECT_NAME}.xcworkspace" \
+    -scheme "${SCHEME_NAME}" \
+    -destination 'platform=macOS,arch=x86_64' \
+    test
 
 

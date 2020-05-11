@@ -24,7 +24,7 @@ Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_t
 ![Okta Logging Framework (6)](https://user-images.githubusercontent.com/48165682/81611685-53e03e00-9390-11ea-8996-1da9ad2eaac8.png)
 ## Interface
 ### OktaLogLevel
-```
+```swift
 @objc
 public class OktaLogLevel: NSObject, OptionSet {
     public let rawValue: Int
@@ -47,7 +47,7 @@ public class OktaLogLevel: NSObject, OptionSet {
 }
 ```
 ### OktaLogOutputDestination
-```
+```swift
 @objc
 public class OktaLogOutputDestination: NSObject, OptionSet {
     public let rawValue: Int
@@ -63,7 +63,7 @@ public class OktaLogOutputDestination: NSObject, OptionSet {
 }
 ```
 ### OktaLoggerConfiguration
-```
+```swift
 @objc
 public class OktaLoggerConfiguration: NSObject {
     public let logLevel: OktaLogLevel
@@ -81,7 +81,7 @@ public class OktaLoggerConfiguration: NSObject {
 }
 ```
 ### OktaFirebaseLoggerConfiguration
-```
+```swift
 @objc
 public class OktaFirebaseLoggerConfiguration: OktaLoggerConfiguration {
     @objc override public init(logLevel: OktaLogLevel = .all, outputDestination: OktaLogOutputDestination = .all) {
@@ -94,7 +94,7 @@ public class OktaFirebaseLoggerConfiguration: OktaLoggerConfiguration {
 }
 ```
 ### OktaLoggingProtocol
-```
+```swift
 @objc
 public protocol OktaLoggingProtocol {
     @objc var config: OktaLoggerConfiguration {get}
@@ -111,7 +111,7 @@ public protocol OktaLoggingProtocol {
 }
 ```
 ### OktaMutableLoggerProtocol
-```
+```swift
 @objc
 public protocol OktaLoggingOperationProtocol {
     @objc func addLogger(logger: OktaLoggingProtocol)
@@ -120,7 +120,7 @@ public protocol OktaLoggingOperationProtocol {
 ```
 ### OktaLogger
 Log to console/IDE
-```
+```swift
 @objc
 public class OktaLogger: NSObject, OktaLoggingProtocol {
     public let config: OktaLoggerConfiguration
@@ -172,7 +172,7 @@ public class OktaLogger: NSObject, OktaLoggingProtocol {
 }
 ```
 ### OktaFirebaseLogger
-```
+```swift
 class OktaFirebaseLogger: OktaLoggingProtocol {
     @objc public let config: OktaLoggerConfiguration
     private let loggerIdentifier: String?
@@ -218,7 +218,7 @@ class OktaFirebaseLogger: OktaLoggingProtocol {
 }
 ```
 ### OktaMutableLogger
-```
+```swift
 class OktaMutableLogger: OktaLoggingProtocol, OktaMutableLoggerProtocol {
     let config: OktaLoggerConfiguration
     let loggerList: [OktaLoggingProtocol]
@@ -284,7 +284,7 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaMutableLoggerProtocol {
 }
 ```
 ## Usage
-```
+```swift
     let config = OktaLoggerConfiguration(logLevel: .all, outputDestination: .all)
     let oktaLogger = OktaLogger(config: config)
     let firebaseConfig = OktaFirebaseLoggerConfiguration(logLevel: .all, outputDestination: .all)

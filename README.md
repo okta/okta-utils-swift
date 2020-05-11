@@ -293,5 +293,5 @@ class OktaMutableLogger: OktaLoggingProtocol, OktaMutableLoggerProtocol {
     let loggerManager = OktaMutableLogger(loggerList: [oktaLogger, firebaseLogger1, firebaseLogger2])
     loggerManager.error(loggerIdentifier:eventName:message:file:line:column:funcName:properties:)
 ```
-### Feature enhancement
+## Feature enhancement
 - Convert NSError to our log message

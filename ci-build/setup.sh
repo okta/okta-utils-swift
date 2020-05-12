@@ -1,5 +1,9 @@
 #!/usr/bin/env bash -l
 
+# Constants
+PROJECT_NAME="OktaLogger"
+LOGGER_ROOT="${CI_DIRECTORY}"/..
+
 # Print header with build machine, build launch information
 function printBuildEnvironment() {
     USER=`whoami`
@@ -49,13 +53,6 @@ function printBuildEnvironment() {
     echo "====================================================="
 }
 
-printBuildEnvironment
 
-set -e
-PROJECT_NAME="OktaLogger"
-
-LOGGER_ROOT="${CI_DIRECTORY}"/..
-pushd "${LOGGER_ROOT}"
-pod install
 
 

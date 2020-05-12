@@ -11,6 +11,9 @@
       location = "group:Podfile">
    </FileRef>
    <FileRef
+      location = "group:/Users/stevelind/okta/okta-logger-swift/.bacon.yml">
+   </FileRef>
+   <FileRef
       location = "group:ci-build">
    </FileRef>
    <FileRef

@@ -7,8 +7,7 @@ Pod::Spec.new do |s|
   s.license          = 'MIT'
   s.author           = { "Steve Lind" => "steve.lind@okta.com" }
   s.source           = { :git => "git@github.com:okta/okta-logger-swift.git",  :tag => s.version.to_s }
-
-  s.platform     = :ios, '12.0'
-  s.requires_arc = true
+  s.ios.deployment_target = '11.0'
+  s.osx.deployment_target = '10.14'
   s.source_files = 'OktaLogger/*.{swift}'
 end

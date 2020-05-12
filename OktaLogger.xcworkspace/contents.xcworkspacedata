@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:README.md">
+   </FileRef>
+   <FileRef
+      location = "group:okta-logger-swift.podspec">
+   </FileRef>
+   <FileRef
+      location = "group:Podfile">
+   </FileRef>
+   <FileRef
+      location = "group:ci-build">
+   </FileRef>
+   <FileRef
+      location = "group:OktaLogger.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -6,7 +6,7 @@ import Foundation
  Allows custom logger implementations to react to some log levels and not others.
  */
 @objc
-public class OktaLogLevel: NSObject, OptionSet {
+public class OktaLogLevel: NSObject, OptionSet, Comparable {
     public let rawValue: Int
     required public init(rawValue: Int) {
         self.rawValue = rawValue
@@ -19,7 +19,18 @@ public class OktaLogLevel: NSObject, OptionSet {
     @objc public static let error = OktaLogLevel(rawValue: 1 << 4)
     @objc public static let all: OktaLogLevel = [.debug, .info, .warning, .uiEvent, .error]
     
-    static func == (lhs: OktaLogLevel, rhs: OktaLogLevel) -> Bool {
+    // MARK: Comparable
+    
+    static public func < (lhs: OktaLogLevel, rhs: OktaLogLevel) -> Bool {
+        return lhs.rawValue >= rhs.rawValue
+    }
+    
+    static public func > (lhs: OktaLogLevel, rhs: OktaLogLevel) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+    
+    static public func == (lhs: OktaLogLevel, rhs: OktaLogLevel) -> Bool {
         return lhs.rawValue == rhs.rawValue
     }
+    
 }

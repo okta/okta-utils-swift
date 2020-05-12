@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D54461BF2469FF3200C755F1 /* OktaMutableLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54461BE2469FF3200C755F1 /* OktaMutableLogger.swift */; };
 		D54461C12469FFBA00C755F1 /* OktaLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54461C02469FFBA00C755F1 /* OktaLogLevel.swift */; };
 		D54461C3246A023000C755F1 /* OktaLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54461C2246A023000C755F1 /* OktaLogger.swift */; };
 		D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C824D42469DBF1005CF747 /* OktaLogger.framework */; };
+		D54461CB246B55A600C755F1 /* OktaLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */; };
+		D5B22D06246B602B007ECC2F /* OktaConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D05246B602B007ECC2F /* OktaConsoleLogger.swift */; };
 		D5C824E32469DBF1005CF747 /* OktaLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */; };
 		D5C824E52469DBF1005CF747 /* OktaLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = D5C824D72469DBF1005CF747 /* OktaLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E03E7F9292FC19B2E3EE6EEA /* libPods-OktaLogger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CB6E9781076186982B2417 /* libPods-OktaLogger.a */; };
@@ -31,9 +32,10 @@
 		1626D76D3FE5CD1504C6A51A /* Pods-OktaLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerTests.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
 		3FDC676F1BCD09641BDA18FA /* libPods-OktaLoggerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F19A5AD43A044835A9DE194 /* Pods-OktaLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.debug.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.debug.xcconfig"; sourceTree = "<group>"; };
-		D54461BE2469FF3200C755F1 /* OktaMutableLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaMutableLogger.swift; sourceTree = "<group>"; };
 		D54461C02469FFBA00C755F1 /* OktaLogLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLogLevel.swift; sourceTree = "<group>"; };
 		D54461C2246A023000C755F1 /* OktaLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLogger.swift; sourceTree = "<group>"; };
+		D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerDestination.swift; sourceTree = "<group>"; };
+		D5B22D05246B602B007ECC2F /* OktaConsoleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaConsoleLogger.swift; sourceTree = "<group>"; };
 		D5C824D42469DBF1005CF747 /* OktaLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5C824D72469DBF1005CF747 /* OktaLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaLogger.h; sourceTree = "<group>"; };
 		D5C824D82469DBF1005CF747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -100,9 +102,10 @@
 			children = (
 				D5C824D72469DBF1005CF747 /* OktaLogger.h */,
 				D5C824D82469DBF1005CF747 /* Info.plist */,
-				D54461BE2469FF3200C755F1 /* OktaMutableLogger.swift */,
 				D54461C2246A023000C755F1 /* OktaLogger.swift */,
 				D54461C02469FFBA00C755F1 /* OktaLogLevel.swift */,
+				D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */,
+				D5B22D05246B602B007ECC2F /* OktaConsoleLogger.swift */,
 			);
 			path = OktaLogger;
 			sourceTree = "<group>";
@@ -286,9 +289,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5B22D06246B602B007ECC2F /* OktaConsoleLogger.swift in Sources */,
 				D54461C12469FFBA00C755F1 /* OktaLogLevel.swift in Sources */,
 				D54461C3246A023000C755F1 /* OktaLogger.swift in Sources */,
-				D54461BF2469FF3200C755F1 /* OktaMutableLogger.swift in Sources */,
+				D54461CB246B55A600C755F1 /* OktaLoggerDestination.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +444,7 @@
 			baseConfigurationReference = 8F19A5AD43A044835A9DE194 /* Pods-OktaLogger.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";
@@ -471,7 +475,7 @@
 			baseConfigurationReference = E845612E0BE69997F307E326 /* Pods-OktaLogger.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = "";

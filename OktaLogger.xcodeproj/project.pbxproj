@@ -12,6 +12,8 @@
 		D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C824D42469DBF1005CF747 /* OktaLogger.framework */; };
 		D54461CB246B55A600C755F1 /* OktaLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */; };
 		D5B22D06246B602B007ECC2F /* OktaConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D05246B602B007ECC2F /* OktaConsoleLogger.swift */; };
+		D5B22D09246C8E3A007ECC2F /* OktaLoggerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D08246C8E3A007ECC2F /* OktaLoggerTests.m */; };
+		D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */; };
 		D5C824E32469DBF1005CF747 /* OktaLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */; };
 		D5C824E52469DBF1005CF747 /* OktaLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = D5C824D72469DBF1005CF747 /* OktaLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E03E7F9292FC19B2E3EE6EEA /* libPods-OktaLogger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F9CB6E9781076186982B2417 /* libPods-OktaLogger.a */; };
@@ -36,6 +38,9 @@
 		D54461C2246A023000C755F1 /* OktaLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLogger.swift; sourceTree = "<group>"; };
 		D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerDestination.swift; sourceTree = "<group>"; };
 		D5B22D05246B602B007ECC2F /* OktaConsoleLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaConsoleLogger.swift; sourceTree = "<group>"; };
+		D5B22D07246C8E39007ECC2F /* OktaLoggerTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OktaLoggerTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		D5B22D08246C8E3A007ECC2F /* OktaLoggerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OktaLoggerTests.m; sourceTree = "<group>"; };
+		D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoggerDestination.swift; sourceTree = "<group>"; };
 		D5C824D42469DBF1005CF747 /* OktaLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D5C824D72469DBF1005CF747 /* OktaLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaLogger.h; sourceTree = "<group>"; };
 		D5C824D82469DBF1005CF747 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,7 +119,10 @@
 			isa = PBXGroup;
 			children = (
 				D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */,
+				D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */,
+				D5B22D08246C8E3A007ECC2F /* OktaLoggerTests.m */,
 				D5C824E42469DBF1005CF747 /* Info.plist */,
+				D5B22D07246C8E39007ECC2F /* OktaLoggerTests-Bridging-Header.h */,
 			);
 			path = OktaLoggerTests;
 			sourceTree = "<group>";
@@ -198,6 +206,7 @@
 					};
 					D5C824DC2469DBF1005CF747 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -300,7 +309,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5B22D09246C8E3A007ECC2F /* OktaLoggerTests.m in Sources */,
 				D5C824E32469DBF1005CF747 /* OktaLoggerTests.swift in Sources */,
+				D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,6 +516,7 @@
 			baseConfigurationReference = DB510C00105E7489E2C16BA3 /* Pods-OktaLoggerTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
@@ -519,6 +531,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "OktaLoggerTests/OktaLoggerTests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -529,6 +543,7 @@
 			baseConfigurationReference = 1626D76D3FE5CD1504C6A51A /* Pods-OktaLoggerTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Manual;
@@ -543,6 +558,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "OktaLoggerTests/OktaLoggerTests-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -4,32 +4,52 @@ import Foundation
  Public interface for main OktaLogger instances
  */
 @objc
-protocol OktaLoggerInterface: OktaLogging {
+public protocol OktaLoggerProtocol {
     
     /**
-     Convenience method for log(level: .debug)
-     */
-    @objc func debug(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    Logging super-method for all parameters
+    
+    - Parameters:
+      - level: OktaLogLevel for this event
+      - eventName: name for this event
+      - message: message for this event (optional)
+      - properties: key-value properties for this event (optional)
+      - identifier: logger identifier for this event
+         */
+    func log(level: OktaLogLevel,
+             eventName: String,
+             message: String?,
+             properties: [AnyHashable: Any]?,
+             identifier: String?,
+             file: String?,
+             line: NSNumber?,
+             column: NSNumber?,
+             funcName: String?)
     
     /**
-     Convenience method for log(level: .info)
+     Convenience method for log(level: .debug, ...)
      */
-    @objc func info(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
     
     /**
-     Convenience method for log(level: .warning)
+     Convenience method for log(level: .info, ...)
      */
-    @objc func warning(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
     
     /**
-     Convenience method for log(level: .uievent)
+     Convenience method for log(level: .warning, ...)
      */
-    @objc func uiEvent(eventName: String,
-                       message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func warning(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    
     /**
-     Convenience method for log(level: .error)
+     Convenience method for log(level: .uievent, ...)
      */
-    @objc func error(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func uiEvent(eventName: String,
+                       message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    /**
+     Convenience method for log(level: .error, ...)
+     */
+    func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
     
     /**
      Set default property dict for a given logging destination
@@ -38,7 +58,7 @@ protocol OktaLoggerInterface: OktaLogging {
      - properties: Key-value pairs of properties to be applied to logs
      - identifier: Logger identifier, nil will apply to all loggers
      */
-    @objc func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?)
+    func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?)
     
     /**
      Remove default properties for a given logging identifier
@@ -46,69 +66,90 @@ protocol OktaLoggerInterface: OktaLogging {
      - Parameters:
      - identifier: Logger identifier, nil applies to all loggers
      */
-    @objc func removeDefaultProperties(identifier: String?)
+    func removeDefaultProperties(identifier: String?)
     
     /**
      Add a logging destination to the Logger
      
      - Parameters:
-        - dest: Concrete logger destination to be added
+        - destination: Concrete logger destination to be added
      */
-    @objc func addDestination(_ dest: OktaLoggerDestination)
+    func addDestination(_ destination: OktaLoggerDestination)
     
     /**
     Remove a logging destination
     
     - Parameters:
-       - dest: Concrete logger destination to be removed
+       - destination: Concrete logger destination to be removed
     */
-    @objc func removeDestination(_ dest: OktaLoggerDestination)
+    func removeDestination(_ destination: OktaLoggerDestination)
 }
 
 /**
  Main Logger Proxy
  */
-class OktaLogger: OktaLoggerInterface {
+@objc
+open class OktaLogger: NSObject, OktaLoggerProtocol {
     
-    private var loggerList = [String:OktaLoggerDestination]()
-    private let serialQueue = DispatchQueue(label: "okta.logger.serial")
-    @objc public init(loggers: [OktaLoggerDestination]) {
-        for logger in loggers {
-            loggerList[logger.identifier] = logger
-        }
-    }
+    var destinations = [OktaLoggerDestination]()
+    let queue = DispatchQueue(label: "com.okta.logger")
     
     // MARK: Public
     
-    func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
-            // log to one ore more loggers
-      }
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+        self.queue.async {
+            for logger in self.destinations {
+                if identifier == nil || logger.identifier == identifier {
+                    logger.log(level: level, eventName: eventName, message: message, properties: properties, file: file, line: line, column: column, funcName: funcName)
+                }
+            }
+        }
+    }
     
-    func debug(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
         log(level: .debug, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    func info(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
         log(level: .info, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    func warning(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
         log(level: .warning, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
         log(level: .uiEvent, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    func error(eventName: String, message: String?, properties: [AnyHashable : Any], file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
         log(level: .error, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    func removeDestination(_ dest: OktaLoggerDestination) {}
+    public func removeDestination(_ destination: OktaLoggerDestination) {
+        self.queue.async {
+            for i in (0..<self.destinations.count).reversed() {
+                let d = self.destinations[i]
+                if d.identifier == destination.identifier {
+                    self.destinations.remove(at: i)
+                }
+            }
+        }
+    }
     
-    func addDestination(_ dest: OktaLoggerDestination) {}
+    public func addDestination(_ destination: OktaLoggerDestination) {
+        self.queue.async {
+            self.destinations.append(destination)
+        }
+    }
     
-    func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?) {}
+    public func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?) {
+        // TODO: NYI
+    }
        
-    func removeDefaultProperties(identifier: String?) {}
+    public func removeDefaultProperties(identifier: String?) {
+        // TODO: NYI
+    }
+    
+    
 }

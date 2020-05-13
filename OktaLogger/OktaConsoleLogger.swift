@@ -1,7 +1,8 @@
 import os
 
-class OktaConsoleLogger: OktaLoggerDestination {
-    let identifier: String
+@objc
+public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
+    public let identifier: String
     var level: OktaLogLevel
     
     init(identifier: String, level: OktaLogLevel) {
@@ -9,9 +10,9 @@ class OktaConsoleLogger: OktaLoggerDestination {
         self.level = level
     }
     
-    func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
-        if level.rawValue >= self.level.rawValue {
-            // generate a log string
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+        if level.contains(self.level) {
+            os_log("Hello World: %s", eventName)
         }
     }
 }

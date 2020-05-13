@@ -119,12 +119,20 @@
 			isa = PBXGroup;
 			children = (
 				D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */,
-				D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */,
 				D5B22D08246C8E3A007ECC2F /* OktaLoggerTests.m */,
+				D5D0978A246CB52900C1362F /* Helpers */,
 				D5C824E42469DBF1005CF747 /* Info.plist */,
 				D5B22D07246C8E39007ECC2F /* OktaLoggerTests-Bridging-Header.h */,
 			);
 			path = OktaLoggerTests;
+			sourceTree = "<group>";
+		};
+		D5D0978A246CB52900C1362F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		FF24FFA3DDFB489FAC52ED9D /* Pods */ = {

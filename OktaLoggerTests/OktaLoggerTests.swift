@@ -37,6 +37,7 @@ class OktaLoggerTests: XCTestCase {
         logger.queue.sync {}
         XCTAssertEqual(logger.destinations.count, 1)
         
+        let line = (#line + 1) as NSNumber // expected line number of the log
         logger.info(eventName: "hello", message: "world", properties: ["key":"value"])
         logger.queue.sync {}
         XCTAssertEqual(destination.events.count, 1)
@@ -45,6 +46,9 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertEqual(event?.name, "hello")
         XCTAssertEqual(event?.message, "world")
         XCTAssertEqual(event?.properties as! [String:String], ["key":"value"])
+        XCTAssertEqual(event?.line, line)
+        XCTAssertEqual(event?.file, #file)
+        XCTAssertEqual(event?.funcName, #function)
     }
 }
 

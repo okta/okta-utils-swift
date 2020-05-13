@@ -2,7 +2,7 @@
 # https://oktawiki.atlassian.net/wiki/spaces/ESS/pages/635280223/Flexible+Test+Suites
 test_suites:
   # Required test suites
-  - name: unit-tests
+  - name: unit-test-ios
     script_path: okta-logger-swift/ci-build
     sort_order: '2'
     timeout: '10'

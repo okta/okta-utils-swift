@@ -80,9 +80,9 @@ public protocol OktaLoggerProtocol {
     Remove a logging destination
     
     - Parameters:
-       - destination: Concrete logger destination to be removed
+       - identifier: identifier of destination to be removed
     */
-    func removeDestination(_ destination: OktaLoggerDestination)
+    func removeDestination(identifier: String)
 }
 
 /**
@@ -90,10 +90,7 @@ public protocol OktaLoggerProtocol {
  */
 @objc
 open class OktaLogger: NSObject, OktaLoggerProtocol {
-    
-    var destinations = [OktaLoggerDestination]()
-    let queue = DispatchQueue(label: "com.okta.logger")
-    
+   
     // MARK: Public
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
@@ -126,11 +123,11 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         log(level: .error, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
     }
     
-    public func removeDestination(_ destination: OktaLoggerDestination) {
+    public func removeDestination(identifier: String) {
         self.queue.async {
             for i in (0..<self.destinations.count).reversed() {
-                let d = self.destinations[i]
-                if d.identifier == destination.identifier {
+                let destination = self.destinations[i]
+                if destination.identifier == identifier {
                     self.destinations.remove(at: i)
                 }
             }
@@ -151,5 +148,10 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         // TODO: NYI
     }
     
+    // MARK: Private / Internal
+    
+    // Marked internal for ease of testing
+    var destinations = [OktaLoggerDestination]()
+    let queue = DispatchQueue(label: "com.okta.logger")
     
 }

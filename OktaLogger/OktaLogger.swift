@@ -94,10 +94,12 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     // MARK: Public
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
-        self.queue.async {
-            for logger in self.destinations {
-                if identifier == nil || logger.identifier == identifier {
+        self.queue.sync {
+            for logger in self.destinations.values {
+                if identifier == nil ||
+                    logger.identifier == identifier {
                     logger.log(level: level, eventName: eventName, message: message, properties: properties, file: file, line: line, column: column, funcName: funcName)
+                    if identifier == nil { break }
                 }
             }
         }
@@ -125,18 +127,13 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     
     public func removeDestination(identifier: String) {
         self.queue.async {
-            for i in (0..<self.destinations.count).reversed() {
-                let destination = self.destinations[i]
-                if destination.identifier == identifier {
-                    self.destinations.remove(at: i)
-                }
-            }
+            self.destinations.removeValue(forKey: identifier)
         }
     }
     
     public func addDestination(_ destination: OktaLoggerDestination) {
         self.queue.async {
-            self.destinations.append(destination)
+            self.destinations[destination.identifier] = destination
         }
     }
     
@@ -151,7 +148,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     // MARK: Private / Internal
     
     // Marked internal for ease of testing
-    var destinations = [OktaLoggerDestination]()
+    var destinations = [String:OktaLoggerDestination]()
     let queue = DispatchQueue(label: "com.okta.logger")
     
 }

@@ -1,13 +1,13 @@
-#!/usr/bin/env bash -lx
+#!/usr/bin/env bash -l
 
 CI_DIRECTORY=$(cd `dirname $0` && pwd)
 source "${CI_DIRECTORY}/setup.sh"
 
 # Main
-set -e
 pushd "${LOGGER_ROOT}"
 printBuildEnvironment
 echo "Running pod install..."
+set -e
 pod install
 
 echo "============================================="

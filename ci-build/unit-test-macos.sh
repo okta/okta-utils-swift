@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -l
+#!/usr/bin/env bash -lx
 
 CI_DIRECTORY=$(cd `dirname $0` && pwd)
 source "${CI_DIRECTORY}/setup.sh"

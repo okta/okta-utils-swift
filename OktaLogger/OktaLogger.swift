@@ -99,7 +99,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
                 if identifier == nil ||
                     logger.identifier == identifier {
                     logger.log(level: level, eventName: eventName, message: message, properties: properties, file: file, line: line, column: column, funcName: funcName)
-                    if identifier == nil { break }
+                    if identifier != nil { break }
                 }
             }
         }

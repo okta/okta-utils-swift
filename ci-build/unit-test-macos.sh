@@ -6,8 +6,8 @@ source "${CI_DIRECTORY}/setup.sh"
 # Main
 pushd "${LOGGER_ROOT}"
 printBuildEnvironment
-echo "Running pod install..."
 set -e
+echo "Running pod install..."
 pod install
 
 echo "============================================="

@@ -12,6 +12,11 @@ public protocol OktaLoggerDestination {
     var identifier: String {get}
     
     /**
+     Logging level for this destination
+     */
+    var level: OktaLogLevel {get}
+    
+    /**
      Logging super-method, to be implemented by all concrete logging destinations
      
      - Parameters:

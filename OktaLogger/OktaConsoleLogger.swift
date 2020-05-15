@@ -1,5 +1,18 @@
 import os
 
+@objc
+public protocol OktaConsoleLoggerProtocol {
+    /**
+        Instantiate a concrete console logger
+        
+        - Parameters:
+            - identifier: Logger identfier
+            - level: OktaLoggingLevel
+            - console: Bool to indicate whether console logging should be enabled. IDE logging is always on.
+        */
+       init(identifier: String, level: OktaLogLevel, console: Bool)
+}
+
 /**
  Concrete logging class for console and IDE logs.
  */
@@ -9,18 +22,12 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
     public let level: OktaLogLevel
     public let console: Bool
     
-    /**
-     Instantiate a concrete console logger
-     
-     - Parameters:
-         - identifier: Logger identfier
-         - level: OktaLoggingLevel
-         - console: Bool to indicate whether console logging should be enabled. IDE logging is always on.
-     */
-    init(identifier: String, level: OktaLogLevel, console: Bool = true) {
+    public init(identifier: String, level: OktaLogLevel, console: Bool) {
         self.identifier = identifier
         self.level = level
         self.console = console
+        self.dateFormatter = DateFormatter()
+        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     }
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
@@ -31,25 +38,29 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
                                            file: file, line: line, column: column, funcName: funcName)
         if self.console {
             // translate log level into relevant console type level
-            let type = self.type(level: level)
+            let type = self.consoleLogType(level: level)
             os_log("%s", type: type, logMessage)
         } else {
             // print only to ide
-            print(logMessage)
+            let datePrefix = self.dateFormatter.string(from: Date())
+            print("\(datePrefix) - \(logMessage)")
         }
     }
     
+    // MARK: Private + Internal
+    
     /**
-     Create a structured string out of the log d
+     Create a structured string out of the logging parameters and properties
      */
-    private func stringValue(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) -> String {
-        return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"properties\": {\(properties ?? [:])}\"location\": \"\(file ?? ""):\(funcName ?? ""):\(line ?? 0)\""
+    func stringValue(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) -> String {
+        let filename = file?.split(separator: "/").last
+        return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"properties\": {\(properties ?? [:])}\"location\": \"\(filename ?? ""):\(funcName ?? ""):\(line ?? 0)\""
     }
     
     /**
      Translate OktaLogLevel into a console-friendly OSLogType value
      */
-    private func type(level: OktaLogLevel) -> OSLogType {
+    func consoleLogType(level: OktaLogLevel) -> OSLogType {
         switch level {
         case .debug:
             return .debug
@@ -61,4 +72,6 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
             return .default
         }
     }
+    
+    private let dateFormatter: DateFormatter
 }

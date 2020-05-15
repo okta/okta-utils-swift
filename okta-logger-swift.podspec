@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
   s.osx.deployment_target = '10.14'
   s.swift_version = '5.0'
-  s.source_files = 'OktaLogger/*.{swift}'
+  s.source_files = 'OktaLogger/*.{h,m,swift}'
   s.exclude_files = [
     'OktaLogger/Info.plist'
   ]

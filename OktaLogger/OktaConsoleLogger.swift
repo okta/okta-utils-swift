@@ -1,30 +1,26 @@
 import os
 
 /**
- Console logger options for ide / console / both
+ Concrete logging class for console and IDE logs.
  */
-@objc
-public class OktaConsoleLoggerOptions: NSObject, OptionSet {
-    public let rawValue: Int
-    required public init(rawValue: Int) {
-        self.rawValue = rawValue
-    }
-    @objc public static let off = OktaConsoleLoggerOptions(rawValue: 0)
-    @objc public static let console = OktaConsoleLoggerOptions(rawValue: 1 << 0)
-    @objc public static let ide = OktaConsoleLoggerOptions(rawValue: 1 << 1)
-    @objc public static let all: OktaConsoleLoggerOptions = [.console, .ide]
-}
-
 @objc
 public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
     public let identifier: String
-    public let options: OktaConsoleLoggerOptions
-    var level: OktaLogLevel
+    public let level: OktaLogLevel
+    public let console: Bool
     
-    init(identifier: String, level: OktaLogLevel, options: OktaConsoleLoggerOptions) {
+    /**
+     Instantiate a concrete console logger
+     
+     - Parameters:
+         - identifier: Logger identfier
+         - level: OktaLoggingLevel
+         - console: Bool to indicate whether console logging should be enabled. IDE logging is always on.
+     */
+    init(identifier: String, level: OktaLogLevel, console: Bool = true) {
         self.identifier = identifier
         self.level = level
-        self.options = options
+        self.console = console
     }
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
@@ -33,15 +29,36 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
                                            message: message,
                                            properties: properties,
                                            file: file, line: line, column: column, funcName: funcName)
-        if self.options.contains(.console) {
-            os_log("%s", logMessage)
-        }
-        if self.options.contains(.ide) {
+        if self.console {
+            // translate log level into relevant console type level
+            let type = self.type(level: level)
+            os_log("%s", type: type, logMessage)
+        } else {
+            // print only to ide
             print(logMessage)
         }
     }
     
+    /**
+     Create a structured string out of the log d
+     */
     private func stringValue(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) -> String {
-        return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"file\": \"\(file ?? ""):\(funcName ?? ""):\(line ?? 0)\""
+        return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"properties\": {\(properties ?? [:])}\"location\": \"\(file ?? ""):\(funcName ?? ""):\(line ?? 0)\""
+    }
+    
+    /**
+     Translate OktaLogLevel into a console-friendly OSLogType value
+     */
+    private func type(level: OktaLogLevel) -> OSLogType {
+        switch level {
+        case .debug:
+            return .debug
+        case .info, .warning, .uiEvent:
+             return .info
+        case .error:
+            return .error
+        default:
+            return .default
+        }
     }
 }

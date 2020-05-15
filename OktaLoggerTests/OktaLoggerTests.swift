@@ -45,10 +45,50 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertNotNil(event)
         XCTAssertEqual(event?.name, "hello")
         XCTAssertEqual(event?.message, "world")
-        XCTAssertEqual(event?.properties as! [String:String], ["key":"value"])
+        XCTAssertEqual(event?.properties as? [String:String], ["key":"value"])
         XCTAssertEqual(event?.line, line)
         XCTAssertEqual(event?.file, #file)
         XCTAssertEqual(event?.funcName, #function)
+    }
+    
+    /**
+     Verify that nil properties pick up the defaults, but explicitly set properties override
+     */
+    func testDefaultProperties() {
+        let logger = OktaLogger()
+        var properties = ["key":"value"]
+        logger.setDefaultProperties(properties: properties)
+        let destination = MockLoggerDestination()
+        logger.addDestination(destination)
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        logger.queue.sync {}
+
+        XCTAssertEqual(destination.events.count, 1)
+        var event = destination.events.first
+        XCTAssertNotNil(event)
+        XCTAssertEqual(event?.properties as? [String:String], properties)
+        
+        properties = ["override":"values"]
+        logger.info(eventName: "hello", message: "world", properties: properties)
+        XCTAssertEqual(destination.events.count, 2)
+        event = destination.events.last
+        XCTAssertNotNil(event)
+        XCTAssertEqual(event?.properties as? [String:String], properties)
+    }
+    
+    /**
+     Verify that the logging level is honored when logging
+     */
+    func testLoggingLevel() {
+        let logger = OktaLogger()
+        let destination = MockLoggerDestination()
+        destination.level = .info
+        logger.addDestination(destination)
+        logger.debug(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.events.count, 0)
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.events.count, 1)
+
     }
 }
 

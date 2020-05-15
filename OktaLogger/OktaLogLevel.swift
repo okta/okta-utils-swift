@@ -11,7 +11,7 @@ public class OktaLogLevel: NSObject, OptionSet {
     required public init(rawValue: Int) {
         self.rawValue = rawValue
     }
-    @objc public static let off = OktaLogLevel(rawValue: 0)
+    @objc public static let off = OktaLogLevel([])
     @objc public static let debug = OktaLogLevel(rawValue: 1 << 0)
     @objc public static let info = OktaLogLevel(rawValue: 1 << 1)
     @objc public static let warning = OktaLogLevel(rawValue: 1 << 2)

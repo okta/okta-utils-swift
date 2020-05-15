@@ -1,6 +1,7 @@
 
 #import <XCTest/XCTest.h>
-@import okta_logger_swift;
+#import "OktaLogger+Helpers.h"
+#import "MockLoggerDestination.h"
 
 @interface OktaLoggerTests : XCTestCase
 
@@ -8,15 +9,23 @@
 
 @implementation OktaLoggerTests
 
-- (void)testSyntax {
-    // testing basic syntax in Objective-c. It's not pretty yet :)
-    // TODO:: ADD Objective-C macro, consider alternate obj-c names
+// Test the basic macro syntax and verify that the logs are populated
+- (void)testMacroSyntax {
     OktaLogger *logger = [[OktaLogger alloc] init];
-    [logger debugWithEventName:@"hello" message:@"world" properties:nil file:nil line:nil column:nil funcName:nil];
-    [logger infoWithEventName:@"hello" message:@"world" properties:nil file:nil line:nil column:nil funcName:nil];
-    [logger warningWithEventName:@"hello" message:@"world" properties:nil file:nil line:nil column:nil funcName:nil];
-    [logger errorWithEventName:@"hello" message:@"world" properties:nil file:nil line:nil column:nil funcName:nil];
-    [logger uiEventWithEventName:@"hello" message:@"world" properties:nil file:nil line:nil column:nil funcName:nil];
+    MockLoggerDestination *destination = [MockLoggerDestination new];
+    [logger addDestination:destination];
+    setDefaultLogger(logger);
+    
+    OLogDebug(@"event", @"%@", @"world");
+    XCTAssertEqual(destination.logs.count, 1);
+    OLogInfo(@"event", @"%@", @"world");
+    XCTAssertEqual(destination.logs.count, 2);
+    OLogWarning(@"event", @"%@", @"world");
+    XCTAssertEqual(destination.logs.count, 3);
+    OLogUiEvent(@"event", @"%@", @"world");
+    XCTAssertEqual(destination.logs.count, 4);
+    OLogError(@"error", @"%@", @"world");
+    XCTAssertEqual(destination.logs.count, 5);
 }
 
 @end

@@ -1,7 +1,8 @@
 import Foundation
 import OktaLogger
 
-class MockLogEvent {
+@objc
+class MockLogEvent: NSObject {
     let name: String
     let message: String?
     let properties: [AnyHashable : Any]?
@@ -27,8 +28,10 @@ class MockLogEvent {
     }
 }
 
-class MockLoggerDestination: OktaLoggerDestination {
+@objc
+class MockLoggerDestination: NSObject, OktaLoggerDestination {
     var identifier: String = "com.okta.logger.mock"
+    var level: OktaLogLevel = [.all]
     var events = [MockLogEvent]()
     func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
         let event = MockLogEvent(name: eventName, message: message, properties: properties, file: file, line: line, column: column, funcName: funcName)

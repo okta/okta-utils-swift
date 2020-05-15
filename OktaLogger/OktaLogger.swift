@@ -58,15 +58,7 @@ public protocol OktaLoggerProtocol {
      - properties: Key-value pairs of properties to be applied to logs
      - identifier: Logger identifier, nil will apply to all loggers
      */
-    func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?)
-    
-    /**
-     Remove default properties for a given logging identifier
-     
-     - Parameters:
-     - identifier: Logger identifier, nil applies to all loggers
-     */
-    func removeDefaultProperties(identifier: String?)
+    func setDefaultProperties(properties: [AnyHashable : Any])
     
     /**
      Add a logging destination to the Logger
@@ -94,11 +86,22 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     // MARK: Public
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+        // sync so that callstacks are preserved
         self.queue.sync {
             for logger in self.destinations.values {
+                // check the logging level of this destination
+                let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
+                if !levelCheck {return}
+                
+                // log to one or all idenitifiers
                 if identifier == nil ||
                     logger.identifier == identifier {
-                    logger.log(level: level, eventName: eventName, message: message, properties: properties, file: file, line: line, column: column, funcName: funcName)
+                    logger.log(level: level,
+                               eventName: eventName,
+                               message: message,
+                               properties: properties ?? self.defaultProperties,
+                               file: file, line: line, column: column, funcName: funcName)
+                    // if we logged to the right identifier, we can break early
                     if identifier != nil { break }
                 }
             }
@@ -126,29 +129,27 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     }
     
     public func removeDestination(identifier: String) {
-        self.queue.async {
+        _ = self.queue.sync {
             self.destinations.removeValue(forKey: identifier)
         }
     }
     
     public func addDestination(_ destination: OktaLoggerDestination) {
-        self.queue.async {
+        self.queue.sync {
             self.destinations[destination.identifier] = destination
         }
     }
     
-    public func addDefaultProperties(properties: [AnyHashable : Any], identifier: String?) {
-        // TODO: NYI
-    }
-       
-    public func removeDefaultProperties(identifier: String?) {
-        // TODO: NYI
+    public func setDefaultProperties(properties: [AnyHashable : Any]) {
+        self.queue.sync {
+            self.defaultProperties = properties
+        }
     }
     
     // MARK: Private / Internal
     
-    // Marked internal for ease of testing
     var destinations = [String:OktaLoggerDestination]()
+    var defaultProperties = [AnyHashable : Any]()
     let queue = DispatchQueue(label: "com.okta.logger")
     
 }

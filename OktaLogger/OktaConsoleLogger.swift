@@ -30,12 +30,12 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
         self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
     }
     
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
         
          let logMessage = self.stringValue(eventName: eventName,
                                            message: message,
                                            properties: properties,
-                                           file: file, line: line, column: column, funcName: funcName)
+                                           file: file, line: line, funcName: funcName)
         if self.console {
             // translate log level into relevant console type level
             let type = self.consoleLogType(level: level)
@@ -52,7 +52,7 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
     /**
      Create a structured string out of the logging parameters and properties
      */
-    func stringValue(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) -> String {
+    func stringValue(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) -> String {
         let filename = file?.split(separator: "/").last
         return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"properties\": {\(properties ?? [:])}\"location\": \"\(filename ?? ""):\(funcName ?? ""):\(line ?? 0)\""
     }

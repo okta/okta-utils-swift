@@ -12,7 +12,7 @@
     return self;
 }
 
-- (void)logWithLevel:(OktaLogLevel * _Nonnull)level eventName:(NSString * _Nonnull)eventName message:(NSString * _Nullable)message properties:(NSDictionary * _Nullable)properties file:(NSString * _Nullable)file line:(NSNumber * _Nullable)line column:(NSNumber * _Nullable)column funcName:(NSString * _Nullable)funcName {
+- (void)logWithLevel:(OktaLogLevel * _Nonnull)level eventName:(NSString * _Nonnull)eventName message:(NSString * _Nullable)message properties:(NSDictionary * _Nullable)properties file:(NSString * _Nullable)file line:(NSNumber * _Nullable)line funcName:(NSString * _Nullable)funcName {
     [self.logs addObject:eventName];
 }
 

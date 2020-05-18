@@ -23,33 +23,32 @@ public protocol OktaLoggerProtocol {
              identifier: String?,
              file: String?,
              line: NSNumber?,
-             column: NSNumber?,
              funcName: String?)
     
     /**
      Convenience method for log(level: .debug, ...)
      */
-    func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
     
     /**
      Convenience method for log(level: .info, ...)
      */
-    func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
     
     /**
      Convenience method for log(level: .warning, ...)
      */
-    func warning(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func warning(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
     
     /**
      Convenience method for log(level: .uievent, ...)
      */
     func uiEvent(eventName: String,
-                       message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+                       message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
     /**
      Convenience method for log(level: .error, ...)
      */
-    func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?)
+    func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
     
     /**
      Set default property dict for a given logging destination
@@ -85,7 +84,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
    
     // MARK: Public
     
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, column: NSNumber?, funcName: String?) {
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, funcName: String?) {
         // sync so that callstacks are preserved
         self.queue.sync {
             for logger in self.destinations.values {
@@ -100,7 +99,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
                                eventName: eventName,
                                message: message,
                                properties: properties ?? self.defaultProperties,
-                               file: file, line: line, column: column, funcName: funcName)
+                               file: file, line: line, funcName: funcName)
                     // if we logged to the right identifier, we can break early
                     if identifier != nil { break }
                 }
@@ -108,24 +107,24 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
     
-    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
-        log(level: .debug, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
+    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+        log(level: .debug, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
     }
     
-    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
-        log(level: .info, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
+    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+        log(level: .info, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
     }
     
-    public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
-        log(level: .warning, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
+    public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+        log(level: .warning, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
     }
     
-    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
-        log(level: .uiEvent, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
+    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+        log(level: .uiEvent, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
     }
     
-    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, column: NSNumber? = #column, funcName: String? = #function) {
-        log(level: .error, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, column: column, funcName: funcName)
+    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+        log(level: .error, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
     }
     
     public func removeDestination(identifier: String) {

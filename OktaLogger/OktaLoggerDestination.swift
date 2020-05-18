@@ -31,6 +31,5 @@ public protocol OktaLoggerDestination {
              properties: [AnyHashable: Any]?,
              file: String?,
              line: NSNumber?,
-             column: NSNumber?,
              funcName: String?)
 }

@@ -12,7 +12,7 @@ public protocol OktaLoggerProtocol {
      - Parameters:
         - destinations: List of OktaLoggerDestinations
      */
-    init(destinations: [OktaLoggerDestination])
+    init(destinations: [OktaLoggerDestinationProtocol])
     
     /**
     Logging super-method for all parameters
@@ -30,6 +30,15 @@ public protocol OktaLoggerProtocol {
              file: String?,
              line: NSNumber?,
              funcName: String?)
+    
+    /**
+     Update the log level for one or all destinations
+     
+     - Parameters:
+         - level: OktaLogLevel to set
+         - identifiers: destination identifiers to be updated
+     */
+    func setLogLevel(level: OktaLogLevel, identifiers: [String])
     
     /**
      Convenience method for log(level: .debug, ...)
@@ -65,43 +74,41 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
    
     // MARK: Public
     
-    public required init(destinations: [OktaLoggerDestination]) {
-        var destinationDict = [String:OktaLoggerDestination]()
+    public required init(destinations: [OktaLoggerDestinationProtocol]) {
+        var destinationDict = [String:OktaLoggerDestinationProtocol]()
         for destination in destinations {
             destinationDict[destination.identifier] = destination
         }
         self.destinations = destinationDict
     }
     
-    deinit {
-        // wait for any outstanding read locks to complete before destroying
-        pthread_rwlock_wrlock(&self.lock)
-        pthread_rwlock_unlock(&self.lock)
-        pthread_rwlock_destroy(&self.lock)
-    }
-    
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
-        pthread_rwlock_rdlock(&self.lock)
-        defer { pthread_rwlock_unlock(&self.lock) }
-
         for logger in self.destinations.values {
             // check the logging level of this destination
             let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
-            if !levelCheck {return}
+            if !levelCheck { continue }
             
             logger.log(level: level,
                        eventName: eventName,
                        message: message,
-                       properties: properties,
+                       properties: properties ?? logger.defaultProperties,
                        file: file, line: line, funcName: funcName)
         }
     }
     
-    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func setLogLevel(level: OktaLogLevel, identifiers: [String]) {
+        for identifier in identifiers {
+            if let destination = self.destinations[identifier] {
+                destination.level = level
+            }
+        }
+    }
+    
+    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
         log(level: .debug, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
         log(level: .info, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
@@ -109,20 +116,15 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         log(level: .warning, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
         log(level: .uiEvent, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
         log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     // MARK: Private / Internal
     
-    let destinations : [String:OktaLoggerDestination]
-    private var lock: pthread_rwlock_t = {
-        var lock = pthread_rwlock_t()
-        pthread_rwlock_init(&lock, nil)
-        return lock
-    }()
+    let destinations : [String:OktaLoggerDestinationProtocol]
 }

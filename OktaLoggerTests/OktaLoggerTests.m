@@ -11,20 +11,19 @@
 
 // Test the basic macro syntax and verify that the logs are populated
 - (void)testMacroSyntax {
-    OktaLogger *logger = [[OktaLogger alloc] init];
     MockLoggerDestination *destination = [MockLoggerDestination new];
-    [logger addDestination:destination];
+    OktaLogger *logger = [[OktaLogger alloc] initWithDestinations:@[destination]];
     setDefaultLogger(logger);
     
-    OLogDebug(@"event", @"%@", @"world");
+    okl_debug(@"event", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 1);
-    OLogInfo(@"event", @"%@", @"world");
+    okl_info(@"event", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 2);
-    OLogWarning(@"event", @"%@", @"world");
+    okl_warn(@"event", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 3);
-    OLogUiEvent(@"event", @"%@", @"world");
+    okl_uievent(@"event", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 4);
-    OLogError(@"error", @"%@", @"world");
+    okl_error(@"error", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 5);
 }
 

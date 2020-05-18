@@ -8,8 +8,7 @@ class OktaConsoleLoggerTests: XCTestCase {
      */
     func testLogToConsoleSyntax() {
         let console = OktaConsoleLogger(identifier: "hello.my.console", level: .debug, console: false)
-        let logger = OktaLogger()
-        logger.addDestination(console)        
+        let logger = OktaLogger(destinations: [console])
         logger.debug(eventName: "Hello", message: "World", properties: nil)
     }
 }

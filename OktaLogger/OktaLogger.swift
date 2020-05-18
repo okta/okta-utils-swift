@@ -6,6 +6,12 @@ import Foundation
 @objc
 public protocol OktaLoggerProtocol {
     
+    /**
+     Initialize a primary logger instance with a list of destinations. Destinations are immutable for thread safety.
+     
+     - Parameters:
+        - destinations: List of OktaLoggerDestinations
+     */
     init(destinations: [OktaLoggerDestination])
     
     /**
@@ -67,7 +73,17 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         self.destinations = destinationDict
     }
     
+    deinit {
+        // wait for any outstanding read locks to complete before destroying
+        pthread_rwlock_wrlock(&self.lock)
+        pthread_rwlock_unlock(&self.lock)
+        pthread_rwlock_destroy(&self.lock)
+    }
+    
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
+        pthread_rwlock_rdlock(&self.lock)
+        defer { pthread_rwlock_unlock(&self.lock) }
+
         for logger in self.destinations.values {
             // check the logging level of this destination
             let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
@@ -104,4 +120,9 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     // MARK: Private / Internal
     
     let destinations : [String:OktaLoggerDestination]
+    private var lock: pthread_rwlock_t = {
+        var lock = pthread_rwlock_t()
+        pthread_rwlock_init(&lock, nil)
+        return lock
+    }()
 }

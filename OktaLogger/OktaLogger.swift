@@ -128,3 +128,12 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     
     let destinations : [String:OktaLoggerDestinationProtocol]
 }
+
+
+/**
+ Simple extension for shared logger in order to provide simple Objective-C support
+ */
+@objc
+public extension OktaLogger {
+    static var shared: OktaLogger?
+}

@@ -13,7 +13,7 @@
 - (void)testMacroSyntax {
     MockLoggerDestination *destination = [MockLoggerDestination new];
     OktaLogger *logger = [[OktaLogger alloc] initWithDestinations:@[destination]];
-    setDefaultLogger(logger);
+    OktaLogger.shared = logger;
     
     okl_debug(@"event", @"%@", @"world");
     XCTAssertEqual(destination.logs.count, 1);

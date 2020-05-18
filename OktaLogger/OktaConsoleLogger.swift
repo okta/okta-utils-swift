@@ -17,34 +17,17 @@ public protocol OktaConsoleLoggerProtocol {
  Concrete logging class for console and IDE logs.
  */
 @objc
-public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
-    public let identifier: String
-    public let level: OktaLogLevel
-    public let console: Bool
+public class OktaConsoleLogger: OktaLoggerDestinationBase {
     
-    public init(identifier: String, level: OktaLogLevel, console: Bool) {
-        self.identifier = identifier
-        self.level = level
-        self.console = console
-        self.dateFormatter = DateFormatter()
-        self.dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    }
-    
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
+    override public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
         
          let logMessage = self.stringValue(eventName: eventName,
                                            message: message,
-                                           properties: properties,
+                                           properties: properties ?? self.defaultProperties,
                                            file: file, line: line, funcName: funcName)
-        if self.console {
-            // translate log level into relevant console type level
-            let type = self.consoleLogType(level: level)
-            os_log("%s", type: type, logMessage)
-        } else {
-            // print only to ide
-            let datePrefix = self.dateFormatter.string(from: Date())
-            print("\(datePrefix) - \(logMessage)")
-        }
+        // translate log level into relevant console type level
+        let type = self.consoleLogType(level: level)
+        os_log("%s", type: type, logMessage)
     }
     
     // MARK: Private + Internal
@@ -72,6 +55,4 @@ public class OktaConsoleLogger: NSObject, OktaLoggerDestination {
             return .default
         }
     }
-    
-    private let dateFormatter: DateFormatter
 }

@@ -7,7 +7,8 @@ import Foundation
 public protocol OktaLoggerDestination {
     
     /**
-     Identifier for this logging destination, e.g. "com.okta.console" or "com.google.firebase.analytics"
+     Unique for this logging destination, e.g. "com.okta.console" or "com.google.firebase.analytics"
+     Only one logger per identifier is permitted
      */
     var identifier: String {get}
     

@@ -14,13 +14,11 @@ public protocol OktaLoggerProtocol {
       - eventName: name for this event
       - message: message for this event (optional)
       - properties: key-value properties for this event (optional)
-      - identifier: logger identifier for this event
          */
     func log(level: OktaLogLevel,
              eventName: String,
              message: String?,
              properties: [AnyHashable: Any]?,
-             identifier: String?,
              file: String?,
              line: NSNumber?,
              funcName: String?)
@@ -55,7 +53,6 @@ public protocol OktaLoggerProtocol {
      
      - Parameters:
      - properties: Key-value pairs of properties to be applied to logs
-     - identifier: Logger identifier, nil will apply to all loggers
      */
     func setDefaultProperties(properties: [AnyHashable : Any])
     
@@ -84,7 +81,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
    
     // MARK: Public
     
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, identifier: String?, file: String?, line: NSNumber?, funcName: String?) {
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
         // sync so that callstacks are preserved
         self.queue.sync {
             for logger in self.destinations.values {
@@ -92,39 +89,33 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
                 let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
                 if !levelCheck {return}
                 
-                // log to one or all idenitifiers
-                if identifier == nil ||
-                    logger.identifier == identifier {
-                    logger.log(level: level,
-                               eventName: eventName,
-                               message: message,
-                               properties: properties ?? self.defaultProperties,
-                               file: file, line: line, funcName: funcName)
-                    // if we logged to the right identifier, we can break early
-                    if identifier != nil { break }
-                }
+                logger.log(level: level,
+                           eventName: eventName,
+                           message: message,
+                           properties: properties ?? self.defaultProperties,
+                           file: file, line: line, funcName: funcName)
             }
         }
     }
     
     public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
-        log(level: .debug, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
+        log(level: .debug, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     public func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
-        log(level: .info, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
+        log(level: .info, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
-        log(level: .warning, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
+        log(level: .warning, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
-        log(level: .uiEvent, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
+        log(level: .uiEvent, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     public func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
-        log(level: .error, eventName: eventName, message: message, properties: properties, identifier: nil, file: file, line: line, funcName: funcName)
+        log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
     public func removeDestination(identifier: String) {

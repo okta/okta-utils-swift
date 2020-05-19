@@ -163,6 +163,18 @@ class OktaLoggerTests: XCTestCase {
         }
         self.wait(for: [expectation], timeout: 10)
     }
+    
+    /**
+     Verify that the 'main' logger getters and setters work properly.
+     */
+    func testGlobalLogger() {
+        let destination = MockLoggerDestination(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        OktaLogger.main = logger
+        XCTAssertEqual(logger, OktaLogger.main)
+        OktaLogger.main?.debug(eventName: "Main", message: nil)
+        XCTAssertEqual(destination.events.count, 1)
+    }
 }
 
 

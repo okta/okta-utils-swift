@@ -129,11 +129,23 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     let destinations : [String:OktaLoggerDestinationProtocol]
 }
 
-
 /**
- Simple extension for shared logger in order to provide simple Objective-C support
+ Extension for thread-safe global logger instance get/set
  */
 @objc
 public extension OktaLogger {
-    static var shared: OktaLogger?
+    static var main: OktaLogger? {
+        get {
+            singletonQueue.sync {
+                return _main
+            }
+        }
+        set (logger) {
+            singletonQueue.sync {
+                _main = logger
+            }
+        }
+    }
+    private static let singletonQueue = DispatchQueue(label: "com.okta.logger.singleton")
+    static var _main: OktaLogger?
 }

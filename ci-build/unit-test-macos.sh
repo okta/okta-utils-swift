@@ -23,6 +23,9 @@ xcodebuild \
     
 # store results / coverage
 cp -r "${DERIVED_DATA}"/Logs/Test/*.xcresult "${TEST_RESULTS_DIR}"
+log_extra_dir_as_zip "${TEST_RESULTS_DIR}" TestResults
+echo "hello" > "${HOME}/dart/test.log"
+
 
 
 

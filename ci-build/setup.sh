@@ -9,7 +9,7 @@ if [ -d "${DERIVED_DATA}" ]; then
     rm -rf "${DERIVED_DATA}"
 fi
 
-TEST_RESULTS_DIR=${HOME}/dart
+TEST_RESULTS_DIR=${LOGGER_ROOT}/TestResults
 if [ ! -d "${TEST_RESULTS_DIR}" ]; then
     mkdir -p "${TEST_RESULTS_DIR}"
 fi

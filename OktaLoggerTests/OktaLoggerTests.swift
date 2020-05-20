@@ -143,11 +143,14 @@ class OktaLoggerTests: XCTestCase {
             concQueue.async {
                 logger.setLogLevel(level: .all, identifiers: [destination.identifier])
             }
-            concQueue.async {
-                // update logger to new instance
-                DispatchQueue.main.async {
-                    let dest = MockLoggerDestination(identifier: UUID().uuidString, level: .all, defaultProperties: nil)
-                    logger = OktaLogger(destinations: [dest])
+            
+            if (i % 10 == 0) {
+                concQueue.async {
+                    // update logger to new instance
+                    DispatchQueue.main.async {
+                        let dest = MockLoggerDestination(identifier: UUID().uuidString, level: .all, defaultProperties: nil)
+                        logger = OktaLogger(destinations: [dest])
+                    }
                 }
             }
             concQueue.async {

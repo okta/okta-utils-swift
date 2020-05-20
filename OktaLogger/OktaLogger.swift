@@ -73,7 +73,7 @@ public protocol OktaLoggerProtocol {
 open class OktaLogger: NSObject, OktaLoggerProtocol {
    
     // MARK: Public
-    
+
     public required init(destinations: [OktaLoggerDestinationProtocol]) {
         var destinationDict = [String:OktaLoggerDestinationProtocol]()
         for destination in destinations {
@@ -83,6 +83,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     }
     
     public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
+        
         for logger in self.destinations.values {
             // check the logging level of this destination
             let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
@@ -124,9 +125,8 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    // MARK: Private / Internal
-    
-    let destinations : [String:OktaLoggerDestinationProtocol]
+    /// Useful to keep public for updating all log levels
+    public let destinations : [String:OktaLoggerDestinationProtocol]
 }
 
 /**

@@ -1,18 +1,5 @@
 import os
 
-@objc
-public protocol OktaConsoleLoggerProtocol {
-    /**
-        Instantiate a concrete console logger
-        
-        - Parameters:
-            - identifier: Logger identfier
-            - level: OktaLoggingLevel
-            - console: Bool to indicate whether console logging should be enabled. IDE logging is always on.
-        */
-       init(identifier: String, level: OktaLogLevel, console: Bool)
-}
-
 /**
  Concrete logging class for console and IDE logs.
  */

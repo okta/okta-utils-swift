@@ -27,4 +27,15 @@
     XCTAssertEqual(destination.logs.count, 5);
 }
 
+/*!
+ Verify objective-c syntax for OktaConsoleLogger destination
+ */
+- (void)testConsoleDestination {
+    OktaConsoleLogger *console = [[OktaConsoleLogger alloc] initWithIdentifier:@"com.okta.console"
+                                                                         level:OktaLogLevel.all
+                                                             defaultProperties:nil];
+    OktaLogger.main = [[OktaLogger alloc] initWithDestinations:@[console]];
+    okl_debug(@"EVENT", @"MY event number: %@", @(123));
+}
+
 @end

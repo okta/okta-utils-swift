@@ -20,7 +20,7 @@ public protocol OktaLoggerDestinationProtocol {
     /**
      Logging level for this destination
      */
-    var defaultProperties: [AnyHashable : Any]? { get }
+    var defaultProperties: [AnyHashable : Any]? {get}
     
     /**
      Logging super-method, to be implemented by all concrete logging destinations
@@ -49,6 +49,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     public let identifier: String
     public let defaultProperties: [AnyHashable : Any]?
     
+    @objc
     public init(identifier: String, level: OktaLogLevel, defaultProperties: [AnyHashable : Any]?) {
         self.identifier = identifier
         self._level = level

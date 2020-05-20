@@ -26,7 +26,6 @@ cp -r "${DERIVED_DATA}"/Logs/Test/*.xcresult "${TEST_RESULTS_DIR}"
 pushd "${TEST_RESULTS_DIR}"
 zip -r ../TestResults.zip .
 popd
-echo "hello" > "${HOME}/dart/test.log"
 rm -rf "${TEST_RESULTS_DIR}"
 mv TestResults.zip "${HOME}"/dart
 

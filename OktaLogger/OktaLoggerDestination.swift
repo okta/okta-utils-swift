@@ -60,13 +60,13 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
      */
     public var level: OktaLogLevel {
         get {
-            pthread_rwlock_rdlock(&self.lock)
-            defer { pthread_rwlock_unlock(&self.lock) }
+            self.lock.readLock()
+            defer { self.lock.unlock() }
             return self._level
         }
         set (value) {
-            pthread_rwlock_wrlock(&self.lock)
-            defer { pthread_rwlock_unlock(&self.lock)}
+            self.lock.writeLock()
+            defer { self.lock.unlock()}
             self._level = value
         }
     }
@@ -80,11 +80,6 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     
     // MARK: Private
     
-    private var lock: pthread_rwlock_t = {
-        var lock = pthread_rwlock_t()
-        pthread_rwlock_init(&lock, nil)
-        return lock
-    }()
-    
+    private var lock = ReadWriteLock()
     private var _level: OktaLogLevel
 }

@@ -136,16 +136,20 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
 public extension OktaLogger {
     static var main: OktaLogger? {
         get {
-            singletonQueue.sync {
-                return _main
+            _lock.readLock()
+            defer {
+                _lock.unlock()
             }
+            return _main
         }
         set (logger) {
-            singletonQueue.sync {
-                _main = logger
+            _lock.writeLock()
+            defer {
+                _lock.unlock()
             }
+            _main = logger
         }
     }
-    private static let singletonQueue = DispatchQueue(label: "com.okta.logger.singleton")
-    static var _main: OktaLogger?
+    static private var _lock = ReadWriteLock()
+    static private var _main: OktaLogger?
 }

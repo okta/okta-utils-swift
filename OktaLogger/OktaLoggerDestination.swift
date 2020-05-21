@@ -35,9 +35,9 @@ public protocol OktaLoggerDestinationProtocol {
              eventName: String,
              message: String?,
              properties: [AnyHashable: Any]?,
-             file: String?,
-             line: NSNumber?,
-             funcName: String?)
+             file: String,
+             line: NSNumber,
+             funcName: String)
 }
 
 
@@ -75,9 +75,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     /**
      Log function must be overridden by subclasses
      */
-    open func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
-        assert(false, "OktaLoggerDestinationBase is an abstract class")
-    }
+    open func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {}
     
     // MARK: Private
     

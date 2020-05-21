@@ -178,6 +178,12 @@ class OktaLoggerTests: XCTestCase {
         OktaLogger.main?.debug(eventName: "Main", message: nil)
         XCTAssertEqual(destination.events.count, 1)
     }
+    
+    func testDestinationBase() {
+        let destination = OktaLoggerDestinationBase(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        logger.debug(eventName: "hello", message: nil)
+    }
 }
 
 

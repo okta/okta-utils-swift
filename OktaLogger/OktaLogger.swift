@@ -27,9 +27,9 @@ public protocol OktaLoggerProtocol {
              eventName: String,
              message: String?,
              properties: [AnyHashable: Any]?,
-             file: String?,
-             line: NSNumber?,
-             funcName: String?)
+             file: String,
+             line: NSNumber,
+             funcName: String)
     
     /**
      Update the log level for one or all destinations
@@ -43,27 +43,27 @@ public protocol OktaLoggerProtocol {
     /**
      Convenience method for log(level: .debug, ...)
      */
-    func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
+    func debug(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String)
     
     /**
      Convenience method for log(level: .info, ...)
      */
-    func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
+    func info(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String)
     
     /**
      Convenience method for log(level: .warning, ...)
      */
-    func warning(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
+    func warning(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String)
     
     /**
      Convenience method for log(level: .uievent, ...)
      */
     func uiEvent(eventName: String,
-                       message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
+                       message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String)
     /**
      Convenience method for log(level: .error, ...)
      */
-    func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?)
+    func error(eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String)
 }
 
 /**
@@ -82,7 +82,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         self.destinations = destinationDict
     }
     
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String?, line: NSNumber?, funcName: String?) {
+    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         
         for logger in self.destinations.values {
             // check the logging level of this destination
@@ -105,23 +105,23 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
     
-    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func debug(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         log(level: .debug, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func info(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         log(level: .info, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func warning(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         log(level: .warning, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func uiEvent(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         log(level: .uiEvent, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     
-    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String? = #file, line: NSNumber? = #line, funcName: String? = #function) {
+    public func error(eventName: String, message: String?, properties: [AnyHashable : Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
     

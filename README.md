@@ -1,28 +1,14 @@
-# Design
-## Goal
-We want to build a logging SDK and have the ability to log events to IDE, Pendo, Firebase, etc.
-## Common operation
-- Should be compatible with swift and objective-c
-- Support single input to multiple output logger classes (e.g. console, firebase, filesystem) 
-- Make it possible to change the log level of any output destination during runtime
-- Future needs: Okta backend logging API
-- A common identifier for the device that gets passed to all logs, this identifier will be created at the time of installation of the app.
-- Default properties for logging destination in order always log items such ase device identifier.
+# OktaLogger
+OktaLogger is a proxy-based logging SDK for allowing an app to log to many destinations at once, allowing for easy error and metric reporting without extraneous noise.
 
-## API example
-Existing logging outputs take events and key-value pairs. These are supported by OktaLogger and are passed to the target logging destinations.
-### Pendo
-```swift
-PendoManager.shared().track("event_name", properties: ["key1":"val1", "key2":"val2"])
-```
-### Firebase
-```swift
-Analytics.logEvent("share_image", parameters: ["name": name as NSObject, "full_text": text as NSObject])
-```
-### OktaLogger
-```swift
-logger.logUiEvent("share_image", message: nil, parameters: ["name": name as NSObject, "full_text": text as NSObject])
-```
+1. Compatible with Swift and Objective-C
+2. Supports single input to multiple output logger classes (e.g. console, firebase, filesystem) 
+3. Supports runtime log level changes to any destination
+4. Default properties for logging destinations in order to support data such as device identifier.
+
+## Diagrams
+![Classes](docs/OktaLogger.png "OktaLogger Classes")
+![Sequence](docs/sequence.png "Operation Sequence")
 
 ## Usage
 ### Swift
@@ -49,3 +35,38 @@ logger.logUiEvent("share_image", message: nil, parameters: ["name": name as NSOb
     // Objective-c macro defined for convenience
     okl_error(@"TOTP Failure", "Could not retrieve key for RSA Key: %@", key);
 ```
+
+## Destinations
+Logging destinations should inherit from the `OktaLoggerDestinationBase` abstract class (See `OktaConsoleLogger` ).
+
+Override the `log()` method with
+
+### Pendo
+```swift
+log(eventName, properties) {
+    PendoManager.shared().track(eventName, properties: properties)
+}
+```
+### Firebase
+```swift
+log(eventName = "share_image", properties = ["name": name as NSObject, "full_text": text as NSObject]) {
+    Analytics.logEvent(eventName, parameters: properties)
+}
+```
+
+## Log Levels and Identifiers
+Each destination has an `identifier: String` and an `OktaLogLevel: NSOptionSet`
+Logging destinations will only log events which match against their level(s).
+
+### Example
+The following console logger will not log for `debug()` logs, but will for `info()` `warning()` or `error()` logs.
+```swift
+let consoleLogger = OktaConsoleLogger(identifier: "console.logger", level: [.info, .warn, .error])`
+OktaLogger.main = OktaLogger(destinations: [consoleLogger])
+```
+The level can be changed at runtime should you wish to begin recording `debug()` level logs
+```swift
+OktaLogger.main.setLogLevel(level: .all, destinations: [consoleLogger.identifier])
+```
+
+

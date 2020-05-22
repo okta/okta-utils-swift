@@ -143,11 +143,14 @@ class OktaLoggerTests: XCTestCase {
             concQueue.async {
                 logger.setLogLevel(level: .all, identifiers: [destination.identifier])
             }
-            concQueue.async {
-                // update logger to new instance
-                DispatchQueue.main.async {
-                    let dest = MockLoggerDestination(identifier: UUID().uuidString, level: .all, defaultProperties: nil)
-                    logger = OktaLogger(destinations: [dest])
+            
+            if (i % 10 == 0) {
+                concQueue.async {
+                    // update logger to new instance
+                    DispatchQueue.main.async {
+                        let dest = MockLoggerDestination(identifier: UUID().uuidString, level: .all, defaultProperties: nil)
+                        logger = OktaLogger(destinations: [dest])
+                    }
                 }
             }
             concQueue.async {
@@ -174,6 +177,12 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertEqual(logger, OktaLogger.main)
         OktaLogger.main?.debug(eventName: "Main", message: nil)
         XCTAssertEqual(destination.events.count, 1)
+    }
+    
+    func testDestinationBase() {
+        let destination = OktaLoggerDestinationBase(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        logger.debug(eventName: "hello", message: nil)
     }
 }
 

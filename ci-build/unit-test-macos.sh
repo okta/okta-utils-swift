@@ -18,6 +18,18 @@ xcodebuild \
     -workspace "${PROJECT_NAME}.xcworkspace" \
     -scheme "${PROJECT_NAME}" \
     -destination 'platform=macOS,arch=x86_64' \
+    -derivedDataPath "${DERIVED_DATA}" \
     test
+    
+# store results / coverage
+cp -r "${DERIVED_DATA}"/Logs/Test/*.xcresult "${TEST_RESULTS_DIR}"
+pushd "${TEST_RESULTS_DIR}"
+zip -r ../TestResults.zip .
+popd
+rm -rf "${TEST_RESULTS_DIR}"
+mv TestResults.zip "${HOME}"/dart
+
+
+
 
 

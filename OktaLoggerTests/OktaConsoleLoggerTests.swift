@@ -7,9 +7,15 @@ class OktaConsoleLoggerTests: XCTestCase {
      Verify that logging to the console works as expected
      */
     func testLogToConsoleSyntax() {
-        let console = OktaConsoleLogger(identifier: "hello.my.console", level: .debug, defaultProperties: nil)
+        let console = OktaConsoleLogger(identifier: "hello.my.console", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [console])
-        logger.debug(eventName: "Hello", message: "World")
+        logger.debug(eventName: "Hello", message: nil)
+        logger.info(eventName: "Boom", message: "crash", properties: ["what":"ever"])
+        logger.error(eventName: "Boom", message: "crash", properties: ["what":"ever"])
+        logger.warning(eventName: "Boom", message: "crash", properties: ["what":"ever"])
+        logger.uiEvent(eventName: "Boom", message: "crash", properties: ["what":"ever"])
+        logger.debug(eventName: "hello", message: "bogusness", properties: nil, file: "")
+        logger.log(level: .off, eventName: "none", message: nil, properties: nil)
     }
     
     /**

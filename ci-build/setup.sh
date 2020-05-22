@@ -4,6 +4,16 @@
 PROJECT_NAME="OktaLogger"
 LOGGER_ROOT="${CI_DIRECTORY}"/..
 
+DERIVED_DATA="${LOGGER_ROOT}/DerivedData"
+if [ -d "${DERIVED_DATA}" ]; then
+    rm -rf "${DERIVED_DATA}"
+fi
+
+TEST_RESULTS_DIR=${LOGGER_ROOT}/TestResults
+if [ ! -d "${TEST_RESULTS_DIR}" ]; then
+    mkdir -p "${TEST_RESULTS_DIR}"
+fi
+
 # Print header with build machine, build launch information
 function printBuildEnvironment() {
     USER=`whoami`

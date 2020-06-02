@@ -18,12 +18,12 @@ public protocol OktaLoggerProtocol {
     Logging super-method for all parameters
     
     - Parameters:
-      - level: OktaLogLevel for this event
+      - level: OktaLoggerLogLevel for this event
       - eventName: name for this event
       - message: message for this event (optional)
       - properties: key-value properties for this event (optional)
          */
-    func log(level: OktaLogLevel,
+    func log(level: OktaLoggerLogLevel,
              eventName: String,
              message: String?,
              properties: [AnyHashable: Any]?,
@@ -35,10 +35,10 @@ public protocol OktaLoggerProtocol {
      Update the log level for one or all destinations
      
      - Parameters:
-         - level: OktaLogLevel to set
+         - level: OktaLoggerLogLevel to set
          - identifiers: destination identifiers to be updated
      */
-    func setLogLevel(level: OktaLogLevel, identifiers: [String])
+    func setLogLevel(level: OktaLoggerLogLevel, identifiers: [String])
     
     /**
      Convenience method for log(level: .debug, ...)
@@ -82,7 +82,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         self.destinations = destinationDict
     }
     
-    public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+    public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
         
         for logger in self.destinations.values {
             // check the logging level of this destination
@@ -97,7 +97,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
     
-    public func setLogLevel(level: OktaLogLevel, identifiers: [String]) {
+    public func setLogLevel(level: OktaLoggerLogLevel, identifiers: [String]) {
         for identifier in identifiers {
             if let destination = self.destinations[identifier] {
                 destination.level = level

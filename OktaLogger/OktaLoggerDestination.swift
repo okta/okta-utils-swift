@@ -15,7 +15,7 @@ public protocol OktaLoggerDestinationProtocol {
     /**
      Logging level for this destination
      */
-    var level: OktaLogLevel { get set }
+    var level: OktaLoggerLogLevel { get set }
     
     /**
      Logging level for this destination
@@ -26,12 +26,12 @@ public protocol OktaLoggerDestinationProtocol {
      Logging super-method, to be implemented by all concrete logging destinations
      
      - Parameters:
-     - level: OktaLogLevel for this event
+     - level: OktaLoggerLogLevel for this event
      - eventName: name for this event
      - message: message for this event (optional)
      - properties: key-value properties for this event (optional)
      */
-    func log(level: OktaLogLevel,
+    func log(level: OktaLoggerLogLevel,
              eventName: String,
              message: String?,
              properties: [AnyHashable: Any]?,
@@ -50,7 +50,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     public let defaultProperties: [AnyHashable : Any]?
     
     @objc
-    public init(identifier: String, level: OktaLogLevel, defaultProperties: [AnyHashable : Any]?) {
+    public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable : Any]?) {
         self.identifier = identifier
         self._level = level
         self.defaultProperties = defaultProperties
@@ -59,7 +59,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     /**
      Atomic get and set using readwrite lock
      */
-    public var level: OktaLogLevel {
+    public var level: OktaLoggerLogLevel {
         get {
             self.lock.readLock()
             defer { self.lock.unlock() }
@@ -75,10 +75,10 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     /**
      Log function must be overridden by subclasses
      */
-    open func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {}
+    open func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {}
     
     // MARK: Private
     
     private var lock = ReadWriteLock()
-    private var _level: OktaLogLevel
+    private var _level: OktaLoggerLogLevel
 }

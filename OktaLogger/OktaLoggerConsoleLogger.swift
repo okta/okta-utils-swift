@@ -4,9 +4,9 @@ import os
  Concrete logging class for console and IDE logs.
  */
 @objc
-public class OktaConsoleLogger: OktaLoggerDestinationBase {
+public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
     
-    override public func log(level: OktaLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {
+    override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {
         
          let logMessage = self.stringValue(eventName: eventName,
                                            message: message,
@@ -27,9 +27,9 @@ public class OktaConsoleLogger: OktaLoggerDestinationBase {
     }
     
     /**
-     Translate OktaLogLevel into a console-friendly OSLogType value
+     Translate OktaLoggerLogLevel into a console-friendly OSLogType value
      */
-    func consoleLogType(level: OktaLogLevel) -> OSLogType {
+    func consoleLogType(level: OktaLoggerLogLevel) -> OSLogType {
         switch level {
         case .debug:
             return .debug

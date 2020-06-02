@@ -28,11 +28,11 @@
 }
 
 /*!
- Verify objective-c syntax for OktaConsoleLogger destination
+ Verify objective-c syntax for OktaLoggerConsoleLogger destination
  */
 - (void)testConsoleDestination {
-    OktaConsoleLogger *console = [[OktaConsoleLogger alloc] initWithIdentifier:@"com.okta.console"
-                                                                         level:OktaLogLevel.all
+    OktaLoggerConsoleLogger *console = [[OktaLoggerConsoleLogger alloc] initWithIdentifier:@"com.okta.console"
+                                                                         level:OktaLoggerLogLevel.all
                                                              defaultProperties:nil];
     OktaLogger.main = [[OktaLogger alloc] initWithDestinations:@[console]];
     okl_debug(@"EVENT", @"MY event number: %@", @(123));

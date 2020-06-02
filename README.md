@@ -14,7 +14,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 ### Swift
 ```swift
     // initialization
-    let console = OktaConsoleDestination(identifier: "com.okta.console.logger", level: .all, defaultProperties: nil)
+    let console = OktaLoggerConsoleLogger(identifier: "com.okta.console.logger", level: .all, defaultProperties: nil)
     let firebase = OktaFirebaseDestination(dentifier: "com.okta.firebaselogger", level: .error, defaultProperties: nil)
     OktaLogger.main = OktaLogger(destinations: [console, firebase])
     
@@ -26,7 +26,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 ```
 ### Objective-C
 ```objc
-    OktaConsoleDestination *console = [[OktaConsoleDestination alloc]
+    OktaLoggerConsoleLogger *console = [[OktaLoggerConsoleLogger alloc]
                                         initWithIdenitfier:@"com.okta.console.logger" 
                                                      level:OktaLevel.all 
                                         defaultProperties:nil];
@@ -37,7 +37,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 ```
 
 ## Destinations
-Logging destinations should inherit from the `OktaLoggerDestinationBase` abstract class (See `OktaConsoleLogger` ).
+Logging destinations should inherit from the `OktaLoggerDestinationBase` abstract class (See `OktaLoggerConsoleLogger` ).
 
 Override the `log()` method with
 
@@ -55,13 +55,13 @@ log(eventName = "share_image", properties = ["name": name as NSObject, "full_tex
 ```
 
 ## Log Levels and Identifiers
-Each destination has an `identifier: String` and an `OktaLogLevel: NSOptionSet`
+Each destination has an `identifier: String` and an `OktaLoggerLogLevel: NSOptionSet`
 Logging destinations will only log events which match against their level(s).
 
 ### Example
 The following console logger will not log for `debug()` logs, but will for `info()` `warning()` or `error()` logs.
 ```swift
-let consoleLogger = OktaConsoleLogger(identifier: "console.logger", level: [.info, .warn, .error])`
+let consoleLogger = OktaLoggerConsoleLogger(identifier: "console.logger", level: [.info, .warn, .error])`
 OktaLogger.main = OktaLogger(destinations: [consoleLogger])
 ```
 The level can be changed at runtime should you wish to begin recording `debug()` level logs

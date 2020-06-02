@@ -1,13 +1,13 @@
 import XCTest
 @testable import OktaLogger
 
-class OktaConsoleLoggerTests: XCTestCase {
+class OktaLoggerConsoleLoggerTests: XCTestCase {
     
     /**
      Verify that logging to the console works as expected
      */
     func testLogToConsoleSyntax() {
-        let console = OktaConsoleLogger(identifier: "hello.my.console", level: .all, defaultProperties: nil)
+        let console = OktaLoggerConsoleLogger(identifier: "hello.my.console", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [console])
         logger.debug(eventName: "Hello", message: nil)
         logger.info(eventName: "Boom", message: "crash", properties: ["what":"ever"])
@@ -23,7 +23,7 @@ class OktaConsoleLoggerTests: XCTestCase {
      */
     func testMultithreadingLogToConsole() {
         let expectation = XCTestExpectation(description: "all logging complete")
-        let destination = OktaConsoleLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let destination = OktaLoggerConsoleLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [destination])
 
         var completed = 0

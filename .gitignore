@@ -4,3 +4,4 @@ Pods
 OktaLogger.xcworkspace/xcuserdata
 OktaLogger.xcodeproj/xcuserdata
 DerivedData
+.DS_Store

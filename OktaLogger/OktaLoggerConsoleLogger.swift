@@ -24,13 +24,8 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
      */
     func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
-        var logMessageIcon = "✅"
-        if level == .warning {
-            logMessageIcon = "⚠️"
-        } else if level == .error {
-            logMessageIcon = "🛑"
-        }
-        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\""
+        let logMessageIcon = OktaLoggerUtility.generateLogMessageIcon(level: level)
+        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
     }
     
     /**

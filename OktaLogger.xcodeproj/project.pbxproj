@@ -27,6 +27,7 @@
 		E251E805248AD1B400EF466D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E251E803248AD1B400EF466D /* Main.storyboard */; };
 		E251E807248AD1B800EF466D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E251E806248AD1B800EF466D /* Assets.xcassets */; };
 		E251E80A248AD1B800EF466D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E251E808248AD1B800EF466D /* LaunchScreen.storyboard */; };
+		E25B6683249838D900E86250 /* OktaLoggerUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25B6682249838D900E86250 /* OktaLoggerUtility.swift */; };
 		F0009FA846FF28BC6F21EF23 /* libPods-OktaLoggerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3FDC676F1BCD09641BDA18FA /* libPods-OktaLoggerTests.a */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		E251E806248AD1B800EF466D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E251E809248AD1B800EF466D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E251E80B248AD1B800EF466D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E25B6682249838D900E86250 /* OktaLoggerUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerUtility.swift; sourceTree = "<group>"; };
 		E845612E0BE69997F307E326 /* Pods-OktaLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.release.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.release.xcconfig"; sourceTree = "<group>"; };
 		F9CB6E9781076186982B2417 /* libPods-OktaLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLogger.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -144,6 +146,7 @@
 				D54461C02469FFBA00C755F1 /* OktaLoggerLogLevel.swift */,
 				D54461CA246B55A600C755F1 /* OktaLoggerDestination.swift */,
 				D5B22D05246B602B007ECC2F /* OktaLoggerConsoleLogger.swift */,
+				E25B6682249838D900E86250 /* OktaLoggerUtility.swift */,
 				D52C2AD02474A4F5003CCF4D /* ReadWriteLock.swift */,
 			);
 			path = OktaLogger;
@@ -402,6 +405,7 @@
 				D54461C3246A023000C755F1 /* OktaLogger.swift in Sources */,
 				D54461CB246B55A600C755F1 /* OktaLoggerDestination.swift in Sources */,
 				D52C2AD12474A4F5003CCF4D /* ReadWriteLock.swift in Sources */,
+				E25B6683249838D900E86250 /* OktaLoggerUtility.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

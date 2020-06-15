@@ -8,7 +8,8 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
     
     override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {
         
-         let logMessage = self.stringValue(eventName: eventName,
+         let logMessage = self.stringValue(level: level,
+                                           eventName: eventName,
                                            message: message,
                                            file: file, line: line, funcName: funcName)
         // translate log level into relevant console type level
@@ -21,9 +22,15 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
     /**
      Create a structured string out of the logging parameters and properties
      */
-    func stringValue(eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
+    func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
-        return "{\"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\""
+        var logMessageIcon = "✅"
+        if level == .warning {
+            logMessageIcon = "⚠️"
+        } else if level == .error {
+            logMessageIcon = "🛑"
+        }
+        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\""
     }
     
     /**
@@ -33,9 +40,9 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
         switch level {
         case .debug:
             return .debug
-        case .info, .warning, .uiEvent:
+        case .info, .uiEvent:
              return .info
-        case .error:
+        case .error, .warning:
             return .error
         default:
             return .default

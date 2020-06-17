@@ -24,7 +24,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
      */
     func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
-        let logMessageIcon = OktaLoggerUtility.generateLogMessageIcon(level: level)
+        let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
         return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
     }
     

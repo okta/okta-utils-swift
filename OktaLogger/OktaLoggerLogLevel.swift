@@ -19,3 +19,23 @@ public class OktaLoggerLogLevel: NSObject, OptionSet {
     @objc public static let error = OktaLoggerLogLevel(rawValue: 1 << 4)
     @objc public static let all: OktaLoggerLogLevel = [.debug, .info, .warning, .uiEvent, .error]
 }
+
+extension OktaLoggerLogLevel {
+    
+    /**
+    Generate log message icon depends on the log level
+    */
+    
+    static func logMessageIcon(level: OktaLoggerLogLevel) -> String {
+        switch level {
+        case .debug, .info, .uiEvent:
+            return "✅"
+        case .error:
+            return "🛑"
+        case .warning:
+            return "⚠️"
+        default:
+            return ""
+        }
+    }
+}

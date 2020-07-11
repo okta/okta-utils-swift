@@ -44,4 +44,11 @@ class OktaLoggerConsoleLoggerTests: XCTestCase {
 
         self.wait(for: [expectation], timeout: 10)
     }
+    
+    func testFileLogger() {
+        let expectation = XCTestExpectation(description: "all logging complete")
+        let destination = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        logger.debug(eventName: "event", message: "Message")
+    }
 }

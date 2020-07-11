@@ -22,6 +22,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         super.viewDidLoad()
         
         tableView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "UITableViewCell")
+        
+        let destination = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        logger.error(eventName: "event", message: "Message")
+        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

@@ -13,6 +13,15 @@ import CocoaLumberjack
 public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     var fileLogger:DDFileLogger = DDFileLogger();
     var isLoggingActive:Bool = true;
+    var logDirectory: String = "logs";
+    
+    /**
+     Initilalize logger with log files in `logDirectory`
+     */
+    @objc
+    convenience public init(logDirectory: String, identifier: String, level:OktaLoggerLogLevel, defaultProperties:[AnyHashable: Any]?) {
+        self.init(identifier:identifier, level:level, defaultProperties:defaultProperties);
+    }
     
     @objc
     override public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable : Any]?) {
@@ -31,23 +40,64 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
         self.log(level: level, message:logMessage)
     }
     
+    /**
+     Stop logging after 'x' seconds
+     */
     @objc
-    public func stopLoggingAfter(hours:Int) {
-        DDLog.remove(self.fileLogger);
+    public func stopLoggingAfter(expiryInMilliSeconds:TimeInterval) {
+        // Async Task/Timer to remove after 'x' seconds
+        Timer.scheduledTimer(withTimeInterval:expiryInMilliSeconds , repeats: false) { timer in
+            self.isLoggingActive = false;
+            DDLog.remove(self.fileLogger)
+            timer.invalidate()
+        }
     }
     
+    /**
+     Stop logging immediately
+     */
     @objc
     public func stopLogging() {
-        self.isLoggingActive = false;
-        DDLog.remove(self.fileLogger)
+        self.stopLoggingAfter(expiryInMilliSeconds: 0);
+    }
+    
+    /**
+     Reinitialize logger
+     */
+    @objc
+    public func resetLogging() {
+        self.stopLogging()
+        let logFilePath = URL(fileURLWithPath: self.logDirectoryAbsolutePath()!)
+        let text = ""
+        do {
+            try text.write(to: logFilePath, atomically: false, encoding: .utf8)
+        } catch {
+            print(error)
+        }
+    }
+    
+    /**
+     Log file path
+     */
+    @objc
+    public func logDirectoryAbsolutePath() -> String?  {
+        let path: String? = self.fileLogger.currentLogFileInfo?.filePath
+        return path
     }
     
     @objc
-    public func resetLogging() {
-        self.fileLogger = DDFileLogger()
-        self.setupLogger()
+    public func getLogs() -> [NSData] {
+        var logFileDataArray:[NSData] = [NSData]();
+        let logFilePaths = self.fileLogger.logFileManager.unsortedLogFilePaths
+        for logFilePath in logFilePaths {
+            let fileURL = NSURL(fileURLWithPath: logFilePath)
+            if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
+                // Insert at front to reverse the order, so that oldest logs appear first.
+                logFileDataArray.insert(logFileData, at: 0)
+            }
+        }
+        return logFileDataArray
     }
-    
     /**
      Remove all Loggers during de allocate
      */
@@ -62,12 +112,9 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
         let logExpiryDay:Double = 60*60*24
         let logExpiryDefault: Double = logExpiryDay * 2
         self.fileLogger.rollingFrequency = logExpiryDefault // 48 hours
-        self.fileLogger.logFileManager.maximumNumberOfLogFiles = 7
+        self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
         DDLog.add(self.fileLogger)
-        Timer.scheduledTimer(withTimeInterval:logExpiryDefault , repeats: false) { timer in
-            self.stopLogging()
-            timer.invalidate()
-        }
+        self.stopLoggingAfter(expiryInMilliSeconds:logExpiryDefault)
         self.isLoggingActive = true
     }
     

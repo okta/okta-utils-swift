@@ -46,9 +46,21 @@ class OktaLoggerConsoleLoggerTests: XCTestCase {
     }
     
     func testFileLogger() {
-        let expectation = XCTestExpectation(description: "all logging complete")
-        let destination = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let destination:OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [destination])
         logger.debug(eventName: "event", message: "Message")
+        let path:String = destination.logDirectoryAbsolutePath()!
+        print(path)
+        var logs:[NSData] = destination.getLogs()
+        XCTAssertEqual(logs.count, 1)
+        var data=String(NSString(data:logs[0] as Data,encoding: String.Encoding.utf8.rawValue)!)
+        XCTAssertNotNil(data)
+        print(data)
+        destination.resetLogging()
+        logger.debug(eventName: "new Log", message: "new log message")
+        logs = destination.getLogs()
+        XCTAssertEqual(logs.count, 1)
+        data=String(NSString(data:logs[0] as Data,encoding: String.Encoding.utf8.rawValue)!)
+        print(data)
     }
 }

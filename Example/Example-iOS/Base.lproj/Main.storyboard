@@ -1,45 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="svN-ME-kku">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Log Levels-->
+        <scene sceneID="zSW-pu-Cz3">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <tableViewController id="Xza-gP-FGh" customClass="ViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="XpS-up-M0V">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7RP-Bh-55n">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <sections/>
-                                <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="F0u-FV-5ns"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Sx0-aP-gRb"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="7RP-Bh-55n" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2OG-eI-nSn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7RP-Bh-55n" secondAttribute="trailing" id="Xj6-Ob-mJR"/>
-                            <constraint firstItem="7RP-Bh-55n" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="pXn-LP-FKe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7RP-Bh-55n" secondAttribute="bottom" id="qzN-Ey-Itr"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                    <connections>
-                        <outlet property="tableView" destination="7RP-Bh-55n" id="TvS-c9-nlE"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoggerLevelTableCell" id="LWL-xQ-g1Z">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LWL-xQ-g1Z" id="DPG-5N-Age">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="Xza-gP-FGh" id="lnD-F2-QKo"/>
+                            <outlet property="delegate" destination="Xza-gP-FGh" id="GUA-my-Ezr"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Log Levels" id="ch5-Fk-gkn"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QWj-Ef-7g8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="138"/>
+            <point key="canvasLocation" x="2605.7971014492755" y="-635.49107142857144"/>
+        </scene>
+        <!--Okta Logger Demo-->
+        <scene sceneID="Pux-n1-yP0">
+            <objects>
+                <tableViewController id="HKS-d3-NUk" customClass="HomeViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ct7-t1-Qzl">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeatureTableViewCell" textLabel="LjM-WD-Iq2" style="IBUITableViewCellStyleDefault" id="8cy-dC-n8c" customClass="FeatureTableViewCell" customModule="OktaLoggerDemoApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8cy-dC-n8c" id="C3m-d2-CYE">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Logger Levels" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LjM-WD-Iq2">
+                                            <rect key="frame" x="20" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="featureLabel" destination="LjM-WD-Iq2" id="qBy-Ng-aeW"/>
+                                    <segue destination="Xza-gP-FGh" kind="show" id="MKL-rJ-tYO"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="HKS-d3-NUk" id="JrO-VW-dv9"/>
+                            <outlet property="delegate" destination="HKS-d3-NUk" id="PjD-JH-7Mb"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Okta Logger Demo" id="hWn-3x-GC7"/>
+                    <connections>
+                        <segue destination="I2c-XP-lI1" kind="show" id="C8b-PO-7je"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B68-VW-Tqw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1831.8840579710147" y="-635.49107142857144"/>
+        </scene>
+        <!--File Logger-->
+        <scene sceneID="reN-Wi-qr4">
+            <objects>
+                <viewController id="I2c-XP-lI1" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fmf-Fs-CKS">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="6El-KX-zPF"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="File Logger" id="dBL-GT-GTb"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Dd-Ag-8x4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2672" y="102"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="xh3-B7-iKP">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="svN-ME-kku" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="t4s-ld-rY1">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="HKS-d3-NUk" kind="relationship" relationship="rootViewController" id="pb8-b8-s10"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gmz-c5-FJh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="921.73913043478262" y="-635.49107142857144"/>
         </scene>
     </scenes>
 </document>

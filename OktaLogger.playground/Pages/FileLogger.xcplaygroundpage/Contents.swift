@@ -1,11 +1,14 @@
 import UIKit
 import OktaLogger
 var str = "Hello, playground"
+//: ---
 /*: ## Initialize logger */
     let destination:OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+//: ---
 /*: ## Add destination to Okta Logger */
     let logger = OktaLogger(destinations: [destination])
     logger.error(eventName: "event", message: str)
+//: ---
 /*: ## Useful Snippets */
 /*: 1. Where is log file */
     let path = destination.logDirectoryAbsolutePath();

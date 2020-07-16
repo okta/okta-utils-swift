@@ -12,8 +12,8 @@ import CocoaLumberjack
 @objc
 public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     var fileLogger:DDFileLogger = DDFileLogger();
-    var isLoggingActive:Bool = true;
-    var logDirectory: String = "logs";
+    var isLoggingActive = true;
+    var logDirectory = "logs";
     
     /**
      Initilalize logger with log files in `logDirectory`
@@ -51,7 +51,7 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     
     @objc
     public func getLogs() -> [NSData] {
-        var logFileDataArray:[NSData] = [NSData]();
+        var logFileDataArray:[NSData] = [];
         //        The first item in the array will be the most recently created log file.
         let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
         for logFileInfo in logFileInfos {
@@ -89,7 +89,7 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
                     }
                     print("Intialized Log at \(logFile.filePath)")
                 }
-            } catch{ error
+            } catch { error
                 print("Error purging log: \(error.localizedDescription)")
             }
         })

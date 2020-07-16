@@ -23,7 +23,7 @@ class HomeViewController: UITableViewController{
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "FeatureTableViewCell", for: indexPath) as? FeatureTableViewCell else {
             fatalError("Not a FeatureTableViewCell. Error rendering cell.")
         }
-        cell.featureLabel.text=Constants.features[indexPath.row]
+        cell.featureLabel.text = Constants.features[indexPath.row]
         return cell;
     }
 }

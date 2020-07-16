@@ -3,7 +3,7 @@ import OktaLogger
 var str = "Hello, playground"
 //: ---
 /*: ## Initialize logger */
-let destination:OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+let destination = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
 //: ---
 /*: ## Add destination to Okta Logger */
 let logger = OktaLogger(destinations: [destination])
@@ -33,5 +33,4 @@ for log in logs {
 let logs2 = destination.getLogs();
 print("# logs: \(logs2.count)")
 /*: Logs also get reinitialized and are available after next logging statement*/
-
 

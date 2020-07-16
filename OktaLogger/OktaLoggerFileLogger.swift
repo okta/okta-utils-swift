@@ -41,42 +41,6 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     }
     
     /**
-     Stop logging after 'x' seconds
-     */
-    @objc
-    public func stopLoggingAfter(expiryInMilliSeconds:TimeInterval) {
-        // Async Task/Timer to remove after 'x' seconds
-        Timer.scheduledTimer(withTimeInterval:expiryInMilliSeconds , repeats: false) { timer in
-            self.isLoggingActive = false;
-            DDLog.remove(self.fileLogger)
-            timer.invalidate()
-        }
-    }
-    
-    /**
-     Stop logging immediately
-     */
-    @objc
-    public func stopLogging() {
-        self.stopLoggingAfter(expiryInMilliSeconds: 0);
-    }
-    
-    /**
-     Reinitialize logger
-     */
-    @objc
-    public func resetLogging() {
-        self.stopLogging()
-        let logFilePath = URL(fileURLWithPath: self.logDirectoryAbsolutePath()!)
-        let text = ""
-        do {
-            try text.write(to: logFilePath, atomically: false, encoding: .utf8)
-        } catch {
-            print(error)
-        }
-    }
-    
-    /**
      Log file path
      */
     @objc
@@ -88,7 +52,8 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     @objc
     public func getLogs() -> [NSData] {
         var logFileDataArray:[NSData] = [NSData]();
-        let logFilePaths = self.fileLogger.logFileManager.unsortedLogFilePaths
+        //        The first item in the array will be the most recently created log file.
+        let logFilePaths = self.fileLogger.logFileManager.sortedLogFilePaths
         for logFilePath in logFilePaths {
             let fileURL = NSURL(fileURLWithPath: logFilePath)
             if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
@@ -97,6 +62,33 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
             }
         }
         return logFileDataArray
+    }
+    
+    @objc
+    override open func logsCanBePurged() -> Bool {
+        return true;
+    }
+    
+    @objc
+    override open func purgeLogs() {
+        self.fileLogger.rollLogFile(withCompletion: {
+            do {
+                for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
+                    if !logFileInfo.isArchived {
+                        continue
+                    }
+                    let logPath = logFileInfo.filePath
+                    try FileManager.default.removeItem(atPath: logPath)
+                    guard let logFile = self.fileLogger.currentLogFileInfo else {
+                        print("Unable to reinit file logger")
+                        return
+                    }
+                    print("Intialized Log at \(logFile.filePath)")
+                }
+            } catch{ error
+                print("Error purging log: \(error.localizedDescription)")
+            }
+        })
     }
     /**
      Remove all Loggers during de allocate
@@ -109,13 +101,10 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
      Configure Logger Parameters
      */
     func setupLogger() {
-        let logExpiryDay:Double = 60*60*24
-        let logExpiryDefault: Double = logExpiryDay * 2
-        self.fileLogger.rollingFrequency = logExpiryDefault // 48 hours
         self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
         DDLog.add(self.fileLogger)
-        self.stopLoggingAfter(expiryInMilliSeconds:logExpiryDefault)
         self.isLoggingActive = true
+        fileLogger.doNotReuseLogFiles=true
     }
     
     /**

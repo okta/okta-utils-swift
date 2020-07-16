@@ -77,6 +77,14 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
      */
     open func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {}
     
+    open func logsCanBePurged() -> Bool {
+        return false;
+    }
+    
+    open func purgeLogs() {
+        
+    }
+    
     // MARK: Private
     
     private var lock = ReadWriteLock()

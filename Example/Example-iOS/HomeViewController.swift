@@ -26,4 +26,14 @@ class HomeViewController: UITableViewController{
         cell.featureLabel.text = Constants.features[indexPath.row]
         return cell;
     }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var segue:String = "";
+        switch indexPath.row {
+        case 0:
+            segue = "logLevelSegue"
+        default:
+            segue = "fileLoggerSegue"
+        }
+        performSegue(withIdentifier: segue, sender: self)
+    }
 }

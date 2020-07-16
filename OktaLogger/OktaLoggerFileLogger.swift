@@ -53,8 +53,12 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     public func getLogs() -> [NSData] {
         var logFileDataArray:[NSData] = [NSData]();
         //        The first item in the array will be the most recently created log file.
-        let logFilePaths = self.fileLogger.logFileManager.sortedLogFilePaths
-        for logFilePath in logFilePaths {
+        let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
+        for logFileInfo in logFileInfos {
+            if logFileInfo.isArchived {
+                continue
+            }
+            let logFilePath = logFileInfo.filePath
             let fileURL = NSURL(fileURLWithPath: logFilePath)
             if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
                 // Insert at front to reverse the order, so that oldest logs appear first.

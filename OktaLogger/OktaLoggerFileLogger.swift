@@ -75,6 +75,10 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     
     @objc
     override open func purgeLogs() {
+        if !logsCanBePurged() {
+            return
+        }
+        
         self.fileLogger.rollLogFile(withCompletion: {
             do {
                 for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
@@ -134,7 +138,7 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
         case .warning:
             return DDLogWarn(message)
         default:
-            return DDLogWarn(message)
+            return DDLogInfo(message)
         }
     }
 }

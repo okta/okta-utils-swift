@@ -10,7 +10,7 @@ import UIKit
 import OktaLogger
 
 class FileLoggerViewController: UIViewController,UIPickerViewDelegate, UIPickerViewDataSource {
-    let pickerData = ["off","error","warning","uiEvent", "info","debug","all"]
+    let pickerData = ["off","error","uiEvent", "warning", "info","debug","all"]
     var logger:OktaLogger!
     var destination:OktaLoggerFileLogger!
     
@@ -46,9 +46,9 @@ class FileLoggerViewController: UIViewController,UIPickerViewDelegate, UIPickerV
         case 1:
             level = .error
         case 2:
-            level = .warning
-        case 3:
             level = .uiEvent
+        case 3:
+            level = .warning
         case 4:
             level = .info
         case 5:

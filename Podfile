@@ -2,8 +2,7 @@ platform :ios, '11.0'
 
 target 'OktaLogger' do
     use_frameworks!
-    pod 'CocoaLumberjack/Swift'
-    
+    podspec :name => 'OktaLogger'
 end
 
 target 'OktaLoggerDemoApp' do

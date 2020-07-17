@@ -10,48 +10,48 @@ import Foundation
 import CocoaLumberjack
 
 @objc
-public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
-    var fileLogger:DDFileLogger = DDFileLogger();
-    var isLoggingActive = true;
-    var logDirectory = "logs";
-    
+public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
+    var fileLogger: DDFileLogger = DDFileLogger()
+    var isLoggingActive = true
+    var logDirectory = "logs"
+
     /**
      Initilalize logger with log files in `logDirectory`
      */
     @objc
-    convenience public init(logDirectory: String, identifier: String, level:OktaLoggerLogLevel, defaultProperties:[AnyHashable: Any]?) {
-        self.init(identifier:identifier, level:level, defaultProperties:defaultProperties);
+    convenience public init(logDirectory: String, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
+        self.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
     }
-    
+
     @objc
-    override public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable : Any]?) {
+    override public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
         self.setupLogger()
     }
-    
+
     @objc
-    override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {
-        
+    override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
+
         let logMessage = self.stringValue(level: level,
                                           eventName: eventName,
                                           message: message,
                                           file: file, line: line, funcName: funcName)
         // translate log level into relevant console type level
-        self.log(level: level, message:logMessage)
+        self.log(level: level, message: logMessage)
     }
-    
+
     /**
      Log file path
      */
     @objc
-    public func logDirectoryAbsolutePath() -> String?  {
+    public func logDirectoryAbsolutePath() -> String? {
         let path: String? = self.fileLogger.currentLogFileInfo?.filePath
         return path
     }
-    
+
     @objc
     public func getLogs() -> [NSData] {
-        var logFileDataArray:[NSData] = [];
+        var logFileDataArray: [NSData] = []
         //        The first item in the array will be the most recently created log file.
         let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
         for logFileInfo in logFileInfos {
@@ -67,18 +67,18 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
         }
         return logFileDataArray
     }
-    
+
     @objc
     override open func logsCanBePurged() -> Bool {
-        return true;
+        return true
     }
-    
+
     @objc
     override open func purgeLogs() {
         if !logsCanBePurged() {
             return
         }
-        
+
         self.fileLogger.rollLogFile(withCompletion: {
             do {
                 for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
@@ -104,7 +104,7 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
     deinit {
         DDLog.remove(self.fileLogger)
     }
-    
+
     /**
      Configure Logger Parameters
      */
@@ -114,23 +114,14 @@ public class OktaLoggerFileLogger : OktaLoggerDestinationBase {
         self.isLoggingActive = true
         fileLogger.doNotReuseLogFiles=true
     }
-    
-    /**
-     Create a structured string out of the logging parameters and properties
-     */
-    func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
-        let filename = file.split(separator: "/").last
-        let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
-        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
-    }
-    
+
     /**
      Translate OktaLoggerLogLevel into a console-friendly OSLogType value
      */
-    func log(level: OktaLoggerLogLevel, message:String) {
+    func log(level: OktaLoggerLogLevel, message: String) {
         switch level {
         case .debug:
-            return DDLogDebug(message);
+            return DDLogDebug(message)
         case .info, .uiEvent:
             return DDLogInfo(message)
         case .error:

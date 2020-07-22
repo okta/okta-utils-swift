@@ -14,6 +14,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     var fileLogger: DDFileLogger = DDFileLogger()
     var isLoggingActive = true
 
+    // MARK: Intializing logger
     @objc
     public init(logConfig: OktaLoggerFileLoggerConfig, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
@@ -27,6 +28,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         self.init(logConfig: logConfig, identifier: identifier, level: level, defaultProperties: defaultProperties)
     }
 
+    // MARK: Logging
     @objc
     override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
 
@@ -47,6 +49,10 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         return path
     }
 
+    // MARK: Retrieve Logs
+    /**
+            Non thread safe implementation to retrieve logs.
+     */
     @objc
     public func getLogs() -> [NSData] {
         self.fileLogger.flush()
@@ -72,7 +78,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     }
 
     /**
-        Retrieves log data a
+        Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
     public func getLogsAsync(completion: @escaping ([NSData]) -> Void) {
@@ -85,6 +91,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         }
     }
 
+    // MARK: Purge Logs
     @objc
     override open func logsCanBePurged() -> Bool {
         return true
@@ -95,9 +102,10 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         if !logsCanBePurged() {
             return
         }
-
+        self.isLoggingActive = false
         self.fileLogger.rollLogFile(withCompletion: {
             do {
+                self.isLoggingActive = true
                 for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
                     if !logFileInfo.isArchived {
                         continue
@@ -115,13 +123,16 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             }
         })
     }
+    
+    // MARK: Internal methods
     /**
-     Remove all Loggers during deinit
+     Remove all Loggers during deallocate
      */
     deinit {
         DDLog.remove(self.fileLogger)
     }
 
+    
     /**
      Configure Logger Parameters
      */
@@ -134,7 +145,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     }
 
     /**
-     Translate OktaLoggerLogLevel into a console-friendly OSLogType value
+     Translate log message  into DDLog message
      */
     func log(level: OktaLoggerLogLevel, message: String) {
         if  !self.isLoggingActive {
@@ -151,7 +162,8 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         case .warning:
             return DDLogWarn(message)
         default:
-            return DDLogInfo(message)
+            // default info
+            return  DDLogInfo(message)
         }
     }
 }

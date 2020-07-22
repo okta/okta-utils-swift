@@ -102,10 +102,8 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         if !logsCanBePurged() {
             return
         }
-        self.isLoggingActive = false
         self.fileLogger.rollLogFile(withCompletion: {
             do {
-                self.isLoggingActive = true
                 for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
                     if !logFileInfo.isArchived {
                         continue

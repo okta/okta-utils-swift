@@ -31,7 +31,6 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         logger.debug(eventName: "AFTER_PURGE", message: "Debug log")
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
         // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
-        testObject.fileLogger.flush()
         logs = testObject.getLogs()
         data = logs[0] as Data
         let newLineCount = countLines(data)

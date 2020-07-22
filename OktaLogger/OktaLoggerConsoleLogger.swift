@@ -22,7 +22,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
     /**
      Create a structured string out of the logging parameters and properties
      */
-    func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
+    public override func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
         let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
         return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"

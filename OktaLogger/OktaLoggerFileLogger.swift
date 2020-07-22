@@ -13,20 +13,18 @@ import CocoaLumberjack
 public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     var fileLogger: DDFileLogger = DDFileLogger()
     var isLoggingActive = true
-    var logDirectory = "logs"
 
-    /**
-     Initilalize logger with log files in `logDirectory`
-     */
     @objc
-    convenience public init(logDirectory: String, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
-        self.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
+    public init(logConfig: OktaLoggerFileLoggerConfig, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
+        super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
+        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: logConfig.rollingFrequency)
+        self.setupLogger(logConfig)
     }
 
     @objc
-    override public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
-        super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
-        self.setupLogger()
+    public convenience override init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
+        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: 60 * 60 * 48)
+        self.init(logConfig: logConfig, identifier: identifier, level: level, defaultProperties: defaultProperties)
     }
 
     @objc
@@ -51,6 +49,9 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
 
     @objc
     public func getLogs() -> [NSData] {
+        self.fileLogger.flush()
+        // pause logging to avoid corruption
+        self.isLoggingActive = false
         var logFileDataArray: [NSData] = []
         //        The first item in the array will be the most recently created log file.
         let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
@@ -65,7 +66,23 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
                 logFileDataArray.insert(logFileData, at: 0)
             }
         }
+        // Resume logging
+        self.isLoggingActive = true
         return logFileDataArray
+    }
+
+    /**
+        Retrieves log data a
+    */
+    @objc
+    public func getLogsAsync(completion: @escaping ([NSData]) -> Void) {
+        // fetch logs
+        DispatchQueue.global(qos: .userInitiated).async {
+            let logData = self.getLogs()
+            DispatchQueue.main.async {
+                completion(logData)
+            }
+        }
     }
 
     @objc
@@ -99,7 +116,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         })
     }
     /**
-     Remove all Loggers during de allocate
+     Remove all Loggers during deinit
      */
     deinit {
         DDLog.remove(self.fileLogger)
@@ -108,8 +125,9 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     /**
      Configure Logger Parameters
      */
-    func setupLogger() {
+    func setupLogger(_ logConfig: OktaLoggerFileLoggerConfig) {
         self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
+        self.fileLogger.rollingFrequency = logConfig.rollingFrequency
         DDLog.add(self.fileLogger)
         self.isLoggingActive = true
         fileLogger.doNotReuseLogFiles=true
@@ -119,6 +137,10 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
      Translate OktaLoggerLogLevel into a console-friendly OSLogType value
      */
     func log(level: OktaLoggerLogLevel, message: String) {
+        if  !self.isLoggingActive {
+            return
+        }
+
         switch level {
         case .debug:
             return DDLogDebug(message)

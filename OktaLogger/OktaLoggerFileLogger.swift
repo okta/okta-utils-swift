@@ -81,7 +81,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
-    public func getLogsAsync(completion: @escaping ([NSData]) -> Void) {
+    public func getLogs(completion: @escaping ([Data]) -> Void) {
         // fetch logs
         DispatchQueue.global(qos: .userInitiated).async {
             let logData = self.getLogs()

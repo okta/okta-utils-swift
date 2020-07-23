@@ -34,5 +34,14 @@ while getopts ":ha" opt; do
   esac
 done
 
+
+CI_DIRECTORY=$(cd `dirname $0` && pwd)
+source "${CI_DIRECTORY}/setup.sh"
+pushd "${LOGGER_ROOT}"
+
+# Main
+pushd "${LOGGER_ROOT}"
+printBuildEnvironment
+
 # Run Lint Test
-bundle exec fastlane lint action:"$action"
+runSwiftLint

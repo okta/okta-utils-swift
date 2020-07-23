@@ -1,0 +1,15 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :lint do |options|
+    Dir.mkdir '../fastlane/lint' unless Dir.exist? '../fastlane/lint'
+    reporter = "junit" unless options[:action] == 'autocorrect'
+    swiftlint(
+      mode: options[:action] || :lint,
+      executable: "Pods/SwiftLint/swiftlint",
+      output_file: "fastlane/lint/swiftlint.result.xml",
+      reporter: reporter
+    )
+  end
+end

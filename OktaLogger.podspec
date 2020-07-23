@@ -15,4 +15,5 @@ Pod::Spec.new do |s|
     'OktaLogger/Info.plist'
   ]
   s.dependency  'CocoaLumberjack/Swift', '~>3.6.0'
+  s.dependency 'SwiftLint'
 end

@@ -18,5 +18,4 @@ test_suites:
     criteria: MERGE
     queue_name: dart-ios-verify-ci-build
     script_env:
-	DEVICE_NAME: "iPhone 11"
-
+	    DEVICE_NAME: "iPhone 11"

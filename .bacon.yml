@@ -9,6 +9,7 @@ test_suites:
     script_name: test
     criteria: MERGE
     queue_name: dart-ios-verify-ci-build
+
  - name: lint
     script_path: okta-logger-swift/ci-build
     sort_order: '2'

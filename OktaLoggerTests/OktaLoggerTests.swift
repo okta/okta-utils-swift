@@ -8,10 +8,10 @@ class OktaLoggerTests: XCTestCase {
      */
     func testLogLevelRawValues() {
         XCTAssertEqual(OktaLoggerLogLevel.off.rawValue, 0)
-        XCTAssertEqual(OktaLoggerLogLevel.error.rawValue, 1<<4)
-        XCTAssertEqual(OktaLoggerLogLevel.uiEvent.rawValue, OktaLoggerLogLevel.error.rawValue|1<<3)
-        XCTAssertEqual(OktaLoggerLogLevel.warning.rawValue, OktaLoggerLogLevel.uiEvent.rawValue | 1<<2)
-        XCTAssertEqual(OktaLoggerLogLevel.info.rawValue, OktaLoggerLogLevel.warning.rawValue | 1<<1)
+        XCTAssertEqual(OktaLoggerLogLevel.error.rawValue, 1 << 4)
+        XCTAssertEqual(OktaLoggerLogLevel.uiEvent.rawValue, OktaLoggerLogLevel.error.rawValue | 1 << 3)
+        XCTAssertEqual(OktaLoggerLogLevel.warning.rawValue, OktaLoggerLogLevel.uiEvent.rawValue | 1 << 2)
+        XCTAssertEqual(OktaLoggerLogLevel.info.rawValue, OktaLoggerLogLevel.warning.rawValue | 1 << 1)
         XCTAssertEqual(OktaLoggerLogLevel.debug.rawValue, OktaLoggerLogLevel.info.rawValue | 1 << 0)
     }
 

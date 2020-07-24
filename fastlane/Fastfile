@@ -30,10 +30,10 @@ module Utils
 
     reports = Dir['../fastlane/test_output/**/*.xml'].map { |relpath| File.absolute_path(relpath) }
     UI.message("collate_junit_reports with #{reports}")
-	collate_junit_reports(
-		reports: reports,
-	        collated_report: './fastlane/test_output/test-result.xml'
-    	)
+    collate_junit_reports(
+        reports: reports,
+        collated_report: './fastlane/test_output/test-result.xml'
+    )
   end
 
 end
@@ -44,33 +44,33 @@ platform :ios do
   before_all do |lane, options|
     cocoapods
   end
-  
+
   lane :lint do |options|
     Dir.mkdir '../fastlane/lint' unless Dir.exist? '../fastlane/lint'
     reporter = "junit" unless options[:action] == 'autocorrect'
     swiftlint(
-      mode: options[:action] || :lint,
-      executable: "Pods/SwiftLint/swiftlint",
-      output_file: "fastlane/lint/swiftlint.result.xml",
-      reporter: reporter
+        mode: options[:action] || :lint,
+        executable: "Pods/SwiftLint/swiftlint",
+        output_file: "fastlane/lint/swiftlint.result.xml",
+        reporter: reporter
     )
   end
 
   lane :test do |options|
-  	result = multi_scan(
-		scheme: options[:scheme] || 'OktaLogger',
-  		try_count: options[:tryCount] || Constants::TRY_ATTEMPTS,
-		output_types: 'junit',
-		output_files: 'test-result.xml',
-		fail_build: true,
-		quit_simulators: true,
-		clean: true,
-		result_bundle: true,
-		testrun_completed_block: Utils.test_run_block,
-		sdk: Constants::SDK,
-		device: options[:device] || Constants::DEFAULT_DEVICE
-		
-	)
+    result = multi_scan(
+        scheme: options[:scheme] || 'OktaLogger',
+        try_count: options[:tryCount] || Constants::TRY_ATTEMPTS,
+        output_types: 'junit',
+        output_files: 'test-result.xml',
+        fail_build: true,
+        quit_simulators: true,
+        clean: true,
+        result_bundle: true,
+        testrun_completed_block: Utils.test_run_block,
+        sdk: Constants::SDK,
+        device: options[:device] || Constants::DEFAULT_DEVICE
+
+    )
   end
 
 end

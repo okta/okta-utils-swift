@@ -1,45 +1,309 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="svN-ME-kku">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Log Levels-->
+        <scene sceneID="zSW-pu-Cz3">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <tableViewController id="Xza-gP-FGh" customClass="ViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="XpS-up-M0V">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoggerLevelTableCell" id="LWL-xQ-g1Z">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="LWL-xQ-g1Z" id="DPG-5N-Age">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="Xza-gP-FGh" id="lnD-F2-QKo"/>
+                            <outlet property="delegate" destination="Xza-gP-FGh" id="GUA-my-Ezr"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Log Levels" id="ch5-Fk-gkn"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QWj-Ef-7g8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2605.7971014492755" y="-635.49107142857144"/>
+        </scene>
+        <!--File Logger View Controller-->
+        <scene sceneID="nSX-xA-1k0">
+            <objects>
+                <viewController id="jUa-Ig-1lU" customClass="FileLoggerViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="idX-oT-swh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7RP-Bh-55n">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                                <sections/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VC3-Ud-GgN">
+                                <rect key="frame" x="10" y="103" width="73" height="96"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Select Log Level">
+                                        <attributes>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lcb-Bo-DX3" customClass="LogLevelPicker" customModule="OktaLoggerDemoApp" customModuleProvider="target">
+                                <rect key="frame" x="74" y="114" width="320" height="74"/>
+                            </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Output" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QdI-kV-UOl">
+                                <rect key="frame" x="10" y="379" width="53.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tnW-ga-EBc">
+                                <rect key="frame" x="10" y="326.5" width="125" height="30"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="125" id="fdd-gH-wM0"/>
+                                </constraints>
+                                <state key="normal" title="Purge Logs">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
                                 <connections>
-                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="F0u-FV-5ns"/>
-                                    <outlet property="delegate" destination="BYZ-38-t0r" id="Sx0-aP-gRb"/>
+                                    <action selector="purgeLogs:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="rDc-AD-UMY"/>
                                 </connections>
-                            </tableView>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5O-oM-sDD">
+                                <rect key="frame" x="216" y="326.5" width="125" height="30"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="125" id="hhe-yW-Nvg"/>
+                                </constraints>
+                                <state key="normal" title="Email Logs">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="emailLogs:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="jV5-I5-if6"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Click buttons below to Generate logs" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DTV-03-6bg">
+                                <rect key="frame" x="10" y="196" width="281.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Other functions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wkA-bS-nhs">
+                                <rect key="frame" x="10" y="298" width="119.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="wLL-xs-nkd">
+                                <rect key="frame" x="10" y="240" width="394" height="30"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HHQ-Xl-7dw">
+                                        <rect key="frame" x="0.0" y="0.0" width="75" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="eLR-Ho-iFv"/>
+                                        </constraints>
+                                        <state key="normal" title="Error">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="printErrorMessage:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="X9Y-4M-vNV"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kc-hK-wpF">
+                                        <rect key="frame" x="80" y="0.0" width="75" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="UI Event">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="printUIEventMessage:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="IiO-v3-6ag"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ZX-1Z-tcP">
+                                        <rect key="frame" x="160" y="0.0" width="74" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="Warning">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="printWarningMessage:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="97O-lt-has"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ufV-Xg-te3">
+                                        <rect key="frame" x="239" y="0.0" width="75" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="9P3-lC-toL"/>
+                                        </constraints>
+                                        <state key="normal" title="Info">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="printInfoMessage:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="0jh-qx-F1T"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bhn-ad-Gel">
+                                        <rect key="frame" x="319" y="0.0" width="75" height="30"/>
+                                        <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="usX-ex-5yB"/>
+                                        </constraints>
+                                        <state key="normal" title="Debug">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="printDebugMessage:" destination="jUa-Ig-1lU" eventType="touchUpInside" id="p1K-ko-Ba4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="0ZX-1Z-tcP" firstAttribute="centerX" secondItem="wLL-xs-nkd" secondAttribute="centerX" id="obX-Hw-Yju"/>
+                                </constraints>
+                            </stackView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgH-ts-gGr">
+                                <rect key="frame" x="20" y="408" width="365" height="444"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JI0-Br-Rp9">
+                                        <rect key="frame" x="20" y="20" width="325" height="404"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                    </textView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="JI0-Br-Rp9" firstAttribute="centerX" secondItem="bgH-ts-gGr" secondAttribute="centerX" id="7l5-zu-V1M"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="JI0-Br-Rp9" secondAttribute="bottom" constant="10" id="J0B-K4-FAN"/>
+                                    <constraint firstItem="JI0-Br-Rp9" firstAttribute="top" secondItem="l81-SR-ABX" secondAttribute="top" constant="20" id="axh-E9-2K1"/>
+                                    <constraint firstItem="JI0-Br-Rp9" firstAttribute="leading" secondItem="l81-SR-ABX" secondAttribute="leading" constant="20" id="e5W-hN-hgr"/>
+                                    <constraint firstAttribute="trailing" secondItem="JI0-Br-Rp9" secondAttribute="trailing" constant="19" id="urM-8r-q76"/>
+                                    <constraint firstItem="JI0-Br-Rp9" firstAttribute="centerY" secondItem="bgH-ts-gGr" secondAttribute="centerY" id="xkE-64-f5i"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Kax-li-pgI"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="l81-SR-ABX"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderUIColor">
+                                        <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="7RP-Bh-55n" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2OG-eI-nSn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7RP-Bh-55n" secondAttribute="trailing" id="Xj6-Ob-mJR"/>
-                            <constraint firstItem="7RP-Bh-55n" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="pXn-LP-FKe"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7RP-Bh-55n" secondAttribute="bottom" id="qzN-Ey-Itr"/>
+                            <constraint firstItem="wLL-xs-nkd" firstAttribute="leading" secondItem="wkA-bS-nhs" secondAttribute="leading" id="07f-0z-1tc"/>
+                            <constraint firstItem="tnW-ga-EBc" firstAttribute="baseline" secondItem="F5O-oM-sDD" secondAttribute="baseline" id="0mq-ru-7K3"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="trailing" secondItem="VC3-Ud-GgN" secondAttribute="trailing" constant="331" id="0zj-AN-w7v"/>
+                            <constraint firstItem="tnW-ga-EBc" firstAttribute="top" secondItem="wkA-bS-nhs" secondAttribute="bottom" constant="8" symbolic="YES" id="2ae-mM-sGK"/>
+                            <constraint firstItem="Lcb-Bo-DX3" firstAttribute="trailing" secondItem="idX-oT-swh" secondAttribute="trailingMargin" id="424-n4-cVX"/>
+                            <constraint firstItem="QdI-kV-UOl" firstAttribute="top" secondItem="idX-oT-swh" secondAttribute="top" constant="379" id="7qQ-5P-eRE"/>
+                            <constraint firstItem="QdI-kV-UOl" firstAttribute="top" secondItem="tnW-ga-EBc" secondAttribute="bottom" constant="22.5" id="AUl-9e-hTM"/>
+                            <constraint firstItem="wLL-xs-nkd" firstAttribute="top" secondItem="DTV-03-6bg" secondAttribute="bottom" constant="23.5" id="Akq-c0-36e"/>
+                            <constraint firstItem="DTV-03-6bg" firstAttribute="leading" secondItem="wLL-xs-nkd" secondAttribute="leading" id="FV5-68-L3H"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="trailing" secondItem="F5O-oM-sDD" secondAttribute="trailing" constant="73" id="GU2-8Z-SuZ"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="bottom" secondItem="bgH-ts-gGr" secondAttribute="bottom" constant="10" id="Io3-Av-ws2"/>
+                            <constraint firstItem="VC3-Ud-GgN" firstAttribute="centerY" secondItem="Lcb-Bo-DX3" secondAttribute="centerY" id="K1q-RF-riJ"/>
+                            <constraint firstItem="DTV-03-6bg" firstAttribute="leading" secondItem="tnW-ga-EBc" secondAttribute="leading" id="PXO-Od-U8p"/>
+                            <constraint firstItem="tnW-ga-EBc" firstAttribute="leading" secondItem="QdI-kV-UOl" secondAttribute="leading" id="Q14-QU-0RE"/>
+                            <constraint firstItem="VC3-Ud-GgN" firstAttribute="top" secondItem="Hes-4f-LKI" secondAttribute="top" constant="15" id="Rak-UN-sTn"/>
+                            <constraint firstItem="DTV-03-6bg" firstAttribute="top" secondItem="Lcb-Bo-DX3" secondAttribute="bottom" constant="8" id="Wtd-24-pL2"/>
+                            <constraint firstItem="bgH-ts-gGr" firstAttribute="top" secondItem="QdI-kV-UOl" secondAttribute="bottom" constant="8" id="YGp-g2-NsU"/>
+                            <constraint firstItem="bgH-ts-gGr" firstAttribute="top" secondItem="idX-oT-swh" secondAttribute="top" constant="408" id="YMk-2Q-bto"/>
+                            <constraint firstItem="Lcb-Bo-DX3" firstAttribute="top" secondItem="Hes-4f-LKI" secondAttribute="top" constant="26" id="aPV-t0-0Y9"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="trailing" secondItem="bgH-ts-gGr" secondAttribute="trailing" constant="29" id="eLv-hr-Abq"/>
+                            <constraint firstItem="VC3-Ud-GgN" firstAttribute="leading" secondItem="DTV-03-6bg" secondAttribute="leading" id="ej5-2h-ykD"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DTV-03-6bg" secondAttribute="trailing" symbolic="YES" id="mtf-SW-4Wm"/>
+                            <constraint firstItem="DTV-03-6bg" firstAttribute="leading" secondItem="Hes-4f-LKI" secondAttribute="leading" constant="10" id="p1P-KN-M5R"/>
+                            <constraint firstItem="Hes-4f-LKI" firstAttribute="trailing" secondItem="wLL-xs-nkd" secondAttribute="trailing" constant="10" id="rvT-0p-pd3"/>
+                            <constraint firstItem="bgH-ts-gGr" firstAttribute="leading" secondItem="idX-oT-swh" secondAttribute="leadingMargin" id="tNz-qt-wOE"/>
+                            <constraint firstItem="wLL-xs-nkd" firstAttribute="leading" secondItem="Hes-4f-LKI" secondAttribute="leading" constant="10" id="uhc-Ma-4VS"/>
+                            <constraint firstItem="DTV-03-6bg" firstAttribute="top" secondItem="idX-oT-swh" secondAttribute="top" constant="196" id="wF9-19-OoO"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="Hes-4f-LKI"/>
                     </view>
+                    <navigationItem key="navigationItem" id="xoB-2Y-vcT"/>
                     <connections>
-                        <outlet property="tableView" destination="7RP-Bh-55n" id="TvS-c9-nlE"/>
+                        <outlet property="logLevelPicker" destination="Lcb-Bo-DX3" id="knB-FR-Uho"/>
+                        <outlet property="outputView" destination="JI0-Br-Rp9" id="jHH-RF-vNh"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Og0-cQ-lew" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="138"/>
+            <point key="canvasLocation" x="2640.579710144928" y="132.58928571428572"/>
+        </scene>
+        <!--Okta Logger Demo-->
+        <scene sceneID="Pux-n1-yP0">
+            <objects>
+                <tableViewController id="HKS-d3-NUk" customClass="HomeViewController" customModule="OktaLoggerDemoApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="ct7-t1-Qzl">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FeatureTableViewCell" textLabel="LjM-WD-Iq2" style="IBUITableViewCellStyleDefault" id="8cy-dC-n8c" customClass="FeatureTableViewCell" customModule="OktaLoggerDemoApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8cy-dC-n8c" id="C3m-d2-CYE">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Logger Levels" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LjM-WD-Iq2">
+                                            <rect key="frame" x="20" y="0.0" width="374" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="featureLabel" destination="LjM-WD-Iq2" id="qBy-Ng-aeW"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="HKS-d3-NUk" id="JrO-VW-dv9"/>
+                            <outlet property="delegate" destination="HKS-d3-NUk" id="PjD-JH-7Mb"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Okta Logger Demo" id="hWn-3x-GC7"/>
+                    <connections>
+                        <segue destination="Xza-gP-FGh" kind="show" identifier="logLevelSegue" id="fHo-dr-6Nw"/>
+                        <segue destination="jUa-Ig-1lU" kind="show" identifier="fileLoggerSegue" id="ISA-wn-cg6"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="B68-VW-Tqw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1819" y="-635"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="xh3-B7-iKP">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="svN-ME-kku" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="t4s-ld-rY1">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="HKS-d3-NUk" kind="relationship" relationship="rootViewController" id="pb8-b8-s10"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gmz-c5-FJh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="921.73913043478262" y="-635.49107142857144"/>
         </scene>
     </scenes>
 </document>

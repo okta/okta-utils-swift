@@ -5,14 +5,14 @@ import OktaLogger
 class MockLogEvent: NSObject {
     let name: String
     let message: String?
-    let properties: [AnyHashable : Any]?
+    let properties: [AnyHashable: Any]?
     let file: String?
     let line: NSNumber?
     let funcName: String?
-    
+
     init(name: String,
          message: String?,
-         properties: [AnyHashable : Any]?,
+         properties: [AnyHashable: Any]?,
          file: String?,
          line: NSNumber?,
          funcName: String?) {
@@ -29,8 +29,8 @@ class MockLogEvent: NSObject {
 class MockLoggerDestination: OktaLoggerDestinationBase {
     var events = [MockLogEvent]()
     let serialQueue = DispatchQueue(label: UUID().uuidString)
-    
-    override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable : Any]?, file: String, line: NSNumber, funcName: String) {
+
+    override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
         let event = MockLogEvent(name: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
         serialQueue.sync {
             self.events.append(event)

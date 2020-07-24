@@ -9,26 +9,19 @@
 import UIKit
 import OktaLogger
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet var tableView: UITableView!
+class ViewController: UITableViewController {
     private let consoleLogCellTexts = ["Log debug message", "Log info message", "Log warning message", "Log UI event message", "Log error message"]
     private let logLevelCellTexts = ["off", "debug", "info", "warning", "uiEvent", "error", "all"]
     private let logLevels: [OktaLoggerLogLevel] = [.off, .debug, .info, .warning, .uiEvent, .error, .all]
     private var logLevelSelectedIndex = 6
     private let logLevelSection = 0
     private let consoleLogSection = 1
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        tableView.register(UITableViewCell.classForCoder(), forCellReuseIdentifier: "UITableViewCell")
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
+
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case logLevelSection:
             return logLevelCellTexts.count
@@ -38,11 +31,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return 0
         }
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case logLevelSection:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LoggerLevelTableCell", for: indexPath)
             cell.textLabel?.text = logLevelCellTexts[indexPath.row]
             if logLevelSelectedIndex == indexPath.row {
                 cell.textLabel?.textColor = UIColor.red
@@ -51,15 +44,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
             return cell
         case consoleLogSection:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "UITableViewCell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LoggerLevelTableCell", for: indexPath)
             cell.textLabel?.text = consoleLogCellTexts[indexPath.row]
             return cell
         default:
             return UITableViewCell()
         }
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case logLevelSection:
             logLevelSelectedIndex = indexPath.row
@@ -85,17 +78,16 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             break
         }
     }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case logLevelSection:
             return "Change log level"
         case consoleLogSection:
-            return "Console logger"
+            return "Log Message"
         default:
             return nil
         }
     }
-    
-}
 
+}

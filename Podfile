@@ -1,7 +1,14 @@
 platform :ios, '11.0'
 
 target 'OktaLogger' do
-    target 'OktaLoggerTests' do
-        inherit! :search_paths
-    end
+    use_frameworks!
+    podspec :name => 'OktaLogger'
+end
+
+target 'OktaLoggerDemoApp' do
+    use_frameworks!
+end
+
+target 'OktaLoggerTests' do
+    use_frameworks!
 end

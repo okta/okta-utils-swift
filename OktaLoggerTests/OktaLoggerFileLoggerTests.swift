@@ -11,9 +11,9 @@ import XCTest
 @testable import OktaLogger
 
 class OktaLoggerFileLoggerTests: XCTestCase {
-    
+
     func testFileLogger() {
-        let testObject:OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
+        let testObject: OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [testObject])
         XCTAssertEqual(testObject.logsCanBePurged(), true)
         // default rolling frequency
@@ -27,7 +27,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         let lineCount = countLines(data)
         XCTAssertEqual(lineCount, 5)
         testObject.purgeLogs()
-        
+
         logger.debug(eventName: "AFTER_PURGE", message: "Debug log")
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
         // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
@@ -36,11 +36,11 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         let newLineCount = countLines(data)
         XCTAssertEqual(newLineCount, 2)
     }
-    
-    func countLines(_ data:Data) -> Int {
-        let logData=String(data:data as Data, encoding: .utf8)
-        var lineCount:Int = 0
-        logData?.enumerateLines { (logData, line) in
+
+    func countLines(_ data: Data) -> Int {
+        let logData=String(data: data as Data, encoding: .utf8)
+        var lineCount: Int = 0
+        logData?.enumerateLines { (_, _) in
             lineCount += 1
         }
         return lineCount

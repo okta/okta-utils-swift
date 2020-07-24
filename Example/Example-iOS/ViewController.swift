@@ -16,7 +16,7 @@ class ViewController: UITableViewController {
     private var logLevelSelectedIndex = 6
     private let logLevelSection = 0
     private let consoleLogSection = 1
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -31,7 +31,7 @@ class ViewController: UITableViewController {
             return 0
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case logLevelSection:
@@ -51,7 +51,7 @@ class ViewController: UITableViewController {
             return UITableViewCell()
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case logLevelSection:
@@ -78,7 +78,7 @@ class ViewController: UITableViewController {
             break
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case logLevelSection:
@@ -89,6 +89,5 @@ class ViewController: UITableViewController {
             return nil
         }
     }
-    
-}
 
+}

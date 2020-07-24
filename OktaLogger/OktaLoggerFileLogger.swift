@@ -54,11 +54,11 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             Non thread safe implementation to retrieve logs.
      */
     @objc
-    public func getLogs() -> [NSData] {
+    public func getLogs() -> [Data] {
         self.fileLogger.flush()
         // pause logging to avoid corruption
         self.isLoggingActive = false
-        var logFileDataArray: [NSData] = []
+        var logFileDataArray: [Data] = []
         //        The first item in the array will be the most recently created log file.
         let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
         for logFileInfo in logFileInfos {
@@ -69,7 +69,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             let fileURL = NSURL(fileURLWithPath: logFilePath)
             if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
                 // Insert at front to reverse the order, so that oldest logs appear first.
-                logFileDataArray.insert(logFileData, at: 0)
+                logFileDataArray.insert(logFileData as Data, at: 0)
             }
         }
         // Resume logging
@@ -121,7 +121,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             }
         })
     }
-    
+
     // MARK: Internal methods
     /**
      Remove all Loggers during deallocate
@@ -130,7 +130,6 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         DDLog.remove(self.fileLogger)
     }
 
-    
     /**
      Configure Logger Parameters
      */

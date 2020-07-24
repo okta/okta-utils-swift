@@ -7,11 +7,12 @@ class OktaLoggerTests: XCTestCase {
      Verify that the Okta Log levels are correctly oriented
      */
     func testLogLevelRawValues() {
-        XCTAssertTrue(OktaLoggerLogLevel.error.rawValue > OktaLoggerLogLevel.uiEvent.rawValue)
-        XCTAssertTrue(OktaLoggerLogLevel.uiEvent.rawValue > OktaLoggerLogLevel.warning.rawValue)
-        XCTAssertTrue(OktaLoggerLogLevel.warning.rawValue > OktaLoggerLogLevel.info.rawValue)
-        XCTAssertTrue(OktaLoggerLogLevel.info.rawValue > OktaLoggerLogLevel.debug.rawValue)
-        XCTAssertTrue(OktaLoggerLogLevel.debug.rawValue > OktaLoggerLogLevel.off.rawValue)
+        XCTAssertTrue(OktaLoggerLogLevel.debug.isSubset(of: .uiEvent))
+        XCTAssertTrue(OktaLoggerLogLevel.error.isSubset(of: .uiEvent))
+        XCTAssertTrue(OktaLoggerLogLevel.uiEvent.isSubset(of: .warning))
+        XCTAssertTrue(OktaLoggerLogLevel.warning.isSubset(of: .info))
+        XCTAssertTrue(OktaLoggerLogLevel.info.isSubset(of: .debug))
+        XCTAssertTrue(OktaLoggerLogLevel.debug.isDisjoint(with: .off))
         XCTAssertEqual(OktaLoggerLogLevel.off.rawValue, 0)
     }
 

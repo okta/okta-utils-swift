@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 # Move this to bacon-setup.sh when we opensource
 # Setup CI Variables
 
@@ -12,6 +14,6 @@ pushd "${LOGGER_ROOT}"
 printBuildEnvironment
 # set -e
 runTests "$DEVICE_NAME"
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
 echo "Error running tests"
 fi

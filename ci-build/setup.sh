@@ -1,18 +1,31 @@
 #!/bin/bash
 
+# Install any missing gems
+bundle install
+
 # Constants
 PROJECT_NAME="OktaLogger"
 LOGGER_ROOT="${CI_DIRECTORY}"/..
-
+FASTLANE_DIRECTORY="fastlane"
+TEST_OUTPUT_DIR="${FASTLANE_DIRECTORY}/test_output"
+LINT_RESULTS_DIR="${FASTLANE_DIRECTORY}/lint"
 DERIVED_DATA="${LOGGER_ROOT}/DerivedData"
-if [ -d "${DERIVED_DATA}" ]; then
+DART_DIR="${HOME}/dart"
+
+if [[ -d "${DERIVED_DATA}" ]]; then
     rm -rf "${DERIVED_DATA}"
 fi
 
+if [[ -z $WORKSPACE ]]; then
+    WORKSPACE="$HOME/okta"
+fi
+
+if [[ -z $REPO ]]; then
+    REPO=$PROJECT_NAME
+fi
 
 # Common environment variables
-FASTLANE_DIRECTORY="$WORKSPACE/${REPO}/fastlane"
-LOGDIRECTORY=$HOME/dart
+
 # Echos an error message
 function echoError() {
   RED='\033[0;31m'
@@ -31,61 +44,35 @@ function echoSuccess() {
 function runTests() {
   echo "===================="
   echo "simulator test"
-  echo "===================="
   xcodebuild -version
   pwd
-
-  ## Perform basic setup
-  # Setup environment vars
-  FASTLANE_TEST_RESULTS_DIR="$FASTLANE_DIRECTORY/test_output"
-  TEST_RESULT_FILE="test-result.xml"
-  FASTLANE_TEST_RESULTS_FILE="${FASTLANE_TEST_RESULTS_DIR}/${TEST_RESULT_FILE}"
-
-  # Truncated directory to tell dart where test results are
-  DART_TEST_RESULTS_DIR="${REPO}/OktaLogger/fastlane/test_output"
-
-  # Clean out old test results
-  if [ -d "$FASTLANE_TEST_RESULTS_DIR" ]; then
-    echo "Removing: $FASTLANE_TEST_RESULTS_DIR"
-    rm -rf "$FASTLANE_TEST_RESULTS_DIR"
-  fi
-
-  if [ -d "$DART_TEST_RESULTS_DIR" ]; then
-    echo "Removing: $DART_TEST_RESULTS_DIR"
-    rm -rf "$DART_TEST_RESULTS_DIR"
-  fi
-
-  if [ -f "${LOGDIRECTORY}/${TEST_RESULT_FILE}" ]; then
-    echo "Removing: ${LOGDIRECTORY}/${TEST_RESULT_FILE}"
-    rm -f "${LOGDIRECTORY}/${TEST_RESULT_FILE}"
-  fi
+  echo "===================="
 
   export TEST_SUITE_TYPE="junit"
-  export TEST_RESULT_FILE_DIR="${DART_TEST_RESULTS_DIR}"
+  export TEST_RESULT_FILE_DIR="${DART_DIR}"
 
-  echo $TEST_SUITE_TYPE > $TEST_SUITE_TYPE_FILE
-  echo $TEST_RESULT_FILE_DIR > $TEST_RESULT_FILE_DIR_FILE
+  echo ${TEST_SUITE_TYPE} > ${TEST_SUITE_TYPE_FILE}
+  echo ${TEST_RESULT_FILE_DIR} > ${TEST_RESULT_FILE_DIR_FILE}
+
+# Clean old test results
+  if [[ -d "${TEST_OUTPUT_DIR}" ]]; then
+    echo "Removing: ${TEST_OUTPUT_DIR}"
+    rm -rf ${TEST_OUTPUT_DIR}
+  fi
+
+  pod install
 
   bundle exec fastlane test device:"$1"
 
   FOUND_ERROR=$?
 
-  ### Send xml up to logs dir
-  echo "CI-INFO: Copying Test Results XML to $LOGDIRECTORY"
-  if [ -f $FASTLANE_TEST_RESULTS_FILE ]; then
-    cp $FASTLANE_TEST_RESULTS_FILE $LOGDIRECTORY
-  else
-    # files are not collated ? 
-    find $FASTLANE_TEST_RESULTS_DIR -name "*.xml" -exec cp {} ${LOGDIRECTORY} \;
-  fi 
-  echo "CI-INFO: Archiving Test Results to $LOGDIRECTORY"
-  tar zcvf "${LOGDIRECTORY}/testResults.tar.gz" -C $FASTLANE_DIRECTORY test_output 
-  realpath ${LOGDIRECTORY}/testResults.tar.gz
-  ls -l ${LOGDIRECTORY}/testResults.tar.gz
+  echo "CI-INFO: Archiving Test Results to $TEST_OUTPUT_DIR"
+  tar zcvf ${DART_DIR}/testResults.zip -C ${FASTLANE_DIRECTORY} test_output
+  cp ${TEST_OUTPUT_DIR}/test-result.xml ${DART_DIR}
   ### Failure! One or other test suites exit non-zero
-  if [ "$FOUND_ERROR" -ne 0 ] ; then
+  if [[ "$FOUND_ERROR" -ne 0 ]] ; then
     echo "error: $FOUND_ERROR"
-    return 1
+    exit -1
   fi
 
   # Success!
@@ -93,22 +80,39 @@ function runTests() {
 }
 
 function runSwiftLint() {
-  LINT_RESULTS_DIR="${FASTLANE_DIRECTORY}/lint"
+  echo "===================="
+  echo "Lint"
+  xcodebuild -version
+  pwd
+  echo "===================="
+
+
+  export TEST_SUITE_TYPE="junit"
+  export TEST_RESULT_FILE_DIR="${DART_DIR}"
+  echo ${TEST_SUITE_TYPE} > ${TEST_SUITE_TYPE_FILE}
+  echo ${TEST_RESULT_FILE_DIR} > ${TEST_RESULT_FILE_DIR_FILE}
 
   # Clean out old test results
-  if [ -d "$LINT_RESULTS_DIR" ]; then
+  if [[ -d "$LINT_RESULTS_DIR" ]]; then
     echo "Removing: $LINT_RESULTS_DIR"
     rm -rf "$LINT_RESULTS_DIR"
   fi
 
   bundle exec fastlane lint action:$1
   LINT_ERROR=$?
-  echo "CI-INFO: Copy Lint output to $LOGDIRECTORY"
-  cp $LINT_RESULTS_DIR/* $LOGDIRECTORY
+  if [[ -d "$LINT_RESULTS_DIR" ]]; then
+    echo "CI-INFO: Copy Lint output to $DART_DIR"
+    pwd
 
-  if [ "$LINT_ERROR" -ne 0 ]; then
-	echo "error: $LINT_ERROR"
-	return 1
+    cp ${LINT_RESULTS_DIR}/*.xml ${DART_DIR}
+  fi
+
+  if [[ "$LINT_ERROR" -ne 0 ]]; then
+	  echo "error: $LINT_ERROR"
+	  exit -1
+  else
+    echo "No Error."
+    exit 0
   fi
 }
 
@@ -124,10 +128,10 @@ function printBuildEnvironment() {
     TIME_NOW=`date`
     UPTIME=`uptime`
     QUEUE=${SQS_QUEUE_URL}
-    if [ -z "$SHA" ] ; then
+    if [[ -z "$SHA" ]] ; then
         SHA=`git rev-parse  HEAD 2> /dev/null`
     fi
-    if [ -z "$BRANCH" ] ; then
+    if [[ -z "$BRANCH" ]] ; then
         BRANCH=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"`
     fi
     AUTHOR=`git show -s --pretty='%an'`
@@ -157,7 +161,7 @@ function printBuildEnvironment() {
     echo "====================================================="
     echo "====================================================="
     echo " Test Details"
-    echo "Device: "  $DEVICE_NAME
-    echo "Test: "  $TEST_GROUP
+    echo "Device: "  ${DEVICE_NAME}
+    echo "Test: "  ${TEST_GROUP}
     echo "====================================================="
 }

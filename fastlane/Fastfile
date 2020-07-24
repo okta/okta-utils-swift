@@ -41,9 +41,6 @@ end
 
 platform :ios do
   desc "Description of what the lane does"
-  before_all do |lane, options|
-    cocoapods
-  end
 
   lane :lint do |options|
     Dir.mkdir '../fastlane/lint' unless Dir.exist? '../fastlane/lint'

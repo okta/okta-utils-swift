@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 usage()
 {
   echo "
@@ -34,6 +34,12 @@ while getopts ":ha" opt; do
   esac
 done
 
+#echo "------------"
+#echo "DART ENVIRONMENT"
+#echo "-------------"
+#env
+#
+#echo "-----------------------------"
 
 CI_DIRECTORY=$(cd `dirname $0` && pwd)
 source "${CI_DIRECTORY}/setup.sh"

@@ -112,7 +112,7 @@ function runSwiftLint() {
 	  exit -1
   else
     echo "No Error."
-    exit 0
+    exit ${PUBLISH_TYPE_AND_RESULT_DIR}
   fi
 }
 

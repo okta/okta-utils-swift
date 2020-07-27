@@ -2,6 +2,7 @@
 
 # Install any missing gems
 bundle install
+pod install
 
 # Constants
 PROJECT_NAME="OktaLogger"

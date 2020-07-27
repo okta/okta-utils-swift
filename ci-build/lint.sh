@@ -51,3 +51,9 @@ printBuildEnvironment
 
 # Run Lint Test
 runSwiftLint
+if [[ $? -ne 0 ]]; then
+  echo "Error running tests"
+  return -1
+else
+  return 0
+fi

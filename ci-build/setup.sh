@@ -11,17 +11,18 @@ TEST_OUTPUT_DIR="${FASTLANE_DIRECTORY}/test_output"
 LINT_RESULTS_DIR="${FASTLANE_DIRECTORY}/lint"
 DERIVED_DATA="${LOGGER_ROOT}/DerivedData"
 DART_DIR="${HOME}/dart"
+export LOGDIRECTORY=${DART_DIR}
 
 if [[ -d "${DERIVED_DATA}" ]]; then
     rm -rf "${DERIVED_DATA}"
 fi
 
-if [[ -z $WORKSPACE ]]; then
+if [[ -z ${WORKSPACE} ]]; then
     WORKSPACE="$HOME/okta"
 fi
 
-if [[ -z $REPO ]]; then
-    REPO=$PROJECT_NAME
+if [[ -z ${REPO} ]]; then
+    REPO=${PROJECT_NAME}
 fi
 
 # Common environment variables
@@ -72,7 +73,7 @@ function runTests() {
   ### Failure! One or other test suites exit non-zero
   if [[ "$FOUND_ERROR" -ne 0 ]] ; then
     echo "error: $FOUND_ERROR"
-    exit -1
+    return -1
   fi
 
   # Success!
@@ -103,16 +104,15 @@ function runSwiftLint() {
   if [[ -d "$LINT_RESULTS_DIR" ]]; then
     echo "CI-INFO: Copy Lint output to $DART_DIR"
     pwd
-
     cp ${LINT_RESULTS_DIR}/*.xml ${DART_DIR}
   fi
 
   if [[ "$LINT_ERROR" -ne 0 ]]; then
 	  echo "error: $LINT_ERROR"
-	  exit -1
+	  return -1
   else
     echo "No Error."
-    exit ${PUBLISH_TYPE_AND_RESULT_DIR}
+    return 0
   fi
 }
 

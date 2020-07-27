@@ -15,7 +15,8 @@ printBuildEnvironment
 # set -e
 runTests "$DEVICE_NAME"
 if [[ $? -ne 0 ]]; then
-echo "Error running tests"
+  echo "Error running tests"
+  return -1
 else
-  return ${PUBLISH_TYPE_AND_RESULT_DIR}
+  return 0
 fi

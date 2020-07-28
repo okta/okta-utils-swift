@@ -10,7 +10,7 @@ public protocol OktaLoggerDestinationProtocol {
      Unique for this logging destination, e.g. "com.okta.console" or "com.google.firebase.analytics"
      Only one logger per identifier is permitted
      */
-    var identifier: String {get}
+    var identifier: String { get }
 
     /**
      Logging level for this destination
@@ -20,11 +20,11 @@ public protocol OktaLoggerDestinationProtocol {
     /**
      Logging level for this destination
      */
-    var defaultProperties: [AnyHashable: Any]? {get}
+    var defaultProperties: [AnyHashable: Any]? { get }
 
     /**
      Logging super-method, to be implemented by all concrete logging destinations
-     
+
      - Parameters:
      - level: OktaLoggerLogLevel for this event
      - eventName: name for this event
@@ -66,7 +66,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
         }
         set (value) {
             self.lock.writeLock()
-            defer { self.lock.unlock()}
+            defer { self.lock.unlock() }
             self._level = value
         }
     }

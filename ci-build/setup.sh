@@ -1,18 +1,121 @@
-#!/usr/bin/env bash -l
+#!/bin/bash
+
+# Install any missing gems
+bundle install
+pod install
 
 # Constants
 PROJECT_NAME="OktaLogger"
 LOGGER_ROOT="${CI_DIRECTORY}"/..
-
+FASTLANE_DIRECTORY="fastlane"
+TEST_OUTPUT_DIR="${FASTLANE_DIRECTORY}/test_output"
+LINT_RESULTS_DIR="${FASTLANE_DIRECTORY}/lint"
 DERIVED_DATA="${LOGGER_ROOT}/DerivedData"
-if [ -d "${DERIVED_DATA}" ]; then
+DART_DIR="${HOME}/dart"
+export LOGDIRECTORY=${DART_DIR}
+
+if [[ -d "${DERIVED_DATA}" ]]; then
     rm -rf "${DERIVED_DATA}"
 fi
 
-TEST_RESULTS_DIR=${LOGGER_ROOT}/TestResults
-if [ ! -d "${TEST_RESULTS_DIR}" ]; then
-    mkdir -p "${TEST_RESULTS_DIR}"
+if [[ -z ${WORKSPACE} ]]; then
+    WORKSPACE="$HOME/okta"
 fi
+
+if [[ -z ${REPO} ]]; then
+    REPO=${PROJECT_NAME}
+fi
+
+# Common environment variables
+
+# Echos an error message
+function echoError() {
+  RED='\033[0;31m'
+  NOCOLOR='\033[0m' #Default
+  printf "${RED}${1}${NOCOLOR}\n"
+  exit 1
+}
+
+# Echos a success message
+function echoSuccess() {
+  GREEN='\033[0;32m'
+  NOCOLOR='\033[0m' #Default
+  printf "${GREEN}${1}${NOCOLOR}\n"
+}
+
+function runTests() {
+  echo "===================="
+  echo "simulator test"
+  xcodebuild -version
+  pwd
+  echo "===================="
+
+  export TEST_SUITE_TYPE="junit"
+  export TEST_RESULT_FILE_DIR="${DART_DIR}"
+
+  echo ${TEST_SUITE_TYPE} > ${TEST_SUITE_TYPE_FILE}
+  echo ${TEST_RESULT_FILE_DIR} > ${TEST_RESULT_FILE_DIR_FILE}
+
+# Clean old test results
+  if [[ -d "${TEST_OUTPUT_DIR}" ]]; then
+    echo "Removing: ${TEST_OUTPUT_DIR}"
+    rm -rf ${TEST_OUTPUT_DIR}
+  fi
+
+  pod install
+
+  bundle exec fastlane test device:"$1"
+
+  FOUND_ERROR=$?
+
+  echo "CI-INFO: Archiving Test Results to $TEST_OUTPUT_DIR"
+  tar zcvf ${DART_DIR}/testResults.zip -C ${FASTLANE_DIRECTORY} test_output
+  cp ${TEST_OUTPUT_DIR}/test-result.xml ${DART_DIR}
+  ### Failure! One or other test suites exit non-zero
+  if [[ "$FOUND_ERROR" -ne 0 ]] ; then
+    echo "error: $FOUND_ERROR"
+    return -1
+  fi
+
+  # Success!
+  return 0
+}
+
+function runSwiftLint() {
+  echo "===================="
+  echo "Lint"
+  xcodebuild -version
+  pwd
+  echo "===================="
+
+
+  export TEST_SUITE_TYPE="junit"
+  export TEST_RESULT_FILE_DIR="${DART_DIR}"
+  echo ${TEST_SUITE_TYPE} > ${TEST_SUITE_TYPE_FILE}
+  echo ${TEST_RESULT_FILE_DIR} > ${TEST_RESULT_FILE_DIR_FILE}
+
+  # Clean out old test results
+  if [[ -d "$LINT_RESULTS_DIR" ]]; then
+    echo "Removing: $LINT_RESULTS_DIR"
+    rm -rf "$LINT_RESULTS_DIR"
+  fi
+
+  bundle exec fastlane lint action:$1
+  LINT_ERROR=$?
+  if [[ -d "$LINT_RESULTS_DIR" ]]; then
+    echo "CI-INFO: Copy Lint output to $DART_DIR"
+    pwd
+    cp ${LINT_RESULTS_DIR}/*.xml ${DART_DIR}
+  fi
+
+  if [[ "$LINT_ERROR" -ne 0 ]]; then
+	  echo "error: $LINT_ERROR"
+	  return -1
+  else
+    echo "No Error."
+    return 0
+  fi
+}
 
 # Print header with build machine, build launch information
 function printBuildEnvironment() {
@@ -26,14 +129,10 @@ function printBuildEnvironment() {
     TIME_NOW=`date`
     UPTIME=`uptime`
     QUEUE=${SQS_QUEUE_URL}
-    if [ -z "$SHA" ] ; then
+    if [[ -z "$SHA" ]] ; then
         SHA=`git rev-parse  HEAD 2> /dev/null`
     fi
-    if [ -z "$REPO" ] ; then
-        GIT_URL=`git remote get-url origin`
-        REPO=`basename $GIT_URL .git`
-    fi
-    if [ -z "$BRANCH" ] ; then
+    if [[ -z "$BRANCH" ]] ; then
         BRANCH=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"`
     fi
     AUTHOR=`git show -s --pretty='%an'`
@@ -61,8 +160,9 @@ function printBuildEnvironment() {
     echo "  ruby: $RUBY_VERSION"
     echo "uptime: $UPTIME"
     echo "====================================================="
+    echo "====================================================="
+    echo " Test Details"
+    echo "Device: "  ${DEVICE_NAME}
+    echo "Test: "  ${TEST_GROUP}
+    echo "====================================================="
 }
-
-
-
-

@@ -26,5 +26,6 @@ class ReadWriteLock: NSObject {
         self.lock = pthread_rwlock_t()
         pthread_rwlock_init(&self.lock, nil)
     }
+
     private var lock: pthread_rwlock_t
 }

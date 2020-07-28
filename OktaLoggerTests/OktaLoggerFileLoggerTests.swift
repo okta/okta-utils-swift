@@ -38,7 +38,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
     }
 
     func countLines(_ data: Data) -> Int {
-        let logData=String(data: data as Data, encoding: .utf8)
+        let logData = String(data: data as Data, encoding: .utf8)
         var lineCount: Int = 0
         logData?.enumerateLines { (_, _) in
             lineCount += 1

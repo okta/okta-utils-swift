@@ -23,7 +23,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     }
 
     @objc
-    public convenience override init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
+    override public convenience init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: 60 * 60 * 48)
         self.init(logConfig: logConfig, identifier: identifier, level: level, defaultProperties: defaultProperties)
     }
@@ -138,7 +138,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         self.fileLogger.rollingFrequency = logConfig.rollingFrequency
         DDLog.add(self.fileLogger)
         self.isLoggingActive = true
-        fileLogger.doNotReuseLogFiles=true
+        fileLogger.doNotReuseLogFiles = true
     }
 
     /**

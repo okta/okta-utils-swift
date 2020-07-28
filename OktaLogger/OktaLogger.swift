@@ -8,7 +8,7 @@ public protocol OktaLoggerProtocol {
 
     /**
      Initialize a primary logger instance with a list of destinations. Destinations are immutable for thread safety.
-     
+
      - Parameters:
         - destinations: List of OktaLoggerDestinations
      */
@@ -16,7 +16,7 @@ public protocol OktaLoggerProtocol {
 
     /**
     Logging super-method for all parameters
-    
+
     - Parameters:
       - level: OktaLoggerLogLevel for this event
       - eventName: name for this event
@@ -33,7 +33,7 @@ public protocol OktaLoggerProtocol {
 
     /**
      Update the log level for one or all destinations
-     
+
      - Parameters:
          - level: OktaLoggerLogLevel to set
          - identifiers: destination identifiers to be updated
@@ -150,6 +150,6 @@ public extension OktaLogger {
             _main = logger
         }
     }
-    static private var _lock = ReadWriteLock()
-    static private var _main: OktaLogger?
+    private static var _lock = ReadWriteLock()
+    private static var _main: OktaLogger?
 }

@@ -10,10 +10,27 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
   s.osx.deployment_target = '10.14'
   s.swift_version = '5.0'
-  s.source_files = 'OktaLogger/*.{h,m,swift}'
-  s.exclude_files = [
-    'OktaLogger/Info.plist'
-  ]
-  s.dependency  'CocoaLumberjack/Swift', '~>3.6.0'
   s.dependency 'SwiftLint'
+  s.default_subspec = "Complete"
+
+  # Subspec
+  s.subspec "Complete" do |complete|
+    complete.dependency 'OktaLogger/Lumberjack'
+  end
+  s.subspec 'Lumberjack' do |lumberjack|
+      lumberjack.source_files = [
+        'OktaLogger/**/Lumberjack*.{h,m,swift}'
+      ]
+      lumberjack.dependency  'CocoaLumberjack/Swift', '~>3.6.0'
+      lumberjack.dependency 'OktaLogger/Core'
+  end
+
+  s.subspec "Core" do |core|
+      core.source_files = 'OktaLogger/*.{h,m,swift}'
+      core.exclude_files = [
+        'OktaLogger/Info.plist',
+        'OktaLogger/FileLoggers'
+      ]
+  end
+
 end

@@ -11,15 +11,15 @@ import CocoaLumberjack
 
 @objc
 public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
-    var fileLogger: DDFileLogger = DDFileLogger()
-    var isLoggingActive = true
+
+    var delegate:LoggerDelegate
 
     // MARK: Intializing logger
     @objc
     public init(logConfig: OktaLoggerFileLoggerConfig, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
+        delegate = LumberjackLoggerDelegate(logConfig)
         super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
         let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: logConfig.rollingFrequency)
-        self.setupLogger(logConfig)
     }
 
     @objc
@@ -31,13 +31,8 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     // MARK: Logging
     @objc
     override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
-
-        let logMessage = self.stringValue(level: level,
-                                          eventName: eventName,
-                                          message: message,
-                                          file: file, line: line, funcName: funcName)
-        // translate log level into relevant console type level
-        self.log(level: level, message: logMessage)
+        let log = self.stringValue(level: level, eventName: eventName, message:message, file: file, line:line, funcName:funcName)
+        delegate.log(level, log)
     }
 
     /**
@@ -45,6 +40,84 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
      */
     @objc
     public func logDirectoryAbsolutePath() -> String? {
+        return delegate.dirPath()
+    }
+
+    // MARK: Retrieve Logs
+    /**
+            Non thread safe implementation to retrieve logs.
+     */
+    @objc
+    public func getLogs() -> [Data] {
+        return delegate.getLogs()
+    }
+
+    /**
+        Retrieves log data asynchronously. Completion block is always executed in main queue
+    */
+    @objc
+    public func getLogs(completion: @escaping ([Data]) -> Void) {
+        // fetch logs
+        delegate.getLogs(completion: completion)
+    }
+
+    // MARK: Purge Logs
+    @objc
+    override open func logsCanBePurged() -> Bool {
+        return delegate.logsCanBePurged()
+    }
+
+    @objc
+    override open func purgeLogs() {
+        if !logsCanBePurged() {
+            return
+        }
+        delegate.purgeLogs()
+    }
+
+    /**
+     Translate log message  into DDLog message
+     */
+    func log(level: OktaLoggerLogLevel, message: String) {
+       delegate.log(level, message)
+    }
+}
+
+protocol LoggerDelegate {
+
+    //MARK: Logging
+    func log(_ level:OktaLoggerLogLevel, _ message:String)
+    func dirPath() -> String?
+
+    //MARK: retrieval
+    func getLogs() -> [Data]
+    func getLogs(completion: @escaping ([Data]) -> Void)
+
+    // MARK: purge
+    func logsCanBePurged() -> Bool
+    func purgeLogs()
+}
+
+class LumberjackLoggerDelegate: LoggerDelegate {
+    var fileLogger: DDFileLogger = DDFileLogger()
+    var isLoggingActive = true
+
+    /**
+     Configure Logger Parameters
+     */
+    init(_ logConfig: OktaLoggerFileLoggerConfig) {
+        self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
+        self.fileLogger.rollingFrequency = logConfig.rollingFrequency
+        DDLog.add(self.fileLogger)
+        self.isLoggingActive = true
+        fileLogger.doNotReuseLogFiles = true
+    }
+
+    /**
+     Log file path
+     */
+    @objc
+    func dirPath() -> String? {
         let path: String? = self.fileLogger.currentLogFileInfo?.filePath
         return path
     }
@@ -54,7 +127,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             Non thread safe implementation to retrieve logs.
      */
     @objc
-    public func getLogs() -> [Data] {
+    func getLogs() -> [Data] {
         self.fileLogger.flush()
         // pause logging to avoid corruption
         self.isLoggingActive = false
@@ -81,7 +154,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
-    public func getLogs(completion: @escaping ([Data]) -> Void) {
+    func getLogs(completion: @escaping ([Data]) -> Void) {
         // fetch logs
         DispatchQueue.global(qos: .userInitiated).async {
             let logData = self.getLogs()
@@ -93,12 +166,12 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
 
     // MARK: Purge Logs
     @objc
-    override open func logsCanBePurged() -> Bool {
+    func logsCanBePurged() -> Bool {
         return true
     }
 
     @objc
-    override open func purgeLogs() {
+    func purgeLogs() {
         if !logsCanBePurged() {
             return
         }
@@ -131,20 +204,9 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     }
 
     /**
-     Configure Logger Parameters
-     */
-    func setupLogger(_ logConfig: OktaLoggerFileLoggerConfig) {
-        self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
-        self.fileLogger.rollingFrequency = logConfig.rollingFrequency
-        DDLog.add(self.fileLogger)
-        self.isLoggingActive = true
-        fileLogger.doNotReuseLogFiles = true
-    }
-
-    /**
      Translate log message  into DDLog message
      */
-    func log(level: OktaLoggerLogLevel, message: String) {
+    func log(_ level: OktaLoggerLogLevel,_ message: String) {
         if  !self.isLoggingActive {
             return
         }

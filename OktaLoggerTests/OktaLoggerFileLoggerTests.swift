@@ -43,7 +43,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
 
         // default rolling frequency
         XCTAssertEqual(testObject.fileLogger.rollingFrequency, TWO_DAYS)
-        XCTAssertNotNil(testObject.dirPath())
+        XCTAssertNotNil(testObject.directoryPath())
 
         XCTAssertEqual(testObject.logsCanBePurged(), true)
         for i in 1...5 {

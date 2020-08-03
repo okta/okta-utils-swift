@@ -24,7 +24,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      Log file path
      */
     @objc
-    func dirPath() -> String? {
+    func directoryPath() -> String? {
         let path: String? = self.fileLogger.currentLogFileInfo?.filePath
         return path
     }

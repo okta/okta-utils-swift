@@ -10,11 +10,11 @@ import Foundation
 */
 protocol FileLoggerDelegate: AnyObject {
 
-    //MARK: Logging
+    // MARK: Logging
     func log(_ level: OktaLoggerLogLevel, _ message: String)
-    func dirPath() -> String?
+    func directoryPath() -> String?
 
-    //MARK: retrieval
+    // MARK: retrieval
     func getLogs() -> [Data]
     func getLogs(completion: @escaping ([Data]) -> Void)
 

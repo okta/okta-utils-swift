@@ -39,7 +39,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
      */
     @objc
     public func logDirectoryAbsolutePath() -> String? {
-        return delegate.dirPath()
+        return delegate.directoryPath()
     }
 
     // MARK: Retrieve Logs

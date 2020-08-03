@@ -9,6 +9,16 @@
 import Foundation
 @objc
 public class OktaLoggerFileLoggerConfig: NSObject {
+
+    public enum Engine {
+        case CocoaLumberjack
+    }
+
+    /**
+    File logging library to use
+    */
+    var engine = Engine.CocoaLumberjack
+
     /**
      Log Rolling frequency in Seconds
      `rollingFrequency`

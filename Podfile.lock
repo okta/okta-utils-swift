@@ -1,22 +1,103 @@
 PODS:
-  - CocoaLumberjack/Core (3.6.1)
-  - CocoaLumberjack/Swift (3.6.1):
+  - CocoaLumberjack/Core (3.6.2)
+  - CocoaLumberjack/Swift (3.6.2):
     - CocoaLumberjack/Core
+  - Firebase/CoreOnly (6.29.0):
+    - FirebaseCore (= 6.9.2)
+  - Firebase/Crashlytics (6.29.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 4.3.1)
+  - FirebaseCore (6.9.2):
+    - FirebaseCoreDiagnostics (~> 1.3)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+  - FirebaseCoreDiagnostics (1.5.0):
+    - GoogleDataTransport (~> 7.0)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/Logger (~> 6.7)
+    - nanopb (~> 1.30905.0)
+  - FirebaseCrashlytics (4.3.1):
+    - FirebaseCore (~> 6.8)
+    - FirebaseInstallations (~> 1.1)
+    - GoogleDataTransport (~> 7.0)
+    - nanopb (~> 1.30905.0)
+    - PromisesObjC (~> 1.2)
+  - FirebaseInstallations (1.5.0):
+    - FirebaseCore (~> 6.8)
+    - GoogleUtilities/Environment (~> 6.7)
+    - GoogleUtilities/UserDefaults (~> 6.7)
+    - PromisesObjC (~> 1.2)
+  - GoogleDataTransport (7.1.0):
+    - nanopb (~> 1.30905.0)
+  - GoogleUtilities/Environment (6.7.1):
+    - PromisesObjC (~> 1.2)
+  - GoogleUtilities/Logger (6.7.1):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/UserDefaults (6.7.1):
+    - GoogleUtilities/Logger
+  - nanopb (1.30905.0):
+    - nanopb/decode (= 1.30905.0)
+    - nanopb/encode (= 1.30905.0)
+  - nanopb/decode (1.30905.0)
+  - nanopb/encode (1.30905.0)
+  - OktaLogger (1.0.3):
+    - OktaLogger/Complete (= 1.0.3)
+    - SwiftLint
+  - OktaLogger/Complete (1.0.3):
+    - OktaLogger/Core
+    - OktaLogger/FirebaseCrashlytics
+    - OktaLogger/Lumberjack
+    - SwiftLint
+  - OktaLogger/Core (1.0.3):
+    - SwiftLint
+  - OktaLogger/FirebaseCrashlytics (1.0.3):
+    - Firebase/Crashlytics (~> 6.29.0)
+    - OktaLogger/Core
+    - SwiftLint
+  - OktaLogger/Lumberjack (1.0.3):
+    - CocoaLumberjack/Swift (~> 3.6.0)
+    - OktaLogger/Core
+    - SwiftLint
+  - PromisesObjC (1.2.9)
   - SwiftLint (0.39.2)
 
 DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 3.6.0)
-  - SwiftLint
+  - Firebase/Crashlytics (~> 6.29.0)
+  - OktaLogger (from `.`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CocoaLumberjack
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreDiagnostics
+    - FirebaseCrashlytics
+    - FirebaseInstallations
+    - GoogleDataTransport
+    - GoogleUtilities
+    - nanopb
+    - PromisesObjC
     - SwiftLint
 
+EXTERNAL SOURCES:
+  OktaLogger:
+    :path: "."
+
 SPEC CHECKSUMS:
-  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
+  CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
+  Firebase: 57957c8d6eb3d8b80a560b1dc58be24724b89ff2
+  FirebaseCore: 7930a1946517d94256d857f97371ed993b55f7bd
+  FirebaseCoreDiagnostics: 7535fe695737f8c5b350584292a70b7f8ff0357b
+  FirebaseCrashlytics: 863c851b034baeb3116cd2c91743e37de2dcedfc
+  FirebaseInstallations: 3c520c951305cbf9ca54eb891ff9e6d1fd384881
+  GoogleDataTransport: af0c79193dc59acd37630b4833d0dc6912ae6bd5
+  GoogleUtilities: e121a3867449ce16b0e35ddf1797ea7a389ffdf2
+  nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
+  OktaLogger: 07aafe21e06022f6910b644aeac0b1b8fd0b6a1b
+  PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: 014074e5ed330283e2a724371142593dd1c928b3
+PODFILE CHECKSUM: 701ae7816dd8304d8bbd4ab4f2de0256a59f3d43
 
 COCOAPODS: 1.7.5

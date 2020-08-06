@@ -1,0 +1,72 @@
+import FirebaseCrashlytics
+
+/**
+ Concrete logging class for Firebase Crashlytics.
+ */
+@objc
+open class OktaLoggerCrashlyticsLogger: OktaLoggerDestinationBase {
+
+    private let crashlytics: Crashlytics
+
+    /**
+     - Parameters
+        - crashlytics: Fully configured and ready-to-use Crashlytics object.
+                       Setup guide can be found [here](https://firebase.google.com/docs/crashlytics/get-started).
+        - identifier: Unique logging destination identifier.
+        - level: Logging level for this destination.
+        - defaultProperties: Default event properties.
+     */
+    @objc
+    public init(
+        crashlytics: Crashlytics,
+        identifier: String,
+        level: OktaLoggerLogLevel
+    ) {
+        self.crashlytics = crashlytics
+        super.init(identifier: identifier, level: level, defaultProperties: nil)
+    }
+
+    override open func log(
+        level: OktaLoggerLogLevel,
+        eventName: String,
+        message: String?,
+        properties: [AnyHashable: Any]?,
+        file: String,
+        line: NSNumber,
+        funcName: String
+    ) {
+        switch level {
+        case .warning, .error:
+            crashlytics.record(error: NSError(
+                domain: buildDomain(with: eventName),
+                code: 0,
+                userInfo: [
+                    "level": OktaLoggerLogLevel.logMessageIcon(level: level),
+                    "eventName": eventName,
+                    "message": message ?? "-",
+                    "file": file,
+                    "line": line,
+                    "function": funcName
+                ])
+            )
+        default:
+            break
+        }
+
+        crashlytics.log(self.stringValue(
+            level: level,
+            eventName: eventName,
+            message: message,
+            file: file,
+            line: line,
+            funcName: funcName)
+        )
+    }
+
+    // MARK: - Private
+
+    private func buildDomain(with eventName: String) -> String {
+        let normalizedEventName = eventName.lowercased().replacingOccurrences(of: " ", with: "-")
+        return "\(identifier).\(normalizedEventName)"
+    }
+}

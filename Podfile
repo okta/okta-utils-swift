@@ -1,14 +1,16 @@
 platform :ios, '11.0'
+use_modular_headers!
 
 target 'OktaLogger' do
-    use_frameworks!
-    podspec :name => 'OktaLogger'
+    pod 'Firebase/Crashlytics', '~>6.29.0'
+    pod 'CocoaLumberjack/Swift', '~>3.6.0'
 end
 
 target 'OktaLoggerDemoApp' do
-    use_frameworks!
-end
+    pod 'OktaLogger', :path => '.'
+    pod 'Firebase/Crashlytics', '~>6.29.0'
 
-target 'OktaLoggerTests' do
-    use_frameworks!
+    target 'OktaLoggerTests' do
+      inherit! :search_paths
+    end
 end

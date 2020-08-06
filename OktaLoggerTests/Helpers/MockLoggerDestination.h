@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-#import <OktaLogger/OktaLogger.h>
+@import OktaLogger;
 
 NS_ASSUME_NONNULL_BEGIN
 

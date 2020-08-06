@@ -11,14 +11,16 @@ import OktaLogger
 
 class ViewController: UITableViewController {
     private let consoleLogCellTexts = ["Log debug message", "Log info message", "Log warning message", "Log UI event message", "Log error message"]
+    private let logEventNames = ["test-debug", "test-info", "test-warning", "test-ui", "test-error"]
     private let logLevelCellTexts = ["off", "debug", "info", "warning", "uiEvent", "error", "all"]
     private let logLevels: [OktaLoggerLogLevel] = [.off, .debug, .info, .warning, .uiEvent, .error, .all]
     private var logLevelSelectedIndex = 6
     private let logLevelSection = 0
     private let consoleLogSection = 1
+    private let crashSection = 2
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -27,6 +29,8 @@ class ViewController: UITableViewController {
             return logLevelCellTexts.count
         case consoleLogSection:
             return consoleLogCellTexts.count
+        case crashSection:
+            return 1
         default:
             return 0
         }
@@ -47,6 +51,11 @@ class ViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "LoggerLevelTableCell", for: indexPath)
             cell.textLabel?.text = consoleLogCellTexts[indexPath.row]
             return cell
+        case crashSection:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "LoggerLevelTableCell", for: indexPath)
+            cell.textLabel?.text = "Force a crash"
+            cell.textLabel?.textColor = UIColor.red
+            return cell
         default:
             return UITableViewCell()
         }
@@ -62,18 +71,20 @@ class ViewController: UITableViewController {
         case consoleLogSection:
             switch indexPath.row {
             case 0:
-                OktaLogger.main?.debug(eventName: consoleLogCellTexts[indexPath.row], message: nil)
+                OktaLogger.main?.debug(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             case 1:
-                OktaLogger.main?.info(eventName: consoleLogCellTexts[indexPath.row], message: nil)
+                OktaLogger.main?.info(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             case 2:
-                OktaLogger.main?.warning(eventName: consoleLogCellTexts[indexPath.row], message: nil)
+                OktaLogger.main?.warning(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             case 3:
-                OktaLogger.main?.uiEvent(eventName: consoleLogCellTexts[indexPath.row], message: nil)
+                OktaLogger.main?.uiEvent(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             case 4:
-                OktaLogger.main?.error(eventName: consoleLogCellTexts[indexPath.row], message: nil)
+                OktaLogger.main?.error(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             default:
                 break
             }
+        case crashSection:
+            fatalError("Test fatal error")
         default:
             break
         }
@@ -85,6 +96,8 @@ class ViewController: UITableViewController {
             return "Change log level"
         case consoleLogSection:
             return "Log Message"
+        case crashSection:
+            return "Crash analytics"
         default:
             return nil
         }

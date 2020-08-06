@@ -18,7 +18,7 @@ public protocol OktaLoggerDestinationProtocol {
     var level: OktaLoggerLogLevel { get set }
 
     /**
-     Logging level for this destination
+     Default event properties
      */
     var defaultProperties: [AnyHashable: Any]? { get }
 

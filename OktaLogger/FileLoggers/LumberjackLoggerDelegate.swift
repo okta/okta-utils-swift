@@ -30,12 +30,18 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     }
 
     // MARK: Retrieve Logs
+    /**
+     Non thread safe implementation to retrieve logs.
+    */
     @objc
     func getLogs() -> [Data] {
         return getLogInfos().0
     }
     
     // MARK: Retrieve log file paths
+    /**
+     Non thread safe implementation to retrieve log file paths..
+    */
     @objc
     func getLogPaths() -> [URL] {
         return getLogInfos().1

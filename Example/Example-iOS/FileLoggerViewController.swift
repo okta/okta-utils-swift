@@ -72,7 +72,7 @@ class FileLoggerViewController: UIViewController, UIPickerViewDelegate, UIPicker
         var output: String = ""
         let logs = destination.getLogs()
         for log in logs {
-            guard let logData = String(data: log as Data, encoding: .utf8) else {
+            guard let logData = String(data: log.data, encoding: .utf8) else {
                 continue
             }
             output.append(logData)

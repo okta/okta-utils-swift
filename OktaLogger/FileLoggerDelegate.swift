@@ -15,8 +15,8 @@ protocol FileLoggerDelegate: AnyObject {
     func directoryPath() -> String?
 
     // MARK: retrieval
-    func getLogs() -> [Data]
-    func getLogs(completion: @escaping ([Data]) -> Void)
+    func getLogs() -> [OktaLoggerFileObject]
+    func getLogs(completion: @escaping ([OktaLoggerFileObject]) -> Void)
 
     // MARK: purge
     func logsCanBePurged() -> Bool

@@ -5,6 +5,18 @@
 
 import CocoaLumberjack
 
+@objc
+open class OktaLoggerFileObject: NSObject {
+    @objc public let filePath: URL
+    @objc public let data: Data
+    
+    @objc init(filePath: URL, data: Data) {
+        self.filePath = filePath
+        self.data = data
+        super.init()
+    }
+}
+
 class LumberjackLoggerDelegate: FileLoggerDelegate {
     var fileLogger: DDFileLogger = DDFileLogger()
     var isLoggingActive = true
@@ -34,11 +46,11 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
             Non thread safe implementation to retrieve logs.
      */
     @objc
-    func getLogs() -> [Data] {
+    func getLogs() -> [OktaLoggerFileObject] {
         self.fileLogger.flush()
         // pause logging to avoid corruption
         self.isLoggingActive = false
-        var logFileDataArray: [Data] = []
+        var logFileObjectArray = [OktaLoggerFileObject]()
         //        The first item in the array will be the most recently created log file.
         let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
         for logFileInfo in logFileInfos {
@@ -46,22 +58,23 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
                 continue
             }
             let logFilePath = logFileInfo.filePath
-            let fileURL = NSURL(fileURLWithPath: logFilePath)
-            if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
+            let fileURL = URL(fileURLWithPath: logFilePath)
+            if let logFileData = try? Data(contentsOf: fileURL, options: Data.ReadingOptions.mappedIfSafe) {
                 // Insert at front to reverse the order, so that oldest logs appear first.
-                logFileDataArray.insert(logFileData as Data, at: 0)
+                let fileObject = OktaLoggerFileObject(filePath: fileURL, data: logFileData)
+                logFileObjectArray.insert(fileObject, at: 0)
             }
         }
         // Resume logging
         self.isLoggingActive = true
-        return logFileDataArray
+        return logFileObjectArray
     }
 
     /**
         Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
-    func getLogs(completion: @escaping ([Data]) -> Void) {
+    func getLogs(completion: @escaping ([OktaLoggerFileObject]) -> Void) {
         // fetch logs
         DispatchQueue.global(qos: .userInitiated).async {
             let logData = self.getLogs()
@@ -96,7 +109,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
                     }
                     print("Intialized Log at \(logFile.filePath)")
                 }
-            } catch { error
+            } catch {
                 print("Error purging log: \(error.localizedDescription)")
             }
         })

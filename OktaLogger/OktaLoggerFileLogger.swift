@@ -47,7 +47,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
             Non thread safe implementation to retrieve logs.
      */
     @objc
-    public func getLogs() -> [Data] {
+    public func getLogs() -> [OktaLoggerFileObject] {
         return delegate.getLogs()
     }
 
@@ -55,7 +55,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
         Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
-    public func getLogs(completion: @escaping ([Data]) -> Void) {
+    public func getLogs(completion: @escaping ([OktaLoggerFileObject]) -> Void) {
         // fetch logs
         delegate.getLogs(completion: completion)
     }

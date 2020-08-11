@@ -22,7 +22,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         }
 
         var logs = testObject.getLogs()
-        var data = logs[0] as Data
+        var data = logs[0].data
         let lineCount = countLines(data)
         XCTAssertEqual(lineCount, 5)
         testObject.purgeLogs()
@@ -31,7 +31,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
         // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
         logs = testObject.getLogs()
-        data = logs[0] as Data
+        data = logs[0].data
         let newLineCount = countLines(data)
         XCTAssertEqual(newLineCount, 2)
     }
@@ -51,7 +51,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         }
 
         var logs = testObject.getLogs()
-        var data = logs[0] as Data
+        var data = logs[0].data
         let lineCount = countLines(data)
         XCTAssertEqual(lineCount, 5)
         testObject.purgeLogs()
@@ -60,7 +60,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.log(.info, "After purge")
         // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
         logs = testObject.getLogs()
-        data = logs[0] as Data
+        data = logs[0].data
         let newLineCount = countLines(data)
         XCTAssertEqual(newLineCount, 2)
     }

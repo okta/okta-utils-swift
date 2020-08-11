@@ -50,6 +50,12 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     public func getLogs() -> [Data] {
         return delegate.getLogs()
     }
+    
+    // MARK: Retrieve log files' paths
+    @objc
+    public func getLogPaths() -> [URL] {
+        return delegate.getLogPaths()
+    }
 
     /**
         Retrieves log data asynchronously. Completion block is always executed in main queue

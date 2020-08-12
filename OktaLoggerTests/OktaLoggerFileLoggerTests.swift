@@ -44,7 +44,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         // default rolling frequency
         XCTAssertEqual(testObject.fileLogger.rollingFrequency, TWO_DAYS)
         XCTAssertNotNil(testObject.directoryPath())
-        
+
         XCTAssertEqual(testObject.logsCanBePurged(), true)
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
@@ -79,7 +79,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         }
         return lineCount
     }
-    
+
     private func getPaths(testObject: LumberjackLoggerDelegate) -> [URL] {
         let logFileInfos = testObject.fileLogger.logFileManager.sortedLogFileInfos
         var logFilePathArray = [URL]()

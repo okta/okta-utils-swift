@@ -50,7 +50,7 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     public func getLogs() -> [Data] {
         return delegate.getLogs()
     }
-    
+
     // MARK: Retrieve log files' paths
     @objc
     public func getLogPaths() -> [URL] {

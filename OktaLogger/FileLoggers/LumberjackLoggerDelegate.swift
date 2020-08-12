@@ -37,7 +37,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     func getLogs() -> [Data] {
         return getLogInfos().data
     }
-    
+
     // MARK: Retrieve log file paths
     /**
      Non thread safe implementation to retrieve log file paths..
@@ -122,7 +122,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
             return  DDLogInfo(message)
         }
     }
-    
+
     // MARK: Private method to retrieve logs and file paths
     /**
      Non thread safe implementation to retrieve logs and file paths.

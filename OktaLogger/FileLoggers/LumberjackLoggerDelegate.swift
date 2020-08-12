@@ -31,30 +31,20 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
 
     // MARK: Retrieve Logs
     /**
-            Non thread safe implementation to retrieve logs.
-     */
+     Non thread safe implementation to retrieve logs.
+    */
     @objc
     func getLogs() -> [Data] {
-        self.fileLogger.flush()
-        // pause logging to avoid corruption
-        self.isLoggingActive = false
-        var logFileDataArray: [Data] = []
-        //        The first item in the array will be the most recently created log file.
-        let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
-        for logFileInfo in logFileInfos {
-            if logFileInfo.isArchived {
-                continue
-            }
-            let logFilePath = logFileInfo.filePath
-            let fileURL = NSURL(fileURLWithPath: logFilePath)
-            if let logFileData = try? NSData(contentsOf: fileURL as URL, options: NSData.ReadingOptions.mappedIfSafe) {
-                // Insert at front to reverse the order, so that oldest logs appear first.
-                logFileDataArray.insert(logFileData as Data, at: 0)
-            }
-        }
-        // Resume logging
-        self.isLoggingActive = true
-        return logFileDataArray
+        return getLogInfos().data
+    }
+
+    // MARK: Retrieve log file paths
+    /**
+     Non thread safe implementation to retrieve log file paths..
+    */
+    @objc
+    func getLogPaths() -> [URL] {
+        return getLogInfos().paths
     }
 
     /**
@@ -96,7 +86,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
                     }
                     print("Intialized Log at \(logFile.filePath)")
                 }
-            } catch { error
+            } catch {
                 print("Error purging log: \(error.localizedDescription)")
             }
         })
@@ -131,5 +121,34 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
             // default info
             return  DDLogInfo(message)
         }
+    }
+
+    // MARK: Private method to retrieve logs and file paths
+    /**
+     Non thread safe implementation to retrieve logs and file paths.
+     */
+    private func getLogInfos() -> (data: [Data], paths: [URL]) {
+        self.fileLogger.flush()
+        // pause logging to avoid corruption
+        self.isLoggingActive = false
+        var logFilePathArray = [URL]()
+        var logFileDataArray = [Data]()
+        // the first item in the array will be the most recently created log file.
+        let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
+        for logFileInfo in logFileInfos {
+            if logFileInfo.isArchived {
+                continue
+            }
+            let logFilePath = logFileInfo.filePath
+            let fileURL = URL(fileURLWithPath: logFilePath)
+            if let logFileData = try? Data(contentsOf: fileURL, options: Data.ReadingOptions.mappedIfSafe) {
+                // Insert at front to reverse the order, so that oldest logs appear first.
+                logFilePathArray.insert(fileURL, at: 0)
+                logFileDataArray.insert(logFileData as Data, at: 0)
+            }
+        }
+        // Resume logging
+        self.isLoggingActive = true
+        return (logFileDataArray, logFilePathArray)
     }
 }

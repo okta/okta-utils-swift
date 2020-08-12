@@ -16,6 +16,7 @@ protocol FileLoggerDelegate: AnyObject {
 
     // MARK: retrieval
     func getLogs() -> [Data]
+    func getLogPaths() -> [URL]
     func getLogs(completion: @escaping ([Data]) -> Void)
 
     // MARK: purge

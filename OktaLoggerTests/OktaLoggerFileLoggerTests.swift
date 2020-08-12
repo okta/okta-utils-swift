@@ -51,18 +51,24 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         }
 
         var logs = testObject.getLogs()
-        var data = logs[0] as Data
+        var data = logs[0]
         let lineCount = countLines(data)
         XCTAssertEqual(lineCount, 5)
+        var paths = testObject.getLogPaths()
+        var filePaths = getPaths(testObject: testObject)
+        XCTAssertEqual(paths, filePaths)
         testObject.purgeLogs()
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
         // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
         logs = testObject.getLogs()
-        data = logs[0] as Data
+        data = logs[0]
         let newLineCount = countLines(data)
         XCTAssertEqual(newLineCount, 2)
+        paths = testObject.getLogPaths()
+        filePaths = getPaths(testObject: testObject)
+        XCTAssertEqual(paths, filePaths)
     }
 
     func countLines(_ data: Data) -> Int {
@@ -72,5 +78,21 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             lineCount += 1
         }
         return lineCount
+    }
+
+    private func getPaths(testObject: LumberjackLoggerDelegate) -> [URL] {
+        let logFileInfos = testObject.fileLogger.logFileManager.sortedLogFileInfos
+        var logFilePathArray = [URL]()
+        for logFileInfo in logFileInfos {
+            if logFileInfo.isArchived {
+                continue
+            }
+            let logFilePath = logFileInfo.filePath
+            let fileURL = URL(fileURLWithPath: logFilePath)
+            if let _ = try? Data(contentsOf: fileURL, options: Data.ReadingOptions.mappedIfSafe) {
+                logFilePathArray.insert(fileURL, at: 0)
+            }
+        }
+        return logFilePathArray
     }
 }

@@ -35,7 +35,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     */
     @objc
     func getLogs() -> [Data] {
-        return getLogInfos().0
+        return getLogInfos().data
     }
     
     // MARK: Retrieve log file paths
@@ -44,7 +44,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     */
     @objc
     func getLogPaths() -> [URL] {
-        return getLogInfos().1
+        return getLogInfos().paths
     }
 
     /**
@@ -125,9 +125,9 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     
     // MARK: Private method to retrieve logs and file paths
     /**
-            Non thread safe implementation to retrieve logs and file paths.
+     Non thread safe implementation to retrieve logs and file paths.
      */
-    private func getLogInfos() -> ([Data], [URL]) {
+    private func getLogInfos() -> (data: [Data], paths: [URL]) {
         self.fileLogger.flush()
         // pause logging to avoid corruption
         self.isLoggingActive = false

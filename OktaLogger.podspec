@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.0.4"
+  s.version          = "1.0.5"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -16,16 +16,16 @@ Pod::Spec.new do |s|
 
   # Subspec
   s.subspec "Complete" do |complete|
-    complete.dependency 'OktaLogger/Lumberjack'
+    complete.dependency 'OktaLogger/FileLogger'
     complete.dependency 'OktaLogger/FirebaseCrashlytics'
   end
 
-  s.subspec 'Lumberjack' do |lumberjack|
-      lumberjack.source_files = [
-        'OktaLogger/**/Lumberjack*.{h,m,swift}'
+  s.subspec 'FileLogger' do |fileLogger|
+      fileLogger.source_files = [
+        'OktaLogger/FileLoggers/*.{h,m,swift}'
       ]
-      lumberjack.dependency 'CocoaLumberjack/Swift', '~>3.6.0'
-      lumberjack.dependency 'OktaLogger/Core'
+      fileLogger.dependency 'CocoaLumberjack/Swift', '~>3.6.0'
+      fileLogger.dependency 'OktaLogger/Core'
   end
 
   s.subspec 'FirebaseCrashlytics' do |crashlytics|

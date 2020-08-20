@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Lumberjack' do |lumberjack|
       lumberjack.source_files = [
-        'OktaLogger/**/Lumberjack*.{h,m,swift}'
+        'OktaLogger/FileLoggers/*.{h,m,swift}'
       ]
       lumberjack.dependency 'CocoaLumberjack/Swift', '~>3.6.0'
       lumberjack.dependency 'OktaLogger/Core'

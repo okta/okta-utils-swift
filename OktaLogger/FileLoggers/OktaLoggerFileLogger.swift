@@ -18,7 +18,6 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     public init(logConfig: OktaLoggerFileLoggerConfig, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         delegate = LumberjackLoggerDelegate(logConfig)
         super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
-        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: logConfig.rollingFrequency)
     }
 
     @objc

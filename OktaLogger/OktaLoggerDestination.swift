@@ -38,6 +38,14 @@ public protocol OktaLoggerDestinationProtocol {
              file: String,
              line: NSNumber,
              funcName: String)
+
+    /**
+     Log NSError object.
+
+     - Parameters
+        - error: NSError object to log.
+     */
+    func log(error: NSError, file: String, line: NSNumber, funcName: String)
 }
 
 /**
@@ -80,8 +88,19 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
         return false
     }
 
-    open func purgeLogs() {
+    open func purgeLogs() {}
 
+    /**
+     This method can be overridden by subclass.
+     Default implementation will call log(level:) function with `error` level
+     and pass `error.domain` and `error.code` as `eventName` parameter,
+     `error.localizedDescription` as `message` and `error.userInfo` as `properties`.
+     */
+    open func log(error: NSError, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        let eventName = "\(error.domain), \(error.code)"
+        let message = error.localizedDescription
+        let properties = error.userInfo
+        log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
 
     /**

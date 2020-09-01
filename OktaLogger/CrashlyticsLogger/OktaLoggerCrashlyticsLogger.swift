@@ -63,6 +63,15 @@ open class OktaLoggerCrashlyticsLogger: OktaLoggerDestinationBase {
         )
     }
 
+    override open func log(error: NSError, file: String, line: NSNumber, funcName: String) {
+        var extendedUserInfo = error.userInfo
+        extendedUserInfo["file"] = file
+        extendedUserInfo["line"] = line
+        extendedUserInfo["funcName"] = funcName
+        let extendedError = NSError(domain: error.domain, code: error.code, userInfo: extendedUserInfo)
+        crashlytics.record(error: extendedError)
+    }
+
     // MARK: - Private
 
     private func buildDomain(with eventName: String) -> String {

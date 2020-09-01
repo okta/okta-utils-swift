@@ -10,7 +10,7 @@ import UIKit
 import OktaLogger
 
 class ViewController: UITableViewController {
-    private let consoleLogCellTexts = ["Log debug message", "Log info message", "Log warning message", "Log UI event message", "Log error message"]
+    private let consoleLogCellTexts = ["Log debug message", "Log info message", "Log warning message", "Log UI event message", "Log error message", "Log NSError object"]
     private let logEventNames = ["test-debug", "test-info", "test-warning", "test-ui", "test-error"]
     private let logLevelCellTexts = ["off", "debug", "info", "warning", "uiEvent", "error", "all"]
     private let logLevels: [OktaLoggerLogLevel] = [.off, .debug, .info, .warning, .uiEvent, .error, .all]
@@ -80,6 +80,9 @@ class ViewController: UITableViewController {
                 OktaLogger.main?.uiEvent(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
             case 4:
                 OktaLogger.main?.error(eventName: logEventNames[indexPath.row], message: consoleLogCellTexts[indexPath.row])
+            case 5:
+                let error = NSError(domain: "com.okta.OktaLoggerDemoApp.test", code: -1, userInfo: ["testData": "some value"])
+                OktaLogger.main?.log(error: error)
             default:
                 break
             }

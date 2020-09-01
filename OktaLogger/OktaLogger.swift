@@ -64,6 +64,14 @@ public protocol OktaLoggerProtocol {
      Convenience method for log(level: .error, ...)
      */
     func error(eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String)
+
+    /**
+     Log NSError object.
+
+     - Parameters
+        - error: NSError object to log.
+     */
+    func log(error: NSError, file: String, line: NSNumber, funcName: String)
 }
 
 /**
@@ -84,16 +92,14 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
 
     public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
 
-        for logger in self.destinations.values {
-            // check the logging level of this destination
-            let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
-            if !levelCheck { continue }
-
-            logger.log(level: level,
-                       eventName: eventName,
-                       message: message,
-                       properties: properties ?? logger.defaultProperties,
-                       file: file, line: line, funcName: funcName)
+        forEachDestination(withLogLevel: level) { logger in
+            logger.log(
+                level: level,
+                eventName: eventName,
+                message: message,
+                properties: properties ?? logger.defaultProperties,
+                file: file, line: line, funcName: funcName
+            )
         }
     }
 
@@ -125,6 +131,12 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
     }
 
+    public func log(error: NSError, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        forEachDestination(withLogLevel: .error) { logger in
+            logger.log(error: error, file: file, line: line, funcName: funcName)
+        }
+    }
+
     /// Useful to keep public for updating all log levels
     public let destinations: [String: OktaLoggerDestinationProtocol]
 }
@@ -152,4 +164,21 @@ public extension OktaLogger {
     }
     private static var _lock = ReadWriteLock()
     private static var _main: OktaLogger?
+}
+
+
+private extension OktaLogger {
+
+    /**
+     Iterates through all of the destinations and calls closure
+     if logger can process specified log level.
+     */
+    func forEachDestination(withLogLevel level: OktaLoggerLogLevel, closure: (OktaLoggerDestinationProtocol) -> ()) {
+        for logger in self.destinations.values {
+            // check the logging level of this destination
+            let levelCheck = (logger.level.rawValue & level.rawValue) == level.rawValue
+            if !levelCheck { continue }
+            closure(logger)
+        }
+    }
 }

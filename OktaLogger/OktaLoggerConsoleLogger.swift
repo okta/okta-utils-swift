@@ -8,7 +8,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
 
     override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
 
-         let logMessage = self.stringValue(level: level,
+         let logMessage = stringValue(level: level,
                                            eventName: eventName,
                                            message: message,
                                            file: file, line: line, funcName: funcName)
@@ -18,15 +18,6 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
     }
 
     // MARK: Private + Internal
-
-    /**
-     Create a structured string out of the logging parameters and properties
-     */
-    override public func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
-        let filename = file.split(separator: "/").last
-        let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
-        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
-    }
 
     /**
      Translate OktaLoggerLogLevel into a console-friendly OSLogType value

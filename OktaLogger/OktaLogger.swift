@@ -78,18 +78,18 @@ public protocol OktaLoggerProtocol {
      
      - Parameters:
         - defaultProperties: defaultProperties to be added to destinations
-        - identifiers: destination identifiers to be added, if it's nil, defaultProperties will be added to all destinations
+        - identifiers: defaultProperties will be added to destinations which identifiers are contained in identifiers. If it's nil, defaultProperties will be added to all destinations
      */
-    func addDefaultProperties(_ defaultProperties: [String: Any], identifiers: [String]?)
+    func addDefaultProperties(_ defaultProperties: [AnyHashable: Any], identifiers: [String]?)
     
     /**
      Remove properties
      
      - Parameters:
         - key: defaultProperties to be removed by key
-        - identifiers: destination identifiers to be removed, if it's nil, defaultProperties will be removed to all destinations
+        - identifiers: key-value defaultProperties will be removed from destinations which identifiers are contained in identifiers. If it's nil, key-value defaultProperties will be removed from all destinations
      */
-    func removeDefaultProperties(for key: String, identifiers: [String]?)
+    func removeDefaultProperties(for key: AnyHashable, identifiers: [String]?)
 }
 
 /**
@@ -155,17 +155,17 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
     
-    public func addDefaultProperties(_ defaultProperties: [String : Any], identifiers: [String]?) {
-        destinations.forEach { (key, destination) in
-            if (identifiers == nil) || (identifiers?.contains(key) ?? true) {
+    public func addDefaultProperties(_ defaultProperties: [AnyHashable : Any], identifiers: [String]?) {
+        destinations.forEach { (identifier, destination) in
+            if (identifiers == nil) || (identifiers?.contains(identifier) ?? true) {
                 destination.addDefaultProperties(defaultProperties)
             }
         }
     }
     
-    public func removeDefaultProperties(for key: String, identifiers: [String]?) {
+    public func removeDefaultProperties(for key: AnyHashable, identifiers: [String]?) {
         destinations.forEach { (identifier, destination) in
-            if (identifiers == nil) || ((identifiers?.contains(identifier)) ?? true) {
+            if (identifiers == nil) || (identifiers?.contains(identifier) ?? true) {
                 destination.removeDefaultProperties(for: key)
             }
         }

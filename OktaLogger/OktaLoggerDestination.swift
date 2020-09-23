@@ -70,13 +70,25 @@ public protocol OktaLoggerDestinationProtocol {
 @objc
 open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     public let identifier: String
-    public var defaultProperties: [AnyHashable: Any]
 
     @objc
     public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         self.identifier = identifier
         self._level = level
-        self.defaultProperties = defaultProperties ?? [AnyHashable: Any]()
+        self._defaultProperties = defaultProperties ?? [AnyHashable: Any]()
+    }
+    
+    public var defaultProperties: [AnyHashable: Any] {
+        get {
+            self.lock.readLock()
+            defer { self.lock.unlock() }
+            return self._defaultProperties
+        }
+        set (value) {
+            self.lock.writeLock()
+            defer { self.lock.unlock() }
+            self._defaultProperties = value
+        }
     }
 
     /**
@@ -141,4 +153,5 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
 
     private var lock = ReadWriteLock()
     private var _level: OktaLoggerLogLevel
+    private var _defaultProperties: [AnyHashable: Any]
 }

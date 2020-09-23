@@ -20,7 +20,7 @@ public protocol OktaLoggerDestinationProtocol {
     /**
      Default event properties
      */
-    var defaultProperties: [AnyHashable: Any]? { get }
+    var defaultProperties: [AnyHashable: Any] { get }
 
     /**
      Logging super-method, to be implemented by all concrete logging destinations
@@ -46,6 +46,22 @@ public protocol OktaLoggerDestinationProtocol {
         - error: NSError object to log.
      */
     func log(error: NSError, file: String, line: NSNumber, funcName: String)
+
+    /**
+     Add default properties to one or more destinations
+
+     - Parameters:
+        - defaultProperties: defaultProperties to be added to destinations
+     */
+    func addDefaultProperties(_ defaultProperties: [AnyHashable: Any])
+
+    /**
+     Remove properties
+
+     - Parameters:
+        - key: defaultProperties to be removed by key
+     */
+    func removeDefaultProperties(for key: AnyHashable)
 }
 
 /**
@@ -54,13 +70,25 @@ public protocol OktaLoggerDestinationProtocol {
 @objc
 open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     public let identifier: String
-    public let defaultProperties: [AnyHashable: Any]?
 
     @objc
     public init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         self.identifier = identifier
         self._level = level
-        self.defaultProperties = defaultProperties
+        self._defaultProperties = defaultProperties ?? [AnyHashable: Any]()
+    }
+
+    public var defaultProperties: [AnyHashable: Any] {
+        get {
+            self.lock.readLock()
+            defer { self.lock.unlock() }
+            return self._defaultProperties
+        }
+        set (value) {
+            self.lock.writeLock()
+            defer { self.lock.unlock() }
+            self._defaultProperties = value
+        }
     }
 
     /**
@@ -109,11 +137,21 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     open func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
         let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
-        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
+        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"defaultProperties\": \"\(defaultProperties.description)\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
     }
+
+    open func addDefaultProperties(_ defaultProperties: [AnyHashable: Any]) {
+        self.defaultProperties.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
+    }
+
+    open func removeDefaultProperties(for key: AnyHashable) {
+        defaultProperties.removeValue(forKey: key)
+    }
+
 
     // MARK: Private
 
     private var lock = ReadWriteLock()
     private var _level: OktaLoggerLogLevel
+    private var _defaultProperties: [AnyHashable: Any]
 }

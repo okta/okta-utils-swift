@@ -77,7 +77,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
         self._level = level
         self._defaultProperties = defaultProperties ?? [AnyHashable: Any]()
     }
-    
+
     public var defaultProperties: [AnyHashable: Any] {
         get {
             self.lock.readLock()

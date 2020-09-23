@@ -155,7 +155,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
 
-    public func addDefaultProperties(_ defaultProperties: [AnyHashable : Any], identifiers: [String]?) {
+    public func addDefaultProperties(_ defaultProperties: [AnyHashable: Any], identifiers: [String]?) {
         destinations.forEach { (identifier, destination) in
             if (identifiers == nil) || (identifiers?.contains(identifier) ?? true) {
                 destination.addDefaultProperties(defaultProperties)

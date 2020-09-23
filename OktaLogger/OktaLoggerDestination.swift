@@ -46,18 +46,18 @@ public protocol OktaLoggerDestinationProtocol {
         - error: NSError object to log.
      */
     func log(error: NSError, file: String, line: NSNumber, funcName: String)
-    
+
     /**
      Add default properties to one or more destinations
-     
+
      - Parameters:
         - defaultProperties: defaultProperties to be added to destinations
      */
     func addDefaultProperties(_ defaultProperties: [AnyHashable: Any])
-    
+
     /**
      Remove properties
-     
+
      - Parameters:
         - key: defaultProperties to be removed by key
      */
@@ -139,15 +139,15 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
         let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
         return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"defaultProperties\": \"\(defaultProperties.description)\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
     }
-    
-    open func addDefaultProperties(_ defaultProperties: [AnyHashable : Any]) {
+
+    open func addDefaultProperties(_ defaultProperties: [AnyHashable: Any]) {
         self.defaultProperties.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
     }
-    
+
     open func removeDefaultProperties(for key: AnyHashable) {
         defaultProperties.removeValue(forKey: key)
     }
-    
+
 
     // MARK: Private
 

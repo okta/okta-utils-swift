@@ -72,19 +72,19 @@ public protocol OktaLoggerProtocol {
         - error: NSError object to log.
      */
     func log(error: NSError, file: String, line: NSNumber, funcName: String)
-    
+
     /**
      Add default properties to one or more destinations
-     
+
      - Parameters:
         - defaultProperties: defaultProperties to be added to destinations
         - identifiers: defaultProperties will be added to destinations which identifiers are contained in identifiers. If it's nil, defaultProperties will be added to all destinations
      */
     func addDefaultProperties(_ defaultProperties: [AnyHashable: Any], identifiers: [String]?)
-    
+
     /**
      Remove properties
-     
+
      - Parameters:
         - key: defaultProperties to be removed by key
         - identifiers: key-value defaultProperties will be removed from destinations which identifiers are contained in identifiers. If it's nil, key-value defaultProperties will be removed from all destinations
@@ -154,7 +154,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
             logger.log(error: error, file: file, line: line, funcName: funcName)
         }
     }
-    
+
     public func addDefaultProperties(_ defaultProperties: [AnyHashable : Any], identifiers: [String]?) {
         destinations.forEach { (identifier, destination) in
             if (identifiers == nil) || (identifiers?.contains(identifier) ?? true) {
@@ -162,7 +162,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
             }
         }
     }
-    
+
     public func removeDefaultProperties(for key: AnyHashable, identifiers: [String]?) {
         destinations.forEach { (identifier, destination) in
             if (identifiers == nil) || (identifiers?.contains(identifier) ?? true) {
@@ -170,7 +170,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
             }
         }
     }
-    
+
     /// Useful to keep public for updating all log levels
     public let destinations: [String: OktaLoggerDestinationProtocol]
 }

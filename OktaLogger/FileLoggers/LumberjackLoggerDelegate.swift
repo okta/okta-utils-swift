@@ -6,18 +6,25 @@
 import CocoaLumberjack
 
 class LumberjackLoggerDelegate: FileLoggerDelegate {
-    var fileLogger: DDFileLogger = DDFileLogger()
+    var fileLogger: DDFileLogger
     var isLoggingActive = true
 
     /**
      Configure Logger Parameters
      */
     public init(_ logConfig: OktaLoggerFileLoggerConfig) {
-        self.fileLogger.logFileManager.maximumNumberOfLogFiles = 1
-        self.fileLogger.rollingFrequency = logConfig.rollingFrequency
-        DDLog.add(self.fileLogger)
-        self.isLoggingActive = true
-        fileLogger.doNotReuseLogFiles = true
+        fileLogger = {
+            guard let logFolder = logConfig.logFolder else {
+                return DDFileLogger()
+            }
+            let logFileManager = DDLogFileManagerDefault(logsDirectory: logFolder)
+            return DDFileLogger(logFileManager: logFileManager)
+        }()
+        fileLogger.rollingFrequency = logConfig.rollingFrequency
+        fileLogger.doNotReuseLogFiles = !logConfig.reuseLogFiles
+        fileLogger.logFileManager.maximumNumberOfLogFiles = logConfig.maximumNumberOfLogFiles
+        DDLog.add(fileLogger)
+        isLoggingActive = true
     }
 
     /**

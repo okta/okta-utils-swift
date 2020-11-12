@@ -18,13 +18,11 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     public init(logConfig: OktaLoggerFileLoggerConfig, identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
         delegate = LumberjackLoggerDelegate(logConfig)
         super.init(identifier: identifier, level: level, defaultProperties: defaultProperties)
-        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: logConfig.rollingFrequency)
     }
 
     @objc
     override public convenience init(identifier: String, level: OktaLoggerLogLevel, defaultProperties: [AnyHashable: Any]?) {
-        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: 60 * 60 * 48)
-        self.init(logConfig: logConfig, identifier: identifier, level: level, defaultProperties: defaultProperties)
+        self.init(logConfig: OktaLoggerFileLoggerConfig(), identifier: identifier, level: level, defaultProperties: defaultProperties)
     }
 
     // MARK: Logging

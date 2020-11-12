@@ -15,7 +15,7 @@ public class OktaLoggerFileLoggerConfig: NSObject {
     }
 
     /**
-    File logging library to use
+    File logging library to use.
     */
     var engine = Engine.CocoaLumberjack
 
@@ -25,20 +25,26 @@ public class OktaLoggerFileLoggerConfig: NSObject {
      How often to roll the log file.
      The frequency is given as an `NSTimeInterval`, which is a double that specifies the interval in seconds.
      Once the log file gets to be this old, it is rolled.
+     Default value is 2 days.
      */
-    var rollingFrequency: TimeInterval
+    public var rollingFrequency: TimeInterval = 48 * 60 * 60
 
     /**
-     Log Folder
+     Custom path to log folder.
+     Default value is `nil` (file logger default folder will be used).
      */
-    var logFolder: String = ""
+    public var logFolder: String?
 
-    public init(rollingFrequency: TimeInterval) {
-        self.rollingFrequency = rollingFrequency
-    }
+    /**
+     If set, file logger will reuse existing log file.
+     If not - it will create new file for every session.
+     Default value is `false`.
+     */
+    public var reuseLogFiles: Bool = false
 
-    public convenience init(rollingFrequency: TimeInterval, logFolder: String) {
-        self.init(rollingFrequency: rollingFrequency)
-        self.logFolder = logFolder
-    }
+    /**
+     Maximum number of log files that could be saved on disk.
+     Default value is `1`.
+     */
+    public var maximumNumberOfLogFiles: UInt = 1
 }

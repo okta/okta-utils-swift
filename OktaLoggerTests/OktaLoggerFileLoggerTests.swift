@@ -38,7 +38,8 @@ class OktaLoggerFileLoggerTests: XCTestCase {
 
     func testLumberjackFileLogger() {
 
-        let logConfig = OktaLoggerFileLoggerConfig(rollingFrequency: TWO_DAYS)
+        let logConfig = OktaLoggerFileLoggerConfig()
+        logConfig.rollingFrequency = TWO_DAYS
         let testObject = LumberjackLoggerDelegate(logConfig)
 
         // default rolling frequency

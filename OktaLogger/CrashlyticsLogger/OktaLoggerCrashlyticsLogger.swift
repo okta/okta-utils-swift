@@ -1,3 +1,5 @@
+// JIRA for proper fix https://oktainc.atlassian.net/browse/OKTA-350983
+#if os(iOS)
 import FirebaseCrashlytics
 
 /**
@@ -79,3 +81,4 @@ open class OktaLoggerCrashlyticsLogger: OktaLoggerDestinationBase {
         return "\(identifier).\(normalizedEventName)"
     }
 }
+#endif

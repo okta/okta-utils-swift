@@ -21,12 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func initializeFirebaseCrashlyticsLogger() -> OktaLoggerCrashlyticsLogger {
+    func initializeFirebaseCrashlyticsLogger() -> OktaLoggerFirebaseCrashlyticsLogger {
         FirebaseApp.configure()
         let crashlytics = Crashlytics.crashlytics()
         crashlytics.setUserID("test123")
 
-        return OktaLoggerCrashlyticsLogger(
+        return OktaLoggerFirebaseCrashlyticsLogger(
             crashlytics: crashlytics,
             identifier: "com.okta.OktaLoggerDemoApp.crashlyticsLogger",
             level: .all

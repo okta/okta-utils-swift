@@ -6,7 +6,7 @@ import FirebaseCrashlytics
  Concrete logging class for Firebase Crashlytics.
  */
 @objc
-open class OktaLoggerCrashlyticsLogger: OktaLoggerDestinationBase {
+open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
 
     private let crashlytics: Crashlytics
 

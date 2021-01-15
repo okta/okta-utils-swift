@@ -14,14 +14,26 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        let console = OktaLoggerConsoleLogger(identifier: "com.okta.OktaLoggerDemoApp.logger", level: .all, defaultProperties: nil)
-        let firebaseCrashlytics = initializeFirebaseCrashlyticsLogger()
-        OktaLogger.main = OktaLogger(destinations: [console, firebaseCrashlytics])
         return true
     }
+}
 
-    func initializeFirebaseCrashlyticsLogger() -> OktaLoggerFirebaseCrashlyticsLogger {
+class LoggingManager {
+
+    static let shared = LoggingManager()
+    private (set) var defaultLogger: OktaLogger
+
+    init() {
+        let consoleDestination = OktaLoggerConsoleLogger(
+            identifier: "com.okta.OktaLoggerDemoApp.logger",
+            level: .info,
+            defaultProperties: nil
+        )
+        let firebaseCrashlyticsDestination = LoggingManager.buildFirebaseCrashlyticsLogger()
+        defaultLogger = OktaLogger(destinations: [consoleDestination, firebaseCrashlyticsDestination])
+    }
+
+    static private func buildFirebaseCrashlyticsLogger() -> OktaLoggerFirebaseCrashlyticsLogger {
         FirebaseApp.configure()
         let crashlytics = Crashlytics.crashlytics()
         crashlytics.setUserID("test123")

@@ -38,4 +38,11 @@ class MockLoggerDestination: OktaLoggerDestinationBase {
             self.eventMessages.append(stringValue(level: level, eventName: eventName, message: message, file: file, line: line, funcName: funcName))
         }
     }
+
+    override func log(error: NSError, file: String, line: NSNumber, funcName: String) {
+        let event = MockLogEvent(name: "Error \(error.domain) \(error.code)", message: nil, properties: error.userInfo, file: file, line: line, funcName: funcName)
+        serialQueue.sync {
+            self.events.append(event)
+        }
+    }
 }

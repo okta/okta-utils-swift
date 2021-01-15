@@ -3,6 +3,8 @@ import XCTest
 
 class OktaLoggerTests: XCTestCase {
 
+    // MARK: - Test log operations
+
     /**
      Verify that the Okta Log levels are correctly oriented
      */
@@ -47,6 +49,29 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertEqual(event?.file, #file)
         XCTAssertEqual(event?.funcName, #function)
     }
+
+    /**
+     Verify that the mock destination handles NSError event as expected
+     */
+    func testNSErrorEventLog() {
+        let destination = MockLoggerDestination(identifier: "Hello.world", level: .all, defaultProperties: nil)
+        let logger = OktaLogger(destinations: [destination])
+        XCTAssertEqual(logger.destinations.count, 1)
+
+        let line = (#line + 1) as NSNumber // expected line number of the log
+        logger.log(error: NSError(domain: "com.okta.logger.test", code: 1001, userInfo: ["key": "value"]))
+        XCTAssertEqual(destination.events.count, 1)
+        let event = destination.events.first
+        XCTAssertNotNil(event)
+        XCTAssertEqual(event?.name, "Error com.okta.logger.test 1001")
+        XCTAssertNil(event?.message)
+        XCTAssertEqual(event?.properties as? [String: String], ["key": "value"])
+        XCTAssertEqual(event?.line, line)
+        XCTAssertEqual(event?.file, #file)
+        XCTAssertEqual(event?.funcName, #function)
+    }
+
+    // MARK: - Test default properties updating
 
     /**
      Verify that nil properties pick up the default properties for the destination
@@ -117,6 +142,8 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertEqual(destination.eventMessages.count, 4)
         XCTAssertTrue(destination.eventMessages[3].contains("\"D: value 5; E: value 6\""))
     }
+
+    // MARK: - Test logging level updating
 
     /**
      Verify that the logging level is honored when logging
@@ -214,21 +241,108 @@ class OktaLoggerTests: XCTestCase {
         self.wait(for: [expectation], timeout: 10)
     }
 
-    /**
-     Verify that the 'main' logger getters and setters work properly.
-     */
-    func testGlobalLogger() {
-        let destination = MockLoggerDestination(identifier: "hello.world", level: .all, defaultProperties: nil)
-        let logger = OktaLogger(destinations: [destination])
-        OktaLogger.main = logger
-        XCTAssertEqual(logger, OktaLogger.main)
-        OktaLogger.main?.debug(eventName: "Main", message: nil)
-        XCTAssertEqual(destination.events.count, 1)
-    }
-
     func testDestinationBase() {
         let destination = OktaLoggerDestinationBase(identifier: "hello.world", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [destination])
         logger.debug(eventName: "hello", message: nil)
+    }
+
+    // MARK: - Test add/remove destinations
+
+    /**
+     Verify that new destinations could be added to a logger instance.
+     */
+    func testAddDestination() {
+        let oktaLogger = OktaLogger()
+
+        XCTAssertTrue(oktaLogger.destinations.isEmpty)
+        oktaLogger.addDestination(OktaLoggerDestinationBase(identifier: "test1", level: .all, defaultProperties: nil))
+        oktaLogger.addDestination(OktaLoggerDestinationBase(identifier: "test2", level: .all, defaultProperties: nil))
+
+        XCTAssertEqual(oktaLogger.destinations.count, 2)
+        XCTAssertNotNil(oktaLogger.destinations["test1"])
+        XCTAssertNotNil(oktaLogger.destinations["test2"])
+    }
+
+    /**
+     Verify that destination with duplicating ID won't be added.
+     */
+    func testAddDestinationWithDuplicatingId() {
+        let destination = OktaLoggerDestinationBase(identifier: "test1", level: .all, defaultProperties: nil)
+        let oktaLogger = OktaLogger(destinations: [destination])
+
+        XCTAssertEqual(oktaLogger.destinations.count, 1)
+        oktaLogger.addDestination(OktaLoggerDestinationBase(identifier: "test1", level: .all, defaultProperties: nil))
+
+        XCTAssertEqual(oktaLogger.destinations.count, 1)
+        XCTAssertTrue(oktaLogger.destinations["test1"] === destination)
+    }
+
+    /**
+     Verify that destination can be removed from logger instance.
+     */
+    func testRemoveDestination() {
+        let oktaLogger = OktaLogger(destinations: [
+            OktaLoggerDestinationBase(identifier: "test1", level: .all, defaultProperties: nil),
+            OktaLoggerDestinationBase(identifier: "test2", level: .all, defaultProperties: nil),
+            OktaLoggerDestinationBase(identifier: "test3", level: .all, defaultProperties: nil)
+        ])
+
+        XCTAssertEqual(oktaLogger.destinations.count, 3)
+        oktaLogger.removeDestination(withIdentifier: "test1")
+        oktaLogger.removeDestination(withIdentifier: "test2")
+
+        XCTAssertEqual(oktaLogger.destinations.count, 1)
+        XCTAssertNil(oktaLogger.destinations["test1"])
+        XCTAssertNil(oktaLogger.destinations["test2"])
+        XCTAssertNotNil(oktaLogger.destinations["test3"])
+    }
+
+    /**
+     Verify that attempt to removing nonexistent destination won't cause any issues.
+     */
+    func testRemoveDestinationWithNonexistentId() {
+        let oktaLogger = OktaLogger(destinations: [
+            OktaLoggerDestinationBase(identifier: "test1", level: .all, defaultProperties: nil)
+        ])
+
+        XCTAssertEqual(oktaLogger.destinations.count, 1)
+        oktaLogger.removeDestination(withIdentifier: "test2")
+
+        XCTAssertEqual(oktaLogger.destinations.count, 1)
+        XCTAssertNotNil(oktaLogger.destinations["test1"])
+    }
+
+    /**
+     Verify that destinations could be mutated fron different threads simultaneously.
+     This test will cause crash if the write sync for `destinations` doesn't work.
+     */
+    func testEditingDestinationsWithConcurrency() {
+        let iterationsCount = 100
+        let oktaLogger = OktaLogger()
+
+        let addDestinationsExpectation = XCTestExpectation(description: "All destinations should be added")
+        addDestinationsExpectation.expectedFulfillmentCount = iterationsCount
+        for iteration in 0..<iterationsCount {
+            DispatchQueue.global(qos: .default).async {
+                oktaLogger.addDestination(
+                    OktaLoggerDestinationBase(identifier: "test\(iteration)", level: .all, defaultProperties: nil)
+                )
+                addDestinationsExpectation.fulfill()
+            }
+        }
+        wait(for: [addDestinationsExpectation], timeout: 5.0)
+        XCTAssertEqual(oktaLogger.destinations.count, iterationsCount)
+
+        let removeDestinationsExpectation = XCTestExpectation(description: "All destinations should be removed")
+        removeDestinationsExpectation.expectedFulfillmentCount = iterationsCount
+        for iteration in 0..<iterationsCount {
+            DispatchQueue.global(qos: .default).async {
+                oktaLogger.removeDestination(withIdentifier: "test\(iteration)")
+                removeDestinationsExpectation.fulfill()
+            }
+        }
+        wait(for: [removeDestinationsExpectation], timeout: 5.0)
+        XCTAssertTrue(oktaLogger.destinations.isEmpty)
     }
 }

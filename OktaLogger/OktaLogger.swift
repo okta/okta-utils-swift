@@ -7,8 +7,6 @@ import Foundation
 public protocol OktaLoggerProtocol {
 
     /**
-     Initialize a primary logger instance with a list of destinations. Destinations are immutable for thread safety.
-
      - Parameters:
         - destinations: List of OktaLoggerDestinations
      */
@@ -90,6 +88,22 @@ public protocol OktaLoggerProtocol {
         - identifiers: key-value defaultProperties will be removed from destinations which identifiers are contained in identifiers. If it's nil, key-value defaultProperties will be removed from all destinations
      */
     func removeDefaultProperties(for key: AnyHashable, identifiers: [String]?)
+
+    /**
+     Add new logging destination.
+
+     - Parameters:
+        - destination: Logging destination to add. It won't be added if logger already has destination with the same identifier.
+     */
+    func addDestination(_ destination: OktaLoggerDestinationProtocol)
+
+    /**
+     Remove logging destination by identifier.
+
+     - Parameters:
+        - identifier: Identifier of destination which should be removed.
+     */
+    func removeDestination(withIdentifier identifier: String)
 }
 
 /**
@@ -98,14 +112,31 @@ public protocol OktaLoggerProtocol {
 @objc
 open class OktaLogger: NSObject, OktaLoggerProtocol {
 
+    private var loggingDestinations: [String: OktaLoggerDestinationProtocol]
+    private let readWriteQueue = DispatchQueue(
+        label: "com.okta.logger.private",
+        qos: .userInitiated,
+        attributes: [.concurrent]
+    )
+
     // MARK: Public
 
     public required init(destinations: [OktaLoggerDestinationProtocol]) {
         var destinationDict = [String: OktaLoggerDestinationProtocol]()
-        for destination in destinations {
+        destinations.forEach { destination in
             destinationDict[destination.identifier] = destination
         }
-        self.destinations = destinationDict
+        self.loggingDestinations = destinationDict
+    }
+
+    public convenience override init() {
+        self.init(destinations: [])
+    }
+
+    public var destinations: [String: OktaLoggerDestinationProtocol] {
+        readWriteQueue.sync {
+            return loggingDestinations
+        }
     }
 
     public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
@@ -171,35 +202,21 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         }
     }
 
-    /// Useful to keep public for updating all log levels
-    public let destinations: [String: OktaLoggerDestinationProtocol]
-}
-
-/**
- Extension for thread-safe global logger instance get/set
- */
-@objc
-public extension OktaLogger {
-    static var main: OktaLogger? {
-        get {
-            _lock.readLock()
-            defer {
-                _lock.unlock()
-            }
-            return _main
+    public func addDestination(_ destination: OktaLoggerDestinationProtocol) {
+        guard !destinations.keys.contains(destination.identifier) else {
+            return
         }
-        set (logger) {
-            _lock.writeLock()
-            defer {
-                _lock.unlock()
-            }
-            _main = logger
+        readWriteQueue.async(flags: [.barrier]) {
+            self.loggingDestinations[destination.identifier] = destination
         }
     }
-    private static var _lock = ReadWriteLock()
-    private static var _main: OktaLogger?
-}
 
+    public func removeDestination(withIdentifier identifier: String) {
+        readWriteQueue.async(flags: [.barrier]) {
+            self.loggingDestinations.removeValue(forKey: identifier)
+        }
+    }
+}
 
 private extension OktaLogger {
 

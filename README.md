@@ -16,13 +16,13 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
     // initialization
     let console = OktaLoggerConsoleLogger(identifier: "com.okta.console.logger", level: .all, defaultProperties: nil)
     let firebase = OktaFirebaseDestination(dentifier: "com.okta.firebaselogger", level: .error, defaultProperties: nil)
-    OktaLogger.main = OktaLogger(destinations: [console, firebase])
+    let logger = OktaLogger(destinations: [console, firebase])
     
     // Logging
-    OktaLogger.main.error(eventName: "TOTP Failure", message:"Could not retrieve key for RSA Key: ab43csd")
+    logger.error(eventName: "TOTP Failure", message:"Could not retrieve key for RSA Key: ab43csd")
     
     // Changing log levels
-    OktaLogger.main.setLogLevel(level: [.warn, .error], [console.identifier, firebase.identifier])
+    logger.setLogLevel(level: [.warn, .error], [console.identifier, firebase.identifier])
 ```
 ### Objective-C
 ```objc
@@ -30,10 +30,9 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
                                         initWithIdenitfier:@"com.okta.console.logger" 
                                                      level:OktaLevel.all 
                                         defaultProperties:nil];
-    OktaLogger.main = [[OktaLogger alloc] initWithDestinations:@[console]];
+    OktaLogger *logger = [[OktaLogger alloc] initWithDestinations:@[console]];
 
-    // Objective-c macro defined for convenience
-    okl_error(@"TOTP Failure", "Could not retrieve key for RSA Key: %@", key);
+    [logger infoWithEventName:@"new event" message:@"some details" properties:@{@"userId": @"1234"} file:[NSString stringWithUTF8String:__FILE__] line:@(__LINE__) funcName:[NSString stringWithUTF8String:__PRETTY_FUNCTION__]];
 ```
 
 ## Destinations
@@ -62,11 +61,11 @@ Logging destinations will only log events which match against their level(s).
 The following console logger will not log for `debug()` logs, but will for `info()` `warning()` or `error()` logs.
 ```swift
 let consoleLogger = OktaLoggerConsoleLogger(identifier: "console.logger", level: [.info, .warn, .error])`
-OktaLogger.main = OktaLogger(destinations: [consoleLogger])
+let logger = OktaLogger(destinations: [consoleLogger])
 ```
 The level can be changed at runtime should you wish to begin recording `debug()` level logs
 ```swift
-OktaLogger.main.setLogLevel(level: .all, destinations: [consoleLogger.identifier])
+logger.setLogLevel(level: .all, destinations: [consoleLogger.identifier])
 ```
 
 

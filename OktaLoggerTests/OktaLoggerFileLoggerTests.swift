@@ -17,23 +17,37 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         let testObject: OktaLoggerFileLogger = OktaLoggerFileLogger(identifier: "hello.world", level: .all, defaultProperties: nil)
         let logger = OktaLogger(destinations: [testObject])
         XCTAssertEqual(testObject.logsCanBePurged(), true)
+
+        // Call log method 5 times
         for i in 1...5 {
             logger.debug(eventName: "BEFORE_PURGE", message: "\(i):log message")
         }
 
-        var logs = testObject.getLogs()
-        var data = logs[0] as Data
-        let lineCount = countLines(data)
-        XCTAssertEqual(lineCount, 5)
+        // Verify that log files contains exactly 5 lines and purge logs
+        var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        var logs: [Data] = []
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        XCTAssertEqual(countLines(logs[0]), 5)
         testObject.purgeLogs()
 
+        // Call log method 2 times
         logger.debug(eventName: "AFTER_PURGE", message: "Debug log")
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
-        // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
-        logs = testObject.getLogs()
-        data = logs[0] as Data
-        let newLineCount = countLines(data)
-        XCTAssertEqual(newLineCount, 2)
+
+        // Verify that log files contains exactly 2 lines
+        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        logs = []
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        XCTAssertEqual(countLines(logs[0]), 2)
+        testObject.purgeLogs()
     }
 
     func testLumberjackFileLogger() {
@@ -45,31 +59,69 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         // default rolling frequency
         XCTAssertEqual(testObject.fileLogger.rollingFrequency, TWO_DAYS)
         XCTAssertNotNil(testObject.directoryPath())
-
         XCTAssertEqual(testObject.logsCanBePurged(), true)
+
+        // Call log method 5 times
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
         }
 
-        var logs = testObject.getLogs()
-        var data = logs[0]
-        let lineCount = countLines(data)
-        XCTAssertEqual(lineCount, 5)
-        var paths = testObject.getLogPaths()
-        var filePaths = getPaths(testObject: testObject)
-        XCTAssertEqual(paths, filePaths)
+        // Verify that log files contains exactly 5 lines and purge logs
+        var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        var logs: [Data] = []
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        XCTAssertEqual(countLines(logs[0]), 5)
+
+        // Verify that actual log files paths same as expected
+        var extectedPaths = getPaths(testObject: testObject)
+        var actualPaths = testObject.getLogPaths()
+        XCTAssertEqual(actualPaths, extectedPaths)
         testObject.purgeLogs()
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
-        // new logs dont get immediately to disk written after rolling. We can force flush destination to write to file. Or wait few moments
-        logs = testObject.getLogs()
-        data = logs[0]
-        let newLineCount = countLines(data)
-        XCTAssertEqual(newLineCount, 2)
-        paths = testObject.getLogPaths()
-        filePaths = getPaths(testObject: testObject)
-        XCTAssertEqual(paths, filePaths)
+        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        XCTAssertEqual(countLines(logs[0]), 2)
+
+        // Verify that actual log files paths same as expected
+        extectedPaths = getPaths(testObject: testObject)
+        actualPaths = testObject.getLogPaths()
+        XCTAssertEqual(actualPaths, extectedPaths)
+        testObject.purgeLogs()
+    }
+
+    func testReadMultithreading() {
+        let testObject = LumberjackLoggerDelegate(.init())
+        testObject.purgeLogs()
+        let iterationsCount = 100
+
+        let testFinishExpectation = XCTestExpectation(description: "All read/write operations finished")
+        testFinishExpectation.expectedFulfillmentCount = 200
+        for _ in 0..<iterationsCount {
+            DispatchQueue.global(qos: .default).async {
+                testObject.log(.debug, "Debug message")
+                testFinishExpectation.fulfill()
+            }
+            DispatchQueue.global(qos: .default).async {
+                _ = testObject.getLogs()
+                testFinishExpectation.fulfill()
+            }
+        }
+        wait(for: [testFinishExpectation], timeout: 30.0)
+
+        let actualLogs = testObject.getLogs()
+        XCTAssertEqual(actualLogs.count, 1)
+        XCTAssertEqual(countLines(actualLogs[0]), 100)
+        testObject.purgeLogs()
     }
 
     func countLines(_ data: Data) -> Int {

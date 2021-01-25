@@ -6,12 +6,9 @@
 import CocoaLumberjack
 
 class LumberjackLoggerDelegate: FileLoggerDelegate {
-    var fileLogger: DDFileLogger
-    var isLoggingActive = true
 
-    /**
-     Configure Logger Parameters
-     */
+    var fileLogger: DDFileLogger
+
     public init(_ logConfig: OktaLoggerFileLoggerConfig) {
         fileLogger = {
             guard let logFolder = logConfig.logFolder else {
@@ -23,12 +20,12 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         fileLogger.rollingFrequency = logConfig.rollingFrequency
         fileLogger.doNotReuseLogFiles = !logConfig.reuseLogFiles
         fileLogger.logFileManager.maximumNumberOfLogFiles = logConfig.maximumNumberOfLogFiles
+        fileLogger.logFormatter = OktaLoggerFileLogFormatter()
         DDLog.add(fileLogger)
-        isLoggingActive = true
     }
 
     /**
-     Log file path
+     Log files directory path
      */
     @objc
     func directoryPath() -> String? {
@@ -37,29 +34,35 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     }
 
     // MARK: Retrieve Logs
+
     /**
-     Non thread safe implementation to retrieve logs.
+     Retrieves logs data. Each `Data` object contains data from one log file.
+     Result array is sorted by file creation date in ascending order.
     */
     @objc
     func getLogs() -> [Data] {
-        return getLogInfos().data
+        self.fileLogger.flush()
+        return self.getLogPaths().compactMap { url in
+            try? Data(contentsOf: url, options: Data.ReadingOptions.mappedIfSafe)
+        }
     }
 
-    // MARK: Retrieve log file paths
     /**
-     Non thread safe implementation to retrieve log file paths..
+     Retrieves log files URLs.
+     Result array is sorted by file creation date in ascending order.
     */
     @objc
     func getLogPaths() -> [URL] {
-        return getLogInfos().paths
+        return fileLogger.logFileManager.sortedLogFileInfos
+            .reversed()
+            .map { URL(fileURLWithPath: $0.filePath) }
     }
 
     /**
-        Retrieves log data asynchronously. Completion block is always executed in main queue
+     Retrieves log data asynchronously. Completion block is always executed in main queue
     */
     @objc
     func getLogs(completion: @escaping ([Data]) -> Void) {
-        // fetch logs
         DispatchQueue.global(qos: .userInitiated).async {
             let logData = self.getLogs()
             DispatchQueue.main.async {
@@ -69,6 +72,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     }
 
     // MARK: Purge Logs
+
     @objc
     func logsCanBePurged() -> Bool {
         return true
@@ -79,42 +83,20 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         if !logsCanBePurged() {
             return
         }
-        self.fileLogger.rollLogFile(withCompletion: {
-            do {
-                for logFileInfo in self.fileLogger.logFileManager.sortedLogFileInfos {
-                    if !logFileInfo.isArchived {
-                        continue
-                    }
-                    let logPath = logFileInfo.filePath
-                    try FileManager.default.removeItem(atPath: logPath)
-                    guard let logFile = self.fileLogger.currentLogFileInfo else {
-                        print("Unable to reinit file logger")
-                        return
-                    }
-                    print("Intialized Log at \(logFile.filePath)")
-                }
-            } catch {
-                print("Error purging log: \(error.localizedDescription)")
+        self.fileLogger.flush()
+        self.fileLogger.rollLogFile {
+            for info in self.fileLogger.logFileManager.unsortedLogFileInfos {
+                try? FileManager.default.removeItem(atPath: info.filePath)
             }
-        })
+        }
     }
 
-    // MARK: Internal methods
-    /**
-     Remove all Loggers during deallocate
-     */
-    deinit {
-        DDLog.remove(self.fileLogger)
-    }
+    // MARK: Write logs
 
     /**
-     Translate log message  into DDLog message
+     Translate log message into DDLog message
      */
     func log(_ level: OktaLoggerLogLevel, _ message: String) {
-        if  !self.isLoggingActive {
-            return
-        }
-
         switch level {
         case .debug:
             return DDLogDebug(message)
@@ -125,37 +107,14 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         case .warning:
             return DDLogWarn(message)
         default:
-            // default info
-            return  DDLogInfo(message)
+            return DDLogInfo(message)
         }
     }
 
-    // MARK: Private method to retrieve logs and file paths
     /**
-     Non thread safe implementation to retrieve logs and file paths.
+     Remove all Loggers during deallocate
      */
-    private func getLogInfos() -> (data: [Data], paths: [URL]) {
-        self.fileLogger.flush()
-        // pause logging to avoid corruption
-        self.isLoggingActive = false
-        var logFilePathArray = [URL]()
-        var logFileDataArray = [Data]()
-        // the first item in the array will be the most recently created log file.
-        let logFileInfos = self.fileLogger.logFileManager.sortedLogFileInfos
-        for logFileInfo in logFileInfos {
-            if logFileInfo.isArchived {
-                continue
-            }
-            let logFilePath = logFileInfo.filePath
-            let fileURL = URL(fileURLWithPath: logFilePath)
-            if let logFileData = try? Data(contentsOf: fileURL, options: Data.ReadingOptions.mappedIfSafe) {
-                // Insert at front to reverse the order, so that oldest logs appear first.
-                logFilePathArray.insert(fileURL, at: 0)
-                logFileDataArray.insert(logFileData as Data, at: 0)
-            }
-        }
-        // Resume logging
-        self.isLoggingActive = true
-        return (logFileDataArray, logFilePathArray)
+    deinit {
+        DDLog.remove(self.fileLogger)
     }
 }

@@ -72,6 +72,53 @@ class OktaLoggerTests: XCTestCase {
     }
 
     /**
+     Verify that default properties have the correct format and order in the log message.
+     */
+    func testDefaultPropertiesMessage() {
+        let properties = ["A": "value 1", "B": "value 2", "C": "value 3"]
+        let expectedMessage = "A: value 1; B: value 2; C: value 3"
+        let destination = MockLoggerDestination(identifier: "test", level: .all, defaultProperties: properties)
+        let logger = OktaLogger(destinations: [destination])
+
+        for _ in 0..<20 {
+            logger.info(eventName: "hello", message: "world", properties: nil)
+        }
+
+        XCTAssertEqual(destination.eventMessages.count, 20)
+        destination.eventMessages.forEach {
+            XCTAssertTrue($0.contains(expectedMessage))
+        }
+    }
+
+    /**
+     Verify that log message is correct after updating default properties.
+     */
+    func testDefaultPropertiesChange() {
+        let properties = ["A": "value 1", "B": "value 2"]
+        let destination = MockLoggerDestination(identifier: "test", level: .all, defaultProperties: properties)
+        let logger = OktaLogger(destinations: [destination])
+
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.eventMessages.count, 1)
+        XCTAssertTrue(destination.eventMessages[0].contains("\"A: value 1; B: value 2\""))
+
+        destination.addDefaultProperties(["B": "value 3", "C": "value 4"])
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.eventMessages.count, 2)
+        XCTAssertTrue(destination.eventMessages[1].contains("\"A: value 1; B: value 3; C: value 4\""))
+
+        destination.removeDefaultProperties(for: "B")
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.eventMessages.count, 3)
+        XCTAssertTrue(destination.eventMessages[2].contains("\"A: value 1; C: value 4\""))
+
+        destination.defaultProperties = ["D": "value 5", "E": "value 6"]
+        logger.info(eventName: "hello", message: "world", properties: nil)
+        XCTAssertEqual(destination.eventMessages.count, 4)
+        XCTAssertTrue(destination.eventMessages[3].contains("\"D: value 5; E: value 6\""))
+    }
+
+    /**
      Verify that the logging level is honored when logging
      */
     func testLoggingLevels() {

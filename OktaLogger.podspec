@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.0.10"
+  s.version          = "1.0.11"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"

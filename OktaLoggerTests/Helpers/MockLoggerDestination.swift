@@ -28,12 +28,14 @@ class MockLogEvent: NSObject {
 @objc
 class MockLoggerDestination: OktaLoggerDestinationBase {
     var events = [MockLogEvent]()
+    var eventMessages = [String]()
     let serialQueue = DispatchQueue(label: UUID().uuidString)
 
     override public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
         let event = MockLogEvent(name: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
         serialQueue.sync {
             self.events.append(event)
+            self.eventMessages.append(stringValue(level: level, eventName: eventName, message: message, file: file, line: line, funcName: funcName))
         }
     }
 }

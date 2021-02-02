@@ -76,6 +76,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
         self.identifier = identifier
         self._level = level
         self._defaultProperties = defaultProperties ?? [AnyHashable: Any]()
+        self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
     }
 
     public var defaultProperties: [AnyHashable: Any] {
@@ -88,6 +89,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
             self.lock.writeLock()
             defer { self.lock.unlock() }
             self._defaultProperties = value
+            self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
         }
     }
 
@@ -137,7 +139,7 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     open func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let filename = file.split(separator: "/").last
         let logMessageIcon = OktaLoggerLogLevel.logMessageIcon(level: level)
-        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"defaultProperties\": \"\(defaultProperties.description)\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
+        return "{\(logMessageIcon) \"\(eventName)\": {\"message\": \"\(message ?? "")\", \"defaultProperties\": \"\(defaultPropertiesDescription)\", \"location\": \"\(filename ?? ""):\(funcName):\(line)\"}}"
     }
 
     open func addDefaultProperties(_ defaultProperties: [AnyHashable: Any]) {
@@ -154,4 +156,13 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     private var lock = ReadWriteLock()
     private var _level: OktaLoggerLogLevel
     private var _defaultProperties: [AnyHashable: Any]
+    private var defaultPropertiesDescription: String
+
+    private static func description(of dictionary: [AnyHashable: Any]) -> String {
+        return dictionary
+            .map { (key: String(describing: $0.key), value: $0.value) }
+            .sorted(by: { $0.key < $1.key })
+            .map { "\($0.key): \($0.value)" }
+            .joined(separator: "; ")
+    }
 }

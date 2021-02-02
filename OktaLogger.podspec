@@ -36,7 +36,7 @@ Pod::Spec.new do |s|
     crashlytics.source_files = [
       'OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
     ]
-    crashlytics.dependency 'Firebase/Crashlytics', '~>6.29.0'
+    crashlytics.dependency 'Firebase/Crashlytics', '7.5.0'
     crashlytics.dependency 'OktaLogger/Core'
   end
 

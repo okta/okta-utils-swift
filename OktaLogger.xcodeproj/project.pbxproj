@@ -9,14 +9,10 @@
 /* Begin PBXBuildFile section */
 		6582A2024047A1BC55BC98D3 /* LumberjackLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */; };
 		6582A2C33C06B4353D1538E3 /* FileLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582ABCA2C9C2759535A1B4E /* FileLoggerDelegate.swift */; };
-		8004832A24C0FEE1008BFF3A /* FileLoggerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004832924C0FEE1008BFF3A /* FileLoggerViewController.swift */; };
-		8004832C24C105AE008BFF3A /* LogLevelPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004832B24C105AE008BFF3A /* LogLevelPicker.swift */; };
 		8004832E24C1EFDF008BFF3A /* OktaLoggerFileLoggerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8004832D24C1EFDF008BFF3A /* OktaLoggerFileLoggerConfig.swift */; };
 		804F18F724C0174800894A52 /* OktaLoggerFileLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F18F624C0174800894A52 /* OktaLoggerFileLoggerTests.swift */; };
 		806FF25E24B95A3300994D4D /* OktaLoggerFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */; };
-		80AA10FC24BE603600981074 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA10FB24BE603600981074 /* HomeViewController.swift */; };
-		80AA110024BE731900981074 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA10FF24BE731900981074 /* Constants.swift */; };
-		80AA110224BE799800981074 /* FeatureTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA110124BE799800981074 /* FeatureTableViewCell.swift */; };
+		80AA110224BE799800981074 /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA110124BE799800981074 /* DemoTableViewCell.swift */; };
 		B3E071E3B33C4657A8B4381B /* libPods-OktaLogger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62BB891524DBDEF8FC8E9711 /* libPods-OktaLogger.a */; };
 		C4AA0759EDAC342A3B6B6796 /* libPods-OktaLoggerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */; };
 		D52C2AD12474A4F5003CCF4D /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52C2AD02474A4F5003CCF4D /* ReadWriteLock.swift */; };
@@ -33,12 +29,14 @@
 		DE2FFE21260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2FFE20260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift */; };
 		DE504DC425BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE504DC325BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift */; };
 		DEABAFC9260C7C0100DB7008 /* FileTestsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEABAFC8260C7C0100DB7008 /* FileTestsHelper.swift */; };
+		DE1A7B3925EFF432007A5F60 /* LoggerDemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1A7B3825EFF432007A5F60 /* LoggerDemoViewModel.swift */; };
+		DE6A163725F1120100B0FBA0 /* LogsBrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6A163625F1120100B0FBA0 /* LogsBrowseViewController.swift */; };
 		DEC5276624DBF9630022B698 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEC5276524DBF9630022B698 /* GoogleService-Info.plist */; };
 		DEF2CC23260A341300F8B644 /* OktaLoggerMultithreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF2CC22260A341300F8B644 /* OktaLoggerMultithreadingTests.swift */; };
 		DEFB59E124EAC76400A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFB59E024EAC76300A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift */; };
 		E251E7FE248AD1B400EF466D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E7FD248AD1B400EF466D /* AppDelegate.swift */; };
 		E251E800248AD1B400EF466D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E7FF248AD1B400EF466D /* SceneDelegate.swift */; };
-		E251E802248AD1B400EF466D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E801248AD1B400EF466D /* ViewController.swift */; };
+		E251E802248AD1B400EF466D /* LoggerDemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E801248AD1B400EF466D /* LoggerDemoViewController.swift */; };
 		E251E805248AD1B400EF466D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E251E803248AD1B400EF466D /* Main.storyboard */; };
 		E251E807248AD1B800EF466D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E251E806248AD1B800EF466D /* Assets.xcassets */; };
 		E251E80A248AD1B800EF466D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E251E808248AD1B800EF466D /* LaunchScreen.storyboard */; };
@@ -98,14 +96,10 @@
 		6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumberjackLoggerDelegate.swift; sourceTree = "<group>"; };
 		6582ABCA2C9C2759535A1B4E /* FileLoggerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileLoggerDelegate.swift; sourceTree = "<group>"; };
 		672ADCC5504F41DBB4546AB0 /* Pods-OktaLogger_.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger_.debug.xcconfig"; path = "Target Support Files/Pods-OktaLogger_/Pods-OktaLogger_.debug.xcconfig"; sourceTree = "<group>"; };
-		8004832924C0FEE1008BFF3A /* FileLoggerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileLoggerViewController.swift; sourceTree = "<group>"; };
-		8004832B24C105AE008BFF3A /* LogLevelPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogLevelPicker.swift; sourceTree = "<group>"; };
 		8004832D24C1EFDF008BFF3A /* OktaLoggerFileLoggerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLoggerConfig.swift; sourceTree = "<group>"; };
 		804F18F624C0174800894A52 /* OktaLoggerFileLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLoggerTests.swift; sourceTree = "<group>"; };
 		806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLogger.swift; sourceTree = "<group>"; };
-		80AA10FB24BE603600981074 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
-		80AA10FF24BE731900981074 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		80AA110124BE799800981074 /* FeatureTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureTableViewCell.swift; sourceTree = "<group>"; };
+		80AA110124BE799800981074 /* DemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewCell.swift; sourceTree = "<group>"; };
 		80DDE79324B972FC00D0E2F3 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C58A9E54B6CE1A902894264C /* Pods-OktaLoggerDemoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp.debug.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D52C2AD02474A4F5003CCF4D /* ReadWriteLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
@@ -128,6 +122,8 @@
 		DE2FFE20260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLoggerMultithreadingTests.swift; sourceTree = "<group>"; };
 		DE504DC325BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLogFormatter.swift; sourceTree = "<group>"; };
 		DEABAFC8260C7C0100DB7008 /* FileTestsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTestsHelper.swift; sourceTree = "<group>"; };
+		DE1A7B3825EFF432007A5F60 /* LoggerDemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerDemoViewModel.swift; sourceTree = "<group>"; };
+		DE6A163625F1120100B0FBA0 /* LogsBrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsBrowseViewController.swift; sourceTree = "<group>"; };
 		DEC5276524DBF9630022B698 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		DEF2CC22260A341300F8B644 /* OktaLoggerMultithreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerMultithreadingTests.swift; sourceTree = "<group>"; };
 		DEFB59E024EAC76300A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFirebaseCrashlyticsLogger.swift; sourceTree = "<group>"; };
@@ -135,7 +131,7 @@
 		E251E7FB248AD1B400EF466D /* OktaLoggerDemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OktaLoggerDemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E251E7FD248AD1B400EF466D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E251E7FF248AD1B400EF466D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E251E801248AD1B400EF466D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E251E801248AD1B400EF466D /* LoggerDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggerDemoViewController.swift; sourceTree = "<group>"; };
 		E251E804248AD1B400EF466D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E251E806248AD1B800EF466D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E251E809248AD1B800EF466D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -289,18 +285,16 @@
 		E251E7F6248AD14C00EF466D /* Example-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				80AA110124BE799800981074 /* FeatureTableViewCell.swift */,
 				E251E7FD248AD1B400EF466D /* AppDelegate.swift */,
 				E251E7FF248AD1B400EF466D /* SceneDelegate.swift */,
-				E251E801248AD1B400EF466D /* ViewController.swift */,
+				E251E801248AD1B400EF466D /* LoggerDemoViewController.swift */,
+				DE1A7B3825EFF432007A5F60 /* LoggerDemoViewModel.swift */,
+				80AA110124BE799800981074 /* DemoTableViewCell.swift */,
+				DE6A163625F1120100B0FBA0 /* LogsBrowseViewController.swift */,
 				E251E803248AD1B400EF466D /* Main.storyboard */,
-				E251E806248AD1B800EF466D /* Assets.xcassets */,
 				E251E808248AD1B800EF466D /* LaunchScreen.storyboard */,
+				E251E806248AD1B800EF466D /* Assets.xcassets */,
 				E251E80B248AD1B800EF466D /* Info.plist */,
-				80AA10FB24BE603600981074 /* HomeViewController.swift */,
-				80AA10FF24BE731900981074 /* Constants.swift */,
-				8004832924C0FEE1008BFF3A /* FileLoggerViewController.swift */,
-				8004832B24C105AE008BFF3A /* LogLevelPicker.swift */,
 			);
 			path = "Example-iOS";
 			sourceTree = "<group>";
@@ -591,14 +585,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				80AA110224BE799800981074 /* FeatureTableViewCell.swift in Sources */,
-				E251E802248AD1B400EF466D /* ViewController.swift in Sources */,
-				8004832A24C0FEE1008BFF3A /* FileLoggerViewController.swift in Sources */,
-				8004832C24C105AE008BFF3A /* LogLevelPicker.swift in Sources */,
+				80AA110224BE799800981074 /* DemoTableViewCell.swift in Sources */,
+				E251E802248AD1B400EF466D /* LoggerDemoViewController.swift in Sources */,
+				DE1A7B3925EFF432007A5F60 /* LoggerDemoViewModel.swift in Sources */,
 				E251E7FE248AD1B400EF466D /* AppDelegate.swift in Sources */,
 				E251E800248AD1B400EF466D /* SceneDelegate.swift in Sources */,
-				80AA10FC24BE603600981074 /* HomeViewController.swift in Sources */,
-				80AA110024BE731900981074 /* Constants.swift in Sources */,
+				DE6A163725F1120100B0FBA0 /* LogsBrowseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

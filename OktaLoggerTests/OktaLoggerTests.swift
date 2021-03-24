@@ -312,37 +312,4 @@ class OktaLoggerTests: XCTestCase {
         XCTAssertEqual(oktaLogger.destinations.count, 1)
         XCTAssertNotNil(oktaLogger.destinations["test1"])
     }
-
-    /**
-     Verify that destinations could be mutated fron different threads simultaneously.
-     This test will cause crash if the write sync for `destinations` doesn't work.
-     */
-    func testEditingDestinationsWithConcurrency() {
-        let iterationsCount = 100
-        let oktaLogger = OktaLogger()
-
-        let addDestinationsExpectation = XCTestExpectation(description: "All destinations should be added")
-        addDestinationsExpectation.expectedFulfillmentCount = iterationsCount
-        for iteration in 0..<iterationsCount {
-            DispatchQueue.global(qos: .default).async {
-                oktaLogger.addDestination(
-                    OktaLoggerDestinationBase(identifier: "test\(iteration)", level: .all, defaultProperties: nil)
-                )
-                addDestinationsExpectation.fulfill()
-            }
-        }
-        wait(for: [addDestinationsExpectation], timeout: 5.0)
-        XCTAssertEqual(oktaLogger.destinations.count, iterationsCount)
-
-        let removeDestinationsExpectation = XCTestExpectation(description: "All destinations should be removed")
-        removeDestinationsExpectation.expectedFulfillmentCount = iterationsCount
-        for iteration in 0..<iterationsCount {
-            DispatchQueue.global(qos: .default).async {
-                oktaLogger.removeDestination(withIdentifier: "test\(iteration)")
-                removeDestinationsExpectation.fulfill()
-            }
-        }
-        wait(for: [removeDestinationsExpectation], timeout: 5.0)
-        XCTAssertTrue(oktaLogger.destinations.isEmpty)
-    }
 }

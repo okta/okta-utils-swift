@@ -146,30 +146,4 @@ class OktaLoggerDefaultPropertiesTests: XCTestCase {
         XCTAssertEqual(dict, consoleLogger.defaultProperties as? [String: String])
         XCTAssertEqual(dict, fileLogger.defaultProperties as? [String: String])
     }
-
-    func testMultithreadingAddDefaultPropertiesAndLogToConsole() {
-        let expectation = XCTestExpectation(description: "all logging complete")
-        let destination = OktaLoggerConsoleLogger(identifier: "com.okta.consoleLogger", level: .all, defaultProperties: nil)
-        let logger = OktaLogger(destinations: [destination])
-
-        var completed = 0
-        let threads = 1000
-        let serialQueue = DispatchQueue(label: "com.okta.serialQueue")
-        let concurrentQueue = DispatchQueue(label: "com.okta.concurrentQueue", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-        for i in 0..<threads {
-            concurrentQueue.async {
-                logger.addDefaultProperties(["testKey1": "testValue1"], identifiers: nil)
-                logger.debug(eventName: "\(i)", message: "Thread count: \(i)")
-                logger.removeDefaultProperties(for: "testKey1", identifiers: nil)
-                serialQueue.async {
-                    completed += 1
-                    if completed == threads {
-                        expectation.fulfill()
-                    }
-                }
-            }
-        }
-
-        self.wait(for: [expectation], timeout: 10)
-    }
 }

@@ -113,11 +113,7 @@ public protocol OktaLoggerProtocol {
 open class OktaLogger: NSObject, OktaLoggerProtocol {
 
     private var loggingDestinations: [String: OktaLoggerDestinationProtocol]
-    private let readWriteQueue = DispatchQueue(
-        label: "com.okta.logger.private",
-        qos: .userInitiated,
-        attributes: [.concurrent]
-    )
+    private var destinationsLock = ReadWriteLock()
 
     // MARK: Public
 
@@ -134,9 +130,9 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
     }
 
     public var destinations: [String: OktaLoggerDestinationProtocol] {
-        readWriteQueue.sync {
-            return loggingDestinations
-        }
+        destinationsLock.readLock()
+        defer { destinationsLock.unlock() }
+        return loggingDestinations
     }
 
     public func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
@@ -206,15 +202,15 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         guard !destinations.keys.contains(destination.identifier) else {
             return
         }
-        readWriteQueue.async(flags: [.barrier]) {
-            self.loggingDestinations[destination.identifier] = destination
-        }
+        destinationsLock.writeLock()
+        defer { destinationsLock.unlock() }
+        loggingDestinations[destination.identifier] = destination
     }
 
     public func removeDestination(withIdentifier identifier: String) {
-        readWriteQueue.async(flags: [.barrier]) {
-            self.loggingDestinations.removeValue(forKey: identifier)
-        }
+        destinationsLock.writeLock()
+        defer { destinationsLock.unlock() }
+        loggingDestinations.removeValue(forKey: identifier)
     }
 }
 

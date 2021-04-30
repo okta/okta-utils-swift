@@ -14,13 +14,20 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
             guard let logFolder = logConfig.logFolder else {
                 return DDFileLogger()
             }
-            let logFileManager = DDLogFileManagerDefault(logsDirectory: logFolder)
+            guard let logFileName = logConfig.logFileName else {
+                let logFileManager = DDLogFileManagerDefault(logsDirectory: logFolder)
+                return DDFileLogger(logFileManager: logFileManager)
+            }
+            let logFileManager = DDLogFileManagerCustomName(logsDirectory: logFolder, fileName: logFileName)
             return DDFileLogger(logFileManager: logFileManager)
         }()
         fileLogger.rollingFrequency = logConfig.rollingFrequency
         fileLogger.doNotReuseLogFiles = !logConfig.reuseLogFiles
         fileLogger.logFileManager.maximumNumberOfLogFiles = logConfig.maximumNumberOfLogFiles
         fileLogger.logFormatter = OktaLoggerFileLogFormatter()
+        if let maxFileSize = logConfig.maximumFileSize {
+            fileLogger.maximumFileSize = maxFileSize
+        }
         DDLog.add(fileLogger)
     }
 

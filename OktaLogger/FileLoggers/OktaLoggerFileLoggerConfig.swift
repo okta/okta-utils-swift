@@ -36,6 +36,13 @@ public class OktaLoggerFileLoggerConfig: NSObject {
     public var logFolder: String?
 
     /**
+     Custom name for log file. Requires custom path to log folder.
+     Name should include file extension
+     Default value is `nil` (file logger default name will be used).
+     */
+    public var logFileName: String?
+
+    /**
      If set, file logger will reuse existing log file.
      If not - it will create new file for every session.
      Default value is `false`.
@@ -47,4 +54,10 @@ public class OktaLoggerFileLoggerConfig: NSObject {
      Default value is `1`.
      */
     public var maximumNumberOfLogFiles: UInt = 1
+
+    /**
+     Maximum allowed file size saved on disk in bytes.
+     Default value is 1 MB.
+     */
+    public var maximumFileSize: UInt64?
 }

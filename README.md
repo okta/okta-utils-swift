@@ -87,6 +87,7 @@ Destination is an entity which perform log operation according to its implementa
 1. [Console (OktaLoggerConsoleLogger)](#console-destination)
 2. [File (OktaLoggerFileLogger)](#file-destination)
 3. [Firebase (OktaLoggerFirebaseCrashlyticsLogger)](#firebase-crashlytics-destination)
+4. [AppCenter (AppCenterLogger)](#app-center-destination)
 
 All of the default logging destinations are thread-safe and could be used from any thread.
 
@@ -128,6 +129,20 @@ There are few important features and restrictions in this destination:
 - Fatal and non-fatal error reports is sent on the next app launch.
 
 This destination is using [Firebase Crashlytics SDK](https://github.com/firebase/firebase-ios-sdk) for logging implementation.
+
+### App Center destination
+
+Related class -
+[AppCenterLogger]
+(OktaLogger/AppCenterLogger/AppCenterLogger.swift).
+This destination uses the AppCenter SDK to send events, so they can be accessed from the App Center console. The only functionality supported by this destination is sending events to the App Center dashboard.
+There are a few important features and restrictions in this destination:
+
+- Logger will not send events unless App Center is already configured in AppDelegate [setup App Center](https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/macos).
+- Logs with 'error' levels are sent as critical events to App Center [event flags](https://docs.microsoft.com/en-us/appcenter/sdk/analytics/macos)
+- Log messages are ignored so they can be left as nil. The eventName parameter is the name of the event sent to App Center, and properties are sent as the properties of the event. Make sure that the properties are in [String: String] format or they may not be sent to App Center
+
+This destination is using [App Center SDK](https://github.com/microsoft/appcenter-sdk-apple) for logging implementation
 
 ### Custom destinations
 

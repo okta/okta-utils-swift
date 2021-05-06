@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.1.2"
+  s.version          = "1.2.0"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
 
   s.subspec "MacOS" do |macos|
     macos.dependency 'OktaLogger/FileLogger'
+    macos.dependency 'OktaLogger/AppCenterLogger'
   end
 
   s.subspec 'FileLogger' do |fileLogger|
@@ -40,12 +41,21 @@ Pod::Spec.new do |s|
     crashlytics.dependency 'OktaLogger/Core'
   end
 
+  s.subspec 'AppCenterLogger' do |appCenterLogger|
+      appCenterLogger.source_files = [
+      'OktaLogger/AppCenterLogger/*'
+      ]
+      appCenterLogger.dependency 'AppCenter', '~>4.1.1'
+      appCenterLogger.dependency 'OktaLogger/Core'
+  end
+
   s.subspec "Core" do |core|
       core.source_files = 'OktaLogger/*.{h,m,swift}'
       core.exclude_files = [
         'OktaLogger/Info.plist',
         'OktaLogger/FileLoggers',
-        'OktaLogger/FirebaseCrashlyticsLogger'
+        'OktaLogger/FirebaseCrashlyticsLogger',
+        'OktaLogger/AppCenterLogger'
       ]
   end
 

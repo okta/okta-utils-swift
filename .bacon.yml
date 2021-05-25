@@ -8,7 +8,7 @@ test_suites:
     timeout: '10'
     script_name: test
     criteria: MERGE
-    queue_name: apple-ci
+    queue_name: macOsBuild-dev-aue1e
 
   - name: lint
     script_path: okta-logger-swift/ci-build
@@ -16,6 +16,6 @@ test_suites:
     timeout: '10'
     script_name: lint
     criteria: MERGE
-    queue_name: apple-ci
+    queue_name: macOsBuild-dev-aue1e
     script_env:
       DEVICE_NAME: "iPhone 11"

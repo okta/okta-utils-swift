@@ -1,0 +1,26 @@
+language: swift
+os: osx
+osx_image: xcode12.2
+
+before_install:
+  - gem install xcpretty
+  - gem install cocoapods
+jobs:
+  include:
+    - stage: Linting
+      name: SwiftLint
+      addons:
+        homebrew:
+          packages:
+          - swiftlint
+          update: true
+      script:
+      - swiftlint
+    - stage: Unit Tests
+      name: iOS
+      script:
+      - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLogger" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+    - stage: Dependency Manager Validation
+      name: CocoaPods
+      script:
+      - pod lib lint --allow-warnings

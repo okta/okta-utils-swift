@@ -182,3 +182,4 @@ consoleLogger.level = .all
 ## Diagrams
 ![Classes](docs/OktaLogger.png "OktaLogger Classes")
 ![Sequence](docs/sequence.png "Operation Sequence")
+

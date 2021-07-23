@@ -14,9 +14,6 @@
       location = "group:Podfile">
    </FileRef>
    <FileRef
-      location = "group:ci-build">
-   </FileRef>
-   <FileRef
       location = "group:OktaLogger.xcodeproj">
    </FileRef>
    <FileRef

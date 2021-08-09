@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -32,8 +32,10 @@
 		DE2FFE21260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2FFE20260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift */; };
 		DE504DC425BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE504DC325BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift */; };
 		DE6A163725F1120100B0FBA0 /* LogsBrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6A163625F1120100B0FBA0 /* LogsBrowseViewController.swift */; };
+		DE9B02FF26BD6A090072A501 /* OktaLoggerInstabugLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9B02FE26BD6A090072A501 /* OktaLoggerInstabugLogger.swift */; };
 		DEABAFC9260C7C0100DB7008 /* FileTestsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEABAFC8260C7C0100DB7008 /* FileTestsHelper.swift */; };
 		DEC5276624DBF9630022B698 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DEC5276524DBF9630022B698 /* GoogleService-Info.plist */; };
+		DEE498C726C1139A00487014 /* OktaLoggerInstabugLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEE498C626C1139A00487014 /* OktaLoggerInstabugLoggerTests.swift */; };
 		DEF2CC23260A341300F8B644 /* OktaLoggerMultithreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF2CC22260A341300F8B644 /* OktaLoggerMultithreadingTests.swift */; };
 		DEFB59E124EAC76400A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEFB59E024EAC76300A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift */; };
 		E251E7FE248AD1B400EF466D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E251E7FD248AD1B400EF466D /* AppDelegate.swift */; };
@@ -126,8 +128,10 @@
 		DE2FFE20260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLoggerMultithreadingTests.swift; sourceTree = "<group>"; };
 		DE504DC325BEE84A00B27BDD /* OktaLoggerFileLogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLogFormatter.swift; sourceTree = "<group>"; };
 		DE6A163625F1120100B0FBA0 /* LogsBrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogsBrowseViewController.swift; sourceTree = "<group>"; };
+		DE9B02FE26BD6A090072A501 /* OktaLoggerInstabugLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerInstabugLogger.swift; sourceTree = "<group>"; };
 		DEABAFC8260C7C0100DB7008 /* FileTestsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileTestsHelper.swift; sourceTree = "<group>"; };
 		DEC5276524DBF9630022B698 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DEE498C626C1139A00487014 /* OktaLoggerInstabugLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerInstabugLoggerTests.swift; sourceTree = "<group>"; };
 		DEF2CC22260A341300F8B644 /* OktaLoggerMultithreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerMultithreadingTests.swift; sourceTree = "<group>"; };
 		DEFB59E024EAC76300A1744F /* OktaLoggerFirebaseCrashlyticsLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFirebaseCrashlyticsLogger.swift; sourceTree = "<group>"; };
 		DF75E3D21D2B9A971A2CAEC7 /* libPods-OktaLoggerDemoApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerDemoApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,6 +233,7 @@
 		D5C824D62469DBF1005CF747 /* OktaLogger */ = {
 			isa = PBXGroup;
 			children = (
+				DE9B02FD26BD697B0072A501 /* InstabugLogger */,
 				8DCF5F662644B23F008698CD /* AppCenterLogger */,
 				8004832F24C1F0F0008BFF3A /* FileLoggers */,
 				DEFB59DF24EAC76300A1744F /* FirebaseCrashlyticsLogger */,
@@ -252,6 +257,7 @@
 				804F18F624C0174800894A52 /* OktaLoggerFileLoggerTests.swift */,
 				DE2FFE20260B89650028CAD6 /* OktaLoggerFileLoggerMultithreadingTests.swift */,
 				D5D0978D246DE00800C1362F /* OktaLoggerConsoleLoggerTests.swift */,
+				DEE498C626C1139A00487014 /* OktaLoggerInstabugLoggerTests.swift */,
 				D5D0978A246CB52900C1362F /* Helpers */,
 				D5C824E42469DBF1005CF747 /* Info.plist */,
 				D5B22D07246C8E39007ECC2F /* OktaLoggerTests-Bridging-Header.h */,
@@ -268,6 +274,14 @@
 				D55F2C1D246F153200680A96 /* MockLoggerDestination.m */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		DE9B02FD26BD697B0072A501 /* InstabugLogger */ = {
+			isa = PBXGroup;
+			children = (
+				DE9B02FE26BD6A090072A501 /* OktaLoggerInstabugLogger.swift */,
+			);
+			path = InstabugLogger;
 			sourceTree = "<group>";
 		};
 		DEC9C9CB24E57AC800AAFAE0 /* Recovered References */ = {
@@ -368,6 +382,7 @@
 				D5C824D92469DBF1005CF747 /* Sources */,
 				D5C824DA2469DBF1005CF747 /* Frameworks */,
 				D5C824DB2469DBF1005CF747 /* Resources */,
+				9ECAD1E0171C5273C443BE35 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -389,6 +404,7 @@
 				E251E7F9248AD1B400EF466D /* Resources */,
 				80DDE77E24B961B400D0E2F3 /* Embed Frameworks */,
 				DEC5276724DBFE6C0022B698 /* ShellScript */,
+				20382702DB652A5C8D9E415D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -494,6 +510,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		20382702DB652A5C8D9E415D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3EDE391A122E4EE902619005 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -538,6 +571,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		9ECAD1E0171C5273C443BE35 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		DEC5276724DBFE6C0022B698 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -571,6 +621,7 @@
 				D54461CB246B55A600C755F1 /* OktaLoggerDestination.swift in Sources */,
 				8004832E24C1EFDF008BFF3A /* OktaLoggerFileLoggerConfig.swift in Sources */,
 				8DCF5F682644B25D008698CD /* AppCenterLogger.swift in Sources */,
+				DE9B02FF26BD6A090072A501 /* OktaLoggerInstabugLogger.swift in Sources */,
 				806FF25E24B95A3300994D4D /* OktaLoggerFileLogger.swift in Sources */,
 				D52C2AD12474A4F5003CCF4D /* ReadWriteLock.swift in Sources */,
 				6582A2024047A1BC55BC98D3 /* LumberjackLoggerDelegate.swift in Sources */,
@@ -583,6 +634,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEE498C726C1139A00487014 /* OktaLoggerInstabugLoggerTests.swift in Sources */,
 				804F18F724C0174800894A52 /* OktaLoggerFileLoggerTests.swift in Sources */,
 				D5D0978E246DE00800C1362F /* OktaLoggerConsoleLoggerTests.swift in Sources */,
 				DEABAFC9260C7C0100DB7008 /* FileTestsHelper.swift in Sources */,

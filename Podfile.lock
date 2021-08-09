@@ -43,26 +43,32 @@ PODS:
     - GoogleUtilities/Environment
   - GoogleUtilities/UserDefaults (7.2.2):
     - GoogleUtilities/Logger
+  - Instabug (10.7.5)
   - nanopb (2.30907.0):
     - nanopb/decode (= 2.30907.0)
     - nanopb/encode (= 2.30907.0)
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
-  - OktaLogger (1.2.2):
-    - OktaLogger/Complete (= 1.2.2)
+  - OktaLogger (1.3.0):
+    - OktaLogger/Complete (= 1.3.0)
     - SwiftLint
-  - OktaLogger/Complete (1.2.2):
+  - OktaLogger/Complete (1.3.0):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
+    - OktaLogger/InstabugLogger
     - SwiftLint
-  - OktaLogger/Core (1.2.2):
+  - OktaLogger/Core (1.3.0):
     - SwiftLint
-  - OktaLogger/FileLogger (1.2.2):
+  - OktaLogger/FileLogger (1.3.0):
     - CocoaLumberjack/Swift (~> 3.6.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/FirebaseCrashlytics (1.2.2):
+  - OktaLogger/FirebaseCrashlytics (1.3.0):
     - Firebase/Crashlytics (~> 7.4.0)
+    - OktaLogger/Core
+    - SwiftLint
+  - OktaLogger/InstabugLogger (1.3.0):
+    - Instabug (~> 10.7.5)
     - OktaLogger/Core
     - SwiftLint
   - PromisesObjC (1.2.12)
@@ -72,6 +78,7 @@ DEPENDENCIES:
   - AppCenter (~> 4.1.1)
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (~> 7.4.0)
+  - Instabug (~> 10.7.5)
   - OktaLogger (from `.`)
 
 SPEC REPOS:
@@ -85,6 +92,7 @@ SPEC REPOS:
     - FirebaseInstallations
     - GoogleDataTransport
     - GoogleUtilities
+    - Instabug
     - nanopb
     - PromisesObjC
     - SwiftLint
@@ -103,11 +111,12 @@ SPEC CHECKSUMS:
   FirebaseInstallations: a46ae59915f0931e18814164849cd0354bea24ed
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
+  Instabug: ec36344097cf86024029f5cf9dde858e6f9ab0ee
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
-  OktaLogger: 43fd81691a7cdb69ef29997d7f2f218a1415d63b
+  OktaLogger: 93607a34f00c947c5ccce88e25140bb6a6e03256
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
 
-PODFILE CHECKSUM: 0d62d957d380013c75e13aeb32bd0c568a713007
+PODFILE CHECKSUM: e599c7c788b36ecd9f8879e14a2c65fd02ff26b0
 
 COCOAPODS: 1.10.1

@@ -17,6 +17,8 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
   - [Console](#console-destination)
   - [File](#file-destination)
   - [Firebase Crashlytics](#firebase-crashlytics-destination)
+  - [App Center](#app-center-destination)
+  - [Instabug](#instabug-destination)
   - [Custom destinations](#custom-destinations)
 - [Log levels](#log-levels)
 - [Diagrams](#diagrams)
@@ -133,8 +135,7 @@ This destination is using [Firebase Crashlytics SDK](https://github.com/firebase
 ### App Center destination
 
 Related class -
-[AppCenterLogger]
-(OktaLogger/AppCenterLogger/AppCenterLogger.swift).
+[AppCenterLogger](OktaLogger/AppCenterLogger/AppCenterLogger.swift).  
 This destination uses the AppCenter SDK to send events, so they can be accessed from the App Center console. The only functionality supported by this destination is sending events to the App Center dashboard.
 There are a few important features and restrictions in this destination:
 
@@ -143,6 +144,28 @@ There are a few important features and restrictions in this destination:
 - Log messages are ignored so they can be left as nil. The eventName parameter is the name of the event sent to App Center, and properties are sent as the properties of the event. Make sure that the properties are in [String: String] format or they may not be sent to App Center
 
 This destination is using [App Center SDK](https://github.com/microsoft/appcenter-sdk-apple) for logging implementation
+
+### Instabug destination
+
+Related class -
+[OktaLoggerInstabugLogger](OktaLogger/InstabugLogger/OktaLoggerInstabugLogger.swift).  
+This destination uses the Instabug SDK to send events, so they can be accessed from the Instabug console in bug report or improvement suggestion.
+There are a few important features and restrictions in this destination:
+
+- Logger will not send events unless Instabug is configured [setup Instabug in iOS app](https://docs.instabug.com/docs/ios-integration).
+- You can review only 1000 log records for one report. See [Instabug docs](https://docs.instabug.com/docs/ios-integration) for more details.
+- For each log level OktaLogger will call appropriate Instabug log method. See the full list in the table below.
+
+| OktaLogger log level | Instabug log method   |
+| -------------------- | --------------------- |
+| `all`                | `IBGLog.logVerbose()` |
+| `debug`              | `IBGLog.logDebug()`   |
+| `info`               | `IBGLog.logInfo()`    |
+| `uiEvent`            | `IBGLog.logInfo()`    |
+| `warning`            | `IBGLog.logWarn()`    |
+| `error`              | `IBGLog.logError()`   |
+
+This destination is using [Instabug iOS SDK](https://github.com/Instabug/Instabug-iOS) for logging implementation.
 
 ### Custom destinations
 

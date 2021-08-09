@@ -5,6 +5,7 @@ target 'OktaLogger' do
     pod 'AppCenter', '~>4.1.1'
     pod 'Firebase/Crashlytics', '~>7.4.0'
     pod 'CocoaLumberjack/Swift', '~>3.6.0'
+    pod 'Instabug', '~>10.7.5'
 end
 
 target 'OktaLoggerDemoApp' do

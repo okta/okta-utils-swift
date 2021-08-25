@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/okta/okta-logger-swift.git",  :tag => s.version.to_s }
   s.ios.deployment_target = '11.0'
   s.osx.deployment_target = '10.14'
+  s.watchos.deployment_target = '6.0'
   s.swift_version = '5.0'
   s.dependency 'SwiftLint'
   s.default_subspec = "Complete"

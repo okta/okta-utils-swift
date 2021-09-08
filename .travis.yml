@@ -23,4 +23,4 @@ jobs:
     - stage: Dependency Manager Validation
       name: CocoaPods
       script:
-      - pod lib lint --verbose --allow-warnings
+      - pod lib lint --allow-warnings

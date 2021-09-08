@@ -22,6 +22,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec "MacOS" do |macos|
+    macos.osx.deployment_target = '10.14'
     macos.dependency 'OktaLogger/FileLogger'
     macos.dependency 'OktaLogger/AppCenterLogger'
   end
@@ -43,11 +44,12 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'AppCenterLogger' do |appCenterLogger|
-      appCenterLogger.source_files = [
-      'OktaLogger/AppCenterLogger/*'
-      ]
-      appCenterLogger.dependency 'AppCenter', '~>4.1.1'
-      appCenterLogger.dependency 'OktaLogger/Core'
+    appCenterLogger.osx.deployment_target = '10.14'
+    appCenterLogger.source_files = [
+    'OktaLogger/AppCenterLogger/*'
+    ]
+    appCenterLogger.dependency 'AppCenter', '~>4.1.1'
+    appCenterLogger.dependency 'OktaLogger/Core'
   end
 
   s.subspec "Core" do |core|

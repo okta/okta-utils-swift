@@ -34,7 +34,7 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
         level: OktaLoggerLogLevel
     ) {
         self.crashlytics = crashlytics
-        super.init(identifier: identifier, level: level, defaultProperties: nil)
+        super.init(identifier: identifier, level: level, defaultProperties: [:])
     }
 
     override open func log(
@@ -48,17 +48,21 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
     ) {
         switch level {
         case .warning, .error:
+            var userInfo: [String: Any] = [
+                "level": OktaLoggerLogLevel.logMessageIcon(level: level),
+                "eventName": eventName,
+                "message": message ?? "-",
+                "file": file,
+                "line": line,
+                "function": funcName
+            ]
+            if let defaultProperties = defaultProperties as? [String: Any], !defaultProperties.isEmpty {
+                userInfo.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
+            }
             crashlytics.record(error: NSError(
                 domain: buildDomain(with: eventName),
                 code: 0,
-                userInfo: [
-                    "level": OktaLoggerLogLevel.logMessageIcon(level: level),
-                    "eventName": eventName,
-                    "message": message ?? "-",
-                    "file": file,
-                    "line": line,
-                    "function": funcName
-                ])
+                userInfo: userInfo)
             )
         default:
             break

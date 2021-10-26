@@ -19,7 +19,7 @@ jobs:
     - stage: Unit Tests
       name: iOS
       script:
-      - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty && [ ${PIPESTATUS[0]} -eq 0 ]
+      - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test 
     - stage: Dependency Manager Validation
       name: CocoaPods
       script:

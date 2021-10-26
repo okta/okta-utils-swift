@@ -40,7 +40,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             logs = result
             receiveLogsExpectation.fulfill()
         }
-        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
         XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 5)
         testObject.purgeLogs()
 
@@ -55,7 +55,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             logs = result
             receiveLogsExpectation.fulfill()
         }
-        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
         XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
         testObject.purgeLogs()
     }
@@ -81,7 +81,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             logs = result
             receiveLogsExpectation.fulfill()
         }
-        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
         XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 5)
 
         // Verify that actual log files paths same as expected
@@ -97,7 +97,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             logs = result
             receiveLogsExpectation.fulfill()
         }
-        wait(for: [receiveLogsExpectation], timeout: 5.0)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
         XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
 
         // Verify that actual log files paths same as expected

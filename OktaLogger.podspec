@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.3.2"
+  s.version          = "1.3.3"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
     appCenterLogger.source_files = [
     'OktaLogger/AppCenterLogger/*'
     ]
-    appCenterLogger.dependency 'AppCenter', '~>4.1.1'
+    appCenterLogger.dependency 'AppCenter', '~>4.3.0'
     appCenterLogger.dependency 'OktaLogger/Core'
   end
 

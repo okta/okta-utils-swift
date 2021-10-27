@@ -29,7 +29,8 @@ public protocol OktaLoggerDestinationProtocol {
     var level: OktaLoggerLogLevel { get set }
 
     /**
-     Default event properties
+     Default event properties.
+     Note: this might be limited for some logging destinations, i.e Firebase destination relies on `Keys` property which has a limit of 64 key-value pairs.
      */
     var defaultProperties: [AnyHashable: Any] { get }
 
@@ -155,10 +156,12 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
 
     open func addDefaultProperties(_ defaultProperties: [AnyHashable: Any]) {
         self.defaultProperties.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
+        self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
     }
 
     open func removeDefaultProperties(for key: AnyHashable) {
         defaultProperties.removeValue(forKey: key)
+        self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
     }
 
 

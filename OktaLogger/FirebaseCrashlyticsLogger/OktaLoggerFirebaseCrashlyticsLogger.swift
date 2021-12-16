@@ -93,9 +93,9 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
     }
     
     class func createUserInfoDict(level: OktaLoggerLogLevel,
-                            eventName: String,
-                            message: String?,
-                            properties: [AnyHashable: Any]?,
+                                  eventName: String,
+                                  message: String?,
+                                  properties: [AnyHashable: Any]?,
                                   defaultProperties: [AnyHashable: Any]?,
                                   file: String,
                                   line: NSNumber,

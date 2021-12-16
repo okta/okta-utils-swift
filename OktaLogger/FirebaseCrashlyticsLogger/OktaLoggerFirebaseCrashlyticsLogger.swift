@@ -48,17 +48,15 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
     ) {
         switch level {
         case .warning, .error:
-            var userInfo: [String: Any] = [
-                "level": OktaLoggerLogLevel.logMessageIcon(level: level),
-                "eventName": eventName,
-                "message": message ?? "-",
-                "file": file,
-                "line": line,
-                "function": funcName
-            ]
-            if let defaultProperties = defaultProperties as? [String: Any], !defaultProperties.isEmpty {
-                userInfo.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
-            }
+            let userInfo = Self.createUserInfoDict(level: level,
+                                                   eventName: eventName,
+                                                   message: message,
+                                                   properties: properties,
+                                                   defaultProperties: defaultProperties,
+                                                   file: file,
+                                                   line: line,
+                                                   funcName: funcName)
+
             crashlytics.record(error: NSError(
                 domain: buildDomain(with: eventName),
                 code: 0,
@@ -92,5 +90,37 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
     private func buildDomain(with eventName: String) -> String {
         let normalizedEventName = eventName.lowercased().replacingOccurrences(of: " ", with: "-")
         return "\(identifier).\(normalizedEventName)"
+    }
+    
+    class func createUserInfoDict(level: OktaLoggerLogLevel,
+                            eventName: String,
+                            message: String?,
+                            properties: [AnyHashable: Any]?,
+                                  defaultProperties: [AnyHashable: Any]?,
+                                  file: String,
+                                  line: NSNumber,
+                                  funcName: String) -> [String: Any] {
+        var userInfo: [String: Any] = [
+            "level": OktaLoggerLogLevel.logMessageIcon(level: level),
+            "eventName": eventName,
+            "message": message ?? "-",
+            "file": file,
+            "line": line,
+            "function": funcName
+        ]
+        
+        // merge destination-level properties into userInfo (high priority)
+        if let defaultProperties = defaultProperties as? [String: Any],
+           !defaultProperties.isEmpty {
+            userInfo.merge(defaultProperties) { (_, last) in last }
+        }
+        
+        // merge log-level properties into userInfo (highest priority)
+        if let properties = properties as? [String: Any],
+           !properties.isEmpty {
+            userInfo.merge(properties) { (_, last) in last }
+        }
+        
+        return userInfo
     }
 }

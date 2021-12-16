@@ -13,8 +13,7 @@ import XCTest
 @testable import OktaLogger
 
 class OktaLoggerFirebaseLoggerTests: XCTestCase {
-
-  
+    
     ///  Verify that the userInfo dict is created as expected
     ///  defaultProperties and logged properties should be merged into the userInfo dict in correct priority
     func testUserInfoMerge() {
@@ -51,7 +50,6 @@ class OktaLoggerFirebaseLoggerTests: XCTestCase {
         XCTAssertEqual(userInfo["function"] as? String, funcName)
         XCTAssertEqual(userInfo["override"] as? String, "SUCCESS")
         XCTAssertEqual(userInfo["file"] as? String, "<REDACTED>")
-
     }
 
 }

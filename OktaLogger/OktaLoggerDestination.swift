@@ -155,13 +155,15 @@ open class OktaLoggerDestinationBase: NSObject, OktaLoggerDestinationProtocol {
     }
 
     open func addDefaultProperties(_ defaultProperties: [AnyHashable: Any]) {
-        self.defaultProperties.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
-        self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
+        var updatedProperties = self.defaultProperties
+        updatedProperties.merge(defaultProperties, uniquingKeysWith: { (_, last) in last })
+        self.defaultProperties = updatedProperties
     }
 
     open func removeDefaultProperties(for key: AnyHashable) {
-        defaultProperties.removeValue(forKey: key)
-        self.defaultPropertiesDescription = Self.description(of: self._defaultProperties)
+        var updatedProperties = defaultProperties
+        updatedProperties.removeValue(forKey: key)
+        defaultProperties = updatedProperties
     }
 
 

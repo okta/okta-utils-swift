@@ -70,7 +70,7 @@ class OktaLoggerFileLoggerMultithreadingTests: XCTestCase {
         }
 
         wait(for: [testFinishExpectation], timeout: defaultTimeout)
-        
+
         let purgeExpectation = expectation(description: "Purge logs from main thread")
         lumberjackDelegate.purgeLogs()
         DispatchQueue.main.async {

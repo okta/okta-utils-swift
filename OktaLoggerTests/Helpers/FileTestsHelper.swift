@@ -53,7 +53,8 @@ class FileTestsHelper {
         try? FileManager.default.removeItem(at: FileTestsHelper.testLogsFolder)
     }
 
-    static private var testLogsFolder: URL {
+    // swiftlint:disable force_unwrapping
+    private static var testLogsFolder: URL {
         return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
             .appendingPathComponent("TestLogs", isDirectory: true)
     }

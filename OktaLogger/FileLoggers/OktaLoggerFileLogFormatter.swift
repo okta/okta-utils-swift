@@ -9,12 +9,6 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-//
-//  OktaLoggerFileLogFormatter.swift
-//  OktaLogger
-//
-//  Created by Borys Kasianenko on 1/25/21.
-//
 
 import Foundation
 import CocoaLumberjack

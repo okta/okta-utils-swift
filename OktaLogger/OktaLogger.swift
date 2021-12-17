@@ -9,6 +9,7 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+
 import Foundation
 
 /**
@@ -136,7 +137,7 @@ open class OktaLogger: NSObject, OktaLoggerProtocol {
         self.loggingDestinations = destinationDict
     }
 
-    public convenience override init() {
+    override public convenience init() {
         self.init(destinations: [])
     }
 

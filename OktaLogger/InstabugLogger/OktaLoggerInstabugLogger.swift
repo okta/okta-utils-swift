@@ -12,9 +12,7 @@
 
 import Instabug
 
-/**
- Concrete logging class for Instabug.
- */
+///  Concrete logging destination for Instabug
 open class OktaLoggerInstabugLogger: OktaLoggerDestinationBase {
 
     override open func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
@@ -47,7 +45,7 @@ open class OktaLoggerInstabugLogger: OktaLoggerDestinationBase {
         }
     }
 
-    open override func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
+    override open func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {
         let fileLogString = file.split(separator: "/").last ?? ""
         let messageLogString: String = {
             guard let message = message else {

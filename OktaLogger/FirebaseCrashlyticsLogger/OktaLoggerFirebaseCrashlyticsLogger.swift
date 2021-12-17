@@ -9,6 +9,7 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+
 import FirebaseCrashlytics
 
 /**
@@ -91,7 +92,7 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
         let normalizedEventName = eventName.lowercased().replacingOccurrences(of: " ", with: "-")
         return "\(identifier).\(normalizedEventName)"
     }
-    
+
     class func createUserInfoDict(level: OktaLoggerLogLevel,
                                   eventName: String,
                                   message: String?,
@@ -108,19 +109,19 @@ open class OktaLoggerFirebaseCrashlyticsLogger: OktaLoggerDestinationBase {
             "line": line,
             "function": funcName
         ]
-        
+
         // merge destination-level properties into userInfo (high priority)
         if let defaultProperties = defaultProperties as? [String: Any],
            !defaultProperties.isEmpty {
             userInfo.merge(defaultProperties) { (_, last) in last }
         }
-        
+
         // merge log-level properties into userInfo (highest priority)
         if let properties = properties as? [String: Any],
            !properties.isEmpty {
             userInfo.merge(properties) { (_, last) in last }
         }
-        
+
         return userInfo
     }
 }

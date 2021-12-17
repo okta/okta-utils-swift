@@ -13,7 +13,7 @@ import XCTest
 @testable import OktaLogger
 
 class OktaLoggerFirebaseLoggerTests: XCTestCase {
-    
+
     ///  Verify that the userInfo dict is created as expected
     ///  defaultProperties and logged properties should be merged into the userInfo dict in correct priority
     func testUserInfoMerge() {
@@ -22,7 +22,7 @@ class OktaLoggerFirebaseLoggerTests: XCTestCase {
         let pushToken = UUID().uuidString
         let properties = [
             "pushToken": pushToken,
-            "override" : "SUCCESS"
+            "override": "SUCCESS"
         ]
         let appInstanceId = UUID().uuidString
         let file = UUID().uuidString
@@ -41,7 +41,7 @@ class OktaLoggerFirebaseLoggerTests: XCTestCase {
                                                                               file: file,
                                                                               line: line,
                                                                               funcName: funcName)
-        
+
         XCTAssertEqual(userInfo["eventName"] as? String, eventName)
         XCTAssertEqual(userInfo["message"] as? String, message)
         XCTAssertEqual(userInfo["pushToken"] as? String, pushToken)

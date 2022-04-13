@@ -11,6 +11,7 @@
  */
 
 import AppCenterAnalytics
+import OktaLogger
 
 /**
  Concrete logging class for App Center events.

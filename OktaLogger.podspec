@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.dependency 'SwiftLint'
   s.default_subspec = "Complete"
-  s.static_framework = true
+  #s.static_framework = true
 
   # Subspec
   s.subspec "Complete" do |complete|

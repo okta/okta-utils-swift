@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLoggerAppCenter"
-  s.version          = "1.0.0"
+  s.version          = "1.3.6"
   s.summary          = "Implementation of AppCenter logger destination"
   s.description      = "Implementation of AppCenter logger destination. Requires OktaLogger/Core"
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
     'OktaLogger/AppCenterLogger/*'
     ]
   s.dependency 'AppCenter','~>4.3.0'
-  s.dependency 'OktaLogger/Core'
+  s.dependency 'OktaLogger/Core','~>1.3'
 end

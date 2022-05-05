@@ -11,8 +11,12 @@
  */
 import XCTest
 @testable import OktaLogger
+#if canImport(LoggerCore)
 @testable import LoggerCore
+#endif
+#if canImport(FileLogger)
 @testable import FileLogger
+#endif
 
 class OktaLoggerDefaultPropertiesTests: XCTestCase {
     func testNoDefaultPropertyInInitializer() {

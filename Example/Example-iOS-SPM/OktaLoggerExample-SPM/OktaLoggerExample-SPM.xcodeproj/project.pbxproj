@@ -13,7 +13,7 @@
 		7FC038BE282468B000C16169 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FC038BC282468B000C16169 /* Main.storyboard */; };
 		7FC038C0282468B100C16169 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7FC038BF282468B100C16169 /* Assets.xcassets */; };
 		7FC038C3282468B100C16169 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FC038C1282468B100C16169 /* LaunchScreen.storyboard */; };
-		7FC038D028246ACC00C16169 /* OktaLogger in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC038CF28246ACC00C16169 /* OktaLogger */; };
+		7FC038D428248ABB00C16169 /* OktaLoggerCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7FC038D328248ABB00C16169 /* OktaLoggerCore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		7FC038BF282468B100C16169 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7FC038C2282468B100C16169 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7FC038C4282468B100C16169 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7FC038CB282468EF00C16169 /* okta-logger-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "okta-logger-swift"; path = ../../..; sourceTree = "<group>"; };
+		7FC038D2282489F600C16169 /* okta-logger-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "okta-logger-swift"; path = ../../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +33,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC038D028246ACC00C16169 /* OktaLogger in Frameworks */,
+				7FC038D428248ABB00C16169 /* OktaLoggerCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -43,7 +43,7 @@
 		7FC038AA282468B000C16169 = {
 			isa = PBXGroup;
 			children = (
-				7FC038CA282468EF00C16169 /* Packages */,
+				7FC038D1282489F600C16169 /* Packages */,
 				7FC038B5282468B000C16169 /* OktaLoggerExample-SPM */,
 				7FC038B4282468B000C16169 /* Products */,
 				7FC038CE28246ACC00C16169 /* Frameworks */,
@@ -72,19 +72,19 @@
 			path = "OktaLoggerExample-SPM";
 			sourceTree = "<group>";
 		};
-		7FC038CA282468EF00C16169 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				7FC038CB282468EF00C16169 /* okta-logger-swift */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		7FC038CE28246ACC00C16169 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7FC038D1282489F600C16169 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7FC038D2282489F600C16169 /* okta-logger-swift */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -104,7 +104,7 @@
 			);
 			name = "OktaLoggerExample-SPM";
 			packageProductDependencies = (
-				7FC038CF28246ACC00C16169 /* OktaLogger */,
+				7FC038D328248ABB00C16169 /* OktaLoggerCore */,
 			);
 			productName = "OktaLoggerExample-SPM";
 			productReference = 7FC038B3282468B000C16169 /* OktaLoggerExample-SPM.app */;
@@ -383,9 +383,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		7FC038CF28246ACC00C16169 /* OktaLogger */ = {
+		7FC038D328248ABB00C16169 /* OktaLoggerCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = OktaLogger;
+			productName = OktaLoggerCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

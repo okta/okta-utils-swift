@@ -18,7 +18,16 @@ let package = Package(
         .library(
             /// Core library with no additional dependencies
             name: "OktaLoggerCore",
-            targets: ["LoggerCore"])
+            targets: ["LoggerCore"]),
+        .library(
+            name: "OktaFileLogger",
+            targets: ["FileLogger"]),
+        .library(
+            name: "OktaFirebaseCrashlyticsLogger",
+            targets: ["FirebaseCrashlyticsLogger"]),
+        .library(
+            name: "OktaInstabugLogger",
+            targets: ["InstabugLogger"])
     ],
     dependencies: [
         .package(url: "https://github.com/Instabug/Instabug-SP", .upToNextMajor(from: "10.7.0")),

@@ -12,6 +12,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 
 - [Getting started](#getting-started)
     - [CocoaPods](#cocoapods)
+    - [Swift Package Manager](#spm)
 - [Usage](#usage)
 - [Destinations](#destinations)
   - [Console](#console-destination)
@@ -39,6 +40,20 @@ There are few available subspecs:
 - `FileLogger` - Core + File logger destination;
 - `FirebaseCrashlytics` - Core + Firebase Crashlytics logger destination;
 - `Complete` - Includes all available functionality. This subspec will be used by default.
+
+### Swift Package manager
+
+This SDK is available through Swift Package Manager. To install it, import it from the following url:
+```
+https://github.com/okta/okta-logger-swift.git
+```
+There are few available products available to import:
+
+- `OktaLoggerCore` - Contains only basic functionality and Console logger destination;
+- `OktaFileLogger` - Core + File logger destination;
+- `OktaFirebaseCrashlytics` - Core + Firebase Crashlytics logger destination;
+- `OktaInstabugLogger` - Core + Instabug logger destination;
+- `OktaLogger` - Includes all available functionality;
 
 ## Usage
 

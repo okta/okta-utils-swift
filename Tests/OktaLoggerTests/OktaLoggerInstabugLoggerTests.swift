@@ -11,7 +11,9 @@
  */
 import XCTest
 @testable import OktaLogger
+#if canImport(InstabugLogger)
 @testable import InstabugLogger
+#endif
 
 class OktaLoggerInstabugLoggerTests: XCTestCase {
 

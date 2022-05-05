@@ -11,7 +11,9 @@
  */
 import Foundation
 import OktaLogger
+#if canImport(LoggerCore)
 import LoggerCore
+#endif
 @objc
 class MockLogEvent: NSObject {
     let name: String

@@ -11,7 +11,9 @@
  */
 import XCTest
 @testable import OktaLogger
+#if canImport(FirebaseCrashlyticsLogger)
 @testable import FirebaseCrashlyticsLogger
+#endif
 
 class OktaLoggerFirebaseLoggerTests: XCTestCase {
 

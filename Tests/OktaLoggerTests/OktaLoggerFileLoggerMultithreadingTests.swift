@@ -11,7 +11,9 @@
  */
 import XCTest
 @testable import OktaLogger
+#if canImport(FileLogger)
 @testable import FileLogger
+#endif
 
 class OktaLoggerFileLoggerMultithreadingTests: XCTestCase {
 
@@ -74,7 +76,7 @@ class OktaLoggerFileLoggerMultithreadingTests: XCTestCase {
 
         let purgeExpectation = expectation(description: "Purge logs from main thread")
         lumberjackDelegate.purgeLogs()
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             purgeExpectation.fulfill()
         }
         wait(for: [purgeExpectation], timeout: 1.0)

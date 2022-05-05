@@ -11,7 +11,9 @@
  */
 import XCTest
 @testable import OktaLogger
+#if canImport(LoggerCore)
 import LoggerCore
+#endif
 class OktaLoggerConsoleLoggerTests: XCTestCase {
 
     /**

@@ -6,7 +6,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 2. Supports single input to multiple output logger classes (e.g. console, firebase, filesystem);
 3. Supports runtime log level changes to any destination;
 4. Supports changing destinations at runtime;
-4. Default properties for logging destinations in order to support data such as device identifier.
+5. Default properties for logging destinations in order to support data such as device identifier.
 
 #### Table of contents
 

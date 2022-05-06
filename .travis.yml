@@ -1,10 +1,11 @@
 language: swift
 os: osx
-osx_image: xcode12.2
+osx_image: xcode13.3
 
 before_install:
   - gem install xcpretty
   - gem install cocoapods
+  - pod install
 jobs:
   include:
     - stage: Linting
@@ -19,7 +20,12 @@ jobs:
     - stage: Unit Tests
       name: iOS
       script:
-      - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test 
+      - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test
+    - stage: SPM Example
+      name: iOS-SPM
+      script:
+      - cd Example/Example-iOS-SPM/OktaLoggerExample-SPM
+      - xcodebuild -scheme OktaLoggerExample-SPM -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean build
     - stage: Dependency Manager Validation
       name: CocoaPods
       script:

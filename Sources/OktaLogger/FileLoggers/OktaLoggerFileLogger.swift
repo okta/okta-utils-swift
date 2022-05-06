@@ -11,7 +11,7 @@
  */
 
 import Foundation
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
 import LoggerCore
 #endif
 

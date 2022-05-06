@@ -11,7 +11,7 @@
  */
 
 import Instabug
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
 import LoggerCore
 #endif
 ///  Concrete logging destination for Instabug

@@ -11,10 +11,8 @@
  */
 import Foundation
 @testable import OktaLogger
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
 import LoggerCore
-#endif
-#if canImport(FileLogger)
 @testable import FileLogger
 #endif
 

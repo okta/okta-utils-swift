@@ -11,10 +11,10 @@
  */
 
 import Foundation
-#if canImport(CocoaLumberjack)
-    import CocoaLumberjack
-#elseif canImport(CocoaLumberjackSwift)
-    import CocoLumberjackSwift
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
+#else
+import CocoaLumberjack
 #endif
 
 @objc

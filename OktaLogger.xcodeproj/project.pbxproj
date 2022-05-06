@@ -12,7 +12,6 @@
 		7B13559F276BE69400F0516C /* OktaLoggerFirebaseLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B13559E276BE69400F0516C /* OktaLoggerFirebaseLoggerTests.swift */; };
 		7FC038A4282467C300C16169 /* OktaLoggerLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC0389E282467C300C16169 /* OktaLoggerLogLevel.swift */; };
 		7FC038A5282467C300C16169 /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC0389F282467C300C16169 /* ReadWriteLock.swift */; };
-		7FC038A6282467C300C16169 /* OktaLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FC038A0282467C300C16169 /* OktaLogger.h */; };
 		7FC038A7282467C300C16169 /* OktaLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC038A1282467C300C16169 /* OktaLogger.swift */; };
 		7FC038A8282467C300C16169 /* OktaLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC038A2282467C300C16169 /* OktaLoggerDestination.swift */; };
 		7FC038A9282467C300C16169 /* OktaLoggerConsoleLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC038A3282467C300C16169 /* OktaLoggerConsoleLogger.swift */; };
@@ -210,7 +209,6 @@
 			children = (
 				7FC0389E282467C300C16169 /* OktaLoggerLogLevel.swift */,
 				7FC0389F282467C300C16169 /* ReadWriteLock.swift */,
-				7FC038A0282467C300C16169 /* OktaLogger.h */,
 				7FC038A1282467C300C16169 /* OktaLogger.swift */,
 				7FC038A2282467C300C16169 /* OktaLoggerDestination.swift */,
 				7FC038A3282467C300C16169 /* OktaLoggerConsoleLogger.swift */,
@@ -252,6 +250,7 @@
 		D5C824CA2469DBF1005CF747 = {
 			isa = PBXGroup;
 			children = (
+				7FC038A0282467C300C16169 /* OktaLogger.h */,
 				DEC5276524DBF9630022B698 /* GoogleService-Info.plist */,
 				7FC0389428243B2900C16169 /* Sources */,
 				7FC0389928243C5F00C16169 /* Tests */,
@@ -373,7 +372,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC038A6282467C300C16169 /* OktaLogger.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

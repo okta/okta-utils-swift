@@ -11,7 +11,7 @@
  */
 import XCTest
 @testable import OktaLogger
-#if canImport(FirebaseCrashlyticsLogger)
+#if SWIFT_PACKAGE
 @testable import FirebaseCrashlyticsLogger
 #endif
 

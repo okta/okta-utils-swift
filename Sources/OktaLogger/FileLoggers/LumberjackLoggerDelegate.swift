@@ -10,14 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-#if canImport(CocoaLumberjack)
-    import CocoaLumberjack
-#endif
-#if canImport(CocoaLumberjackSwift)
-    import CocoaLumberjackSwift
-#endif
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
+import CocoaLumberjackSwift
 import LoggerCore
+#else
+import CocoaLumberjack
 #endif
 
 

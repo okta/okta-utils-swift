@@ -11,7 +11,7 @@
  */
 
 import FirebaseCrashlytics
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
 import LoggerCore
 #endif
 /**

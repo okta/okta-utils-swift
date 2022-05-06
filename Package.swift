@@ -51,7 +51,6 @@ let package = Package(
                       "Info.plist"]),
         .target(name: "FileLogger",
                 dependencies: [
-                .product(name: "CocoaLumberjack", package: "CocoaLumberjack"),
                 .product(name: "CocoaLumberjackSwift", package: "CocoaLumberjack"),
                 .target(name: "LoggerCore")
                ],

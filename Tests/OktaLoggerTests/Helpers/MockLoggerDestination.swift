@@ -11,7 +11,7 @@
  */
 import Foundation
 import OktaLogger
-#if canImport(LoggerCore)
+#if SWIFT_PACKAGE
 import LoggerCore
 #endif
 @objc

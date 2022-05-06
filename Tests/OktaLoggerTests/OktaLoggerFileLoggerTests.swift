@@ -11,10 +11,8 @@
  */
 import XCTest
 @testable import OktaLogger
-#if canImport(FileLogger)
+#if SWIFT_PACKAGE
 @testable import FileLogger
-#endif
-#if canImport(LoggerCore)
 @testable import LoggerCore
 #endif
 

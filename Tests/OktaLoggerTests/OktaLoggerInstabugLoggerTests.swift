@@ -11,7 +11,7 @@
  */
 import XCTest
 @testable import OktaLogger
-#if canImport(InstabugLogger)
+#if SWIFT_PACKAGE
 @testable import InstabugLogger
 #endif
 

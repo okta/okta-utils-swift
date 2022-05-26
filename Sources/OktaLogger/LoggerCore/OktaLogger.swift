@@ -118,6 +118,29 @@ public protocol OktaLoggerProtocol {
     func removeDestination(withIdentifier identifier: String)
 }
 
+public extension OktaLoggerProtocol {
+
+    func debug(eventName: String, message: String?, properties: [AnyHashable: Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        log(level: .debug, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
+    }
+
+    func info(eventName: String, message: String?, properties: [AnyHashable: Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        log(level: .info, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
+    }
+
+    func warning(eventName: String, message: String?, properties: [AnyHashable: Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        log(level: .warning, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
+    }
+
+    func uiEvent(eventName: String, message: String?, properties: [AnyHashable: Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        log(level: .uiEvent, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
+    }
+
+    func error(eventName: String, message: String?, properties: [AnyHashable: Any]? = nil, file: String = #file, line: NSNumber = #line, funcName: String = #function) {
+        log(level: .error, eventName: eventName, message: message, properties: properties, file: file, line: line, funcName: funcName)
+    }
+}
+
 /**
  Main Logger Proxy
  */

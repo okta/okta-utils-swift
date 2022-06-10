@@ -19,10 +19,10 @@ PODS:
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.6)
     - GoogleUtilities/Logger (~> 7.6)
-  - FirebaseCoreDiagnostics (8.9.0):
+  - FirebaseCoreDiagnostics (8.15.0):
     - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
   - FirebaseCrashlytics (8.9.0):
     - FirebaseCore (~> 8.0)
@@ -31,57 +31,57 @@ PODS:
     - GoogleUtilities/Environment (~> 7.6)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - FirebaseInstallations (8.9.0):
+  - FirebaseInstallations (8.15.0):
     - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/UserDefaults (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleDataTransport (9.1.2):
-    - GoogleUtilities/Environment (~> 7.2)
-    - nanopb (~> 2.30908.0)
+  - GoogleDataTransport (9.1.4):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Environment (7.6.0):
+  - GoogleUtilities/Environment (7.7.0):
     - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.6.0):
+  - GoogleUtilities/Logger (7.7.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/UserDefaults (7.6.0):
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
-  - Instabug (10.7.5)
+  - Instabug (11.0.1)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - OktaLogger (1.3.7):
-    - OktaLogger/Complete (= 1.3.7)
+  - OktaLogger (1.3.8):
+    - OktaLogger/Complete (= 1.3.8)
     - SwiftLint
-  - OktaLogger/Complete (1.3.7):
+  - OktaLogger/Complete (1.3.8):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
     - OktaLogger/InstabugLogger
     - SwiftLint
-  - OktaLogger/Core (1.3.7):
+  - OktaLogger/Core (1.3.8):
     - SwiftLint
-  - OktaLogger/FileLogger (1.3.7):
+  - OktaLogger/FileLogger (1.3.8):
     - CocoaLumberjack/Swift (~> 3.6.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/FirebaseCrashlytics (1.3.7):
+  - OktaLogger/FirebaseCrashlytics (1.3.8):
     - Firebase/Crashlytics (~> 8.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/InstabugLogger (1.3.7):
-    - Instabug (~> 10.7)
+  - OktaLogger/InstabugLogger (1.3.8):
+    - Instabug (= 11.0.1)
     - OktaLogger/Core
     - SwiftLint
-  - PromisesObjC (2.0.0)
-  - SwiftLint (0.39.2)
+  - PromisesObjC (2.1.0)
+  - SwiftLint (0.47.1)
 
 DEPENDENCIES:
   - AppCenter (~> 4.3.0)
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (= 8.9.1)
-  - Instabug (~> 10.7.5)
+  - Instabug (= 11.0.1)
   - OktaLogger (from `.`)
 
 SPEC REPOS:
@@ -109,17 +109,17 @@ SPEC CHECKSUMS:
   CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
   Firebase: fb5114cd2bf96e2ff7bcb01d0d9a156cf5fd2f07
   FirebaseCore: c5aab092d9c4b8efea894946166b04c9d9ef0e68
-  FirebaseCoreDiagnostics: 5daa63f1c1409d981a2d5007daa100b36eac6a34
+  FirebaseCoreDiagnostics: 92e07a649aeb66352b319d43bdd2ee3942af84cb
   FirebaseCrashlytics: 40efbd81157dae307ec95612fa1328347284d2c2
-  FirebaseInstallations: caa7c8e0d3e2345b8829d2fa9ca1b4dfbf2fcc85
-  GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
-  GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
-  Instabug: ec36344097cf86024029f5cf9dde858e6f9ab0ee
+  FirebaseInstallations: 40bd9054049b2eae9a2c38ef1c3dd213df3605cd
+  GoogleDataTransport: 5fffe35792f8b96ec8d6775f5eccd83c998d5a3b
+  GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
+  Instabug: 66a95bac5cd87725b546456b732893ada4b6aef5
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OktaLogger: 15c0ab869ae644ce6965addbbb2c502a81c58c93
-  PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
+  OktaLogger: 84d844823ae9ca60e88c89a0b1f321d2b051603b
+  PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
+  SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 
-PODFILE CHECKSUM: c7b528935aa4b5b90c72bd881c5147d4fe62eda7
+PODFILE CHECKSUM: 99261b14e6088b2e519def3893c4c8808128e0dc
 
 COCOAPODS: 1.10.2

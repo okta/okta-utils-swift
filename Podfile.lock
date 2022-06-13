@@ -52,25 +52,25 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
-  - OktaLogger (1.3.8):
-    - OktaLogger/Complete (= 1.3.8)
+  - OktaLogger (1.3.9):
+    - OktaLogger/Complete (= 1.3.9)
     - SwiftLint
-  - OktaLogger/Complete (1.3.8):
+  - OktaLogger/Complete (1.3.9):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
     - OktaLogger/InstabugLogger
     - SwiftLint
-  - OktaLogger/Core (1.3.8):
+  - OktaLogger/Core (1.3.9):
     - SwiftLint
-  - OktaLogger/FileLogger (1.3.8):
+  - OktaLogger/FileLogger (1.3.9):
     - CocoaLumberjack/Swift (~> 3.6.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/FirebaseCrashlytics (1.3.8):
+  - OktaLogger/FirebaseCrashlytics (1.3.9):
     - Firebase/Crashlytics (~> 8.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/InstabugLogger (1.3.8):
+  - OktaLogger/InstabugLogger (1.3.9):
     - Instabug (= 11.0.1)
     - OktaLogger/Core
     - SwiftLint
@@ -116,7 +116,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   Instabug: 66a95bac5cd87725b546456b732893ada4b6aef5
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
-  OktaLogger: 84d844823ae9ca60e88c89a0b1f321d2b051603b
+  OktaLogger: 1f01a4c8f7470feb6e47ff42a2f8155d0ace3270
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   SwiftLint: f80f1be7fa96d30e0aa68e58d45d4ea1ccaac519
 

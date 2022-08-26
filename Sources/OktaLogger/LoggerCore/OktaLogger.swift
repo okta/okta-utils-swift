@@ -17,7 +17,6 @@ import Foundation
  */
 @objc
 public protocol OktaLoggerProtocol {
-
     /**
      - Parameters:
         - destinations: List of OktaLoggerDestinations
@@ -264,3 +263,4 @@ private extension OktaLogger {
         }
     }
 }
+

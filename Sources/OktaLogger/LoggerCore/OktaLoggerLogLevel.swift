@@ -18,7 +18,6 @@ import Foundation
  */
 @objc
 public class OktaLoggerLogLevel: NSObject, OptionSet {
-
     public let rawValue: Int
 
     public required init(rawValue: Int) {
@@ -36,10 +35,9 @@ public class OktaLoggerLogLevel: NSObject, OptionSet {
 }
 
 extension OktaLoggerLogLevel {
-
     /**
-    Generate log message icon depends on the log level
-    */
+     Generate log message icon depends on the log level
+     */
 
     public static func logMessageIcon(level: OktaLoggerLogLevel) -> String {
         switch level {

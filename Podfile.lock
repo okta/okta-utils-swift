@@ -56,25 +56,28 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - OktaLogger (1.3.11):
-    - OktaLogger/Complete (= 1.3.11)
+  - OktaAnalytics (1.0.0):
+    - AppCenter (= 4.3.0)
+    - OktaLogger/Core (~> 1)
+  - OktaLogger (1.3.12):
+    - OktaLogger/Complete (= 1.3.12)
     - SwiftLint
-  - OktaLogger/Complete (1.3.11):
+  - OktaLogger/Complete (1.3.12):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
     - OktaLogger/InstabugLogger
     - SwiftLint
-  - OktaLogger/Core (1.3.11):
+  - OktaLogger/Core (1.3.12):
     - SwiftLint
-  - OktaLogger/FileLogger (1.3.11):
+  - OktaLogger/FileLogger (1.3.12):
     - CocoaLumberjack/Swift (~> 3.6.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/FirebaseCrashlytics (1.3.11):
+  - OktaLogger/FirebaseCrashlytics (1.3.12):
     - Firebase/Crashlytics (~> 9.0)
     - OktaLogger/Core
     - SwiftLint
-  - OktaLogger/InstabugLogger (1.3.11):
+  - OktaLogger/InstabugLogger (1.3.12):
     - Instabug (= 11.2.0)
     - OktaLogger/Core
     - SwiftLint
@@ -82,10 +85,11 @@ PODS:
   - SwiftLint (0.49.1)
 
 DEPENDENCIES:
-  - AppCenter (~> 4.3.0)
+  - AppCenter (= 4.3.0)
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (= 9.4.0)
   - Instabug (= 11.2.0)
+  - OktaAnalytics (from `.`)
   - OktaLogger (from `.`)
 
 SPEC REPOS:
@@ -106,6 +110,8 @@ SPEC REPOS:
     - SwiftLint
 
 EXTERNAL SOURCES:
+  OktaAnalytics:
+    :path: "."
   OktaLogger:
     :path: "."
 
@@ -122,10 +128,11 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   Instabug: 2153fb2bc805bca730ce97251e3dc6cd04864171
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  OktaLogger: 3f0914e79824fe9003386c0a55f78de3e691c00e
+  OktaAnalytics: fc9c038258ccb56c202fb02376ba7345a52dd485
+  OktaLogger: 7788647b3748015cc367e3b767d40b0c9e3a391a
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5
 
-PODFILE CHECKSUM: 58ec482414d3f91cc4985e463efe0b724bf2a137
+PODFILE CHECKSUM: b802960bc460f61959e2fdf12bc8d1bc8085e5e9
 
 COCOAPODS: 1.10.2

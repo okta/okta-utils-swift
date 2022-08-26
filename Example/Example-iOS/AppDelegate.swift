@@ -10,14 +10,32 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import UIKit
-import OktaLogger
 import Firebase
+import OktaLogger
+import OktaAnalytics
+import AppCenterAnalytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    let appCenterAnalyticsProvider: AnalyticsProviderProtocol = {
+        AppCenter.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
+        let logger = OktaLogger()
+        logger.addDestination(
+            OktaLoggerConsoleLogger(
+                identifier: "com.okta.loggerDemo.console",
+                level: OktaLoggerLogLevel.debug,
+                defaultProperties: nil
+            )
+        )
+        return AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
+    }()
+
+    var timer: Timer?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        OktaAnalytics.addProvider(appCenterAnalyticsProvider)
+        OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
         return true
     }
 }

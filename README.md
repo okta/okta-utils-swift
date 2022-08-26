@@ -18,9 +18,9 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
   - [Console](#console-destination)
   - [File](#file-destination)
   - [Firebase Crashlytics](#firebase-crashlytics-destination)
-  - [App Center](#app-center-destination)
   - [Instabug](#instabug-destination)
   - [Custom destinations](#custom-destinations)
+- [OktaAnalytics](#oktaanalytics)
 - [Log levels](#log-levels)
 - [Diagrams](#diagrams)
 
@@ -147,19 +147,6 @@ There are few important features and restrictions in this destination:
 
 This destination is using [Firebase Crashlytics SDK](https://github.com/firebase/firebase-ios-sdk) for logging implementation.
 
-### App Center destination
-
-Related class -
-[AppCenterLogger](OktaLogger/AppCenterLogger/AppCenterLogger.swift).  
-This destination uses the AppCenter SDK to send events, so they can be accessed from the App Center console. The only functionality supported by this destination is sending events to the App Center dashboard.
-There are a few important features and restrictions in this destination:
-
-- Logger will not send events unless App Center is already configured in AppDelegate [setup App Center](https://docs.microsoft.com/en-us/appcenter/sdk/getting-started/macos).
-- Logs with 'error' levels are sent as critical events to App Center [event flags](https://docs.microsoft.com/en-us/appcenter/sdk/analytics/macos)
-- Log messages are ignored so they can be left as nil. The eventName parameter is the name of the event sent to App Center, and properties are sent as the properties of the event. Make sure that the properties are in [String: String] format or they may not be sent to App Center
-
-This destination is using [App Center SDK](https://github.com/microsoft/appcenter-sdk-apple) for logging implementation
-
 ### Instabug destination
 
 Related class -
@@ -187,6 +174,21 @@ This destination is using [Instabug iOS SDK](https://github.com/Instabug/Instabu
 If you want to create your custom destination it is recommended to inherit it from `OktaLoggerDestinationBase` class, as this class implements some basic functionality. Hovewer, the only requirement for destinations is to conform to `OktaLoggerDestinationProtocol`.
 
 If you choose to inherit from `OktaLoggerDestinationBase`, than you need to implement `log()` method in order to make it work. You can use `stringValue()` method to receive default log message string representation. Please, refer to [OktaLoggerConsoleLogger](OktaLogger/OktaLoggerConsoleLogger.swift) as an example of logger destination implementation.
+
+## OktaAnalytics
+
+![Analytics Logger Design](https://user-images.githubusercontent.com/491437/192922456-1d78ad47-8c03-4e97-8260-d08375ee54a8.svg)
+
+`OktaAnalytics` is a pod that's useful to track `Analytics`, right now we are supporting `AppCenter` and dependent on `OktaLogger` framework.
+  OktaAnalytics has functions to add, remove, purge providers and trackevent functions.
+ Steps to use `OktaAnalytics` 
+ -  Client have to implement `AnalyticsProviderProtocol` and provide information about provider (or) use create `AppCenterAnalyticsProvider` instance by providing `AppCenterAnalytics.Analytics.Type` with `init`
+    if client is implementing `AnalyticsProviderProtocol` protocol, `func trackEvent(_ eventName: String, withProperties: [String: String]?)` has to be overridden and add tracking event calls of provider by the client.
+ - Add `AnalyticsProviderProtocol` type instance to `OktaAnalytics` using `addProvider(_: provider)` function 
+    ```swift
+     OktaAnalytics.addProvider(appCenterAnalyticsProvider)
+    ```
+ - Now the provider is added to `OktaAnalytics` and user can track the events using `trackEvent(eventName:, withProperties:)` to track events to the provider.
 
 ## Log levels
 
@@ -218,5 +220,66 @@ consoleLogger.level = .all
 ```
 
 ## Diagrams
-![Classes](docs/OktaLogger.png "OktaLogger Classes")
-![Sequence](docs/sequence.png "Operation Sequence")
+```mermaid
+classDiagram
+OktaLogger *-- OktaLoggerDestinationBase : contains
+OktaLoggerDestinationBase .. OktaLogLevel
+
+class OktaLogger {
+  var main: OktaLogger? static instance
+  let destinations: [string:OktaLoggerDestinationProtocol]
+  init(destinations: [OktaLoggerDestinationProtocol])
+  log(level:eventName:message:properties:file:line:function)
+
+  debug(eventName:message:properties)
+  info(eventName:message:properties)
+  warning(eventName:message:properties)
+  uiEvent(eventName:message:properties)
+  error(eventName:message:properties)
+}
+
+class OktaLoggerDestinationBase {
+  let identifier: String
+  var logLevel: OktaLogLevel
+  log(level:eventName:message:properties:file:line:function)
+}
+
+class OktaLogLevel {
+  static let off
+  static let debug
+  static let info
+  static let warning
+  static let uiEvent
+  static let error
+  static let all
+}
+```
+
+```mermaid
+sequenceDiagram
+participant Application
+participant OktaLogger
+participant ConsoleDestination
+participant FileDestination
+participant FirebaseDestination
+participant OktaLoggerAnalytics
+participant AppCenter
+
+Application->>Application: Create destinations\n(console, file, firebase)
+Application->>OktaLogger: Create OktaLogger instance\nwith destinations
+Application->>OktaLogger: logError(event, message, data)
+OktaLogger->>ConsoleDestination: logError()
+ConsoleDestination->>ConsoleDestination: Log to console + IDE
+OktaLogger->>FileDestination: logError()
+FileDestination->>FileDestination: Write log entry to file
+OktaLogger->>FirebaseDestination: logError()
+FirebaseDestination->>FirebaseDestination: recordNonFatal(error)
+
+Application->>OktaLogger: logDebug("network request")
+OktaLogger->>ConsoleDestination: log to console + IDE
+OktaLogger->>OktaLogger: Skip destinations\nwithout level: .debug
+
+Application->>OktaLoggerAnalytics: trackEvent(event, properties)
+OktaLoggerAnalytics->>AppCenter: trackEvent(event, properties)
+OktaLoggerAnalytics-->>OktaLogger: log(_: _: _)
+```

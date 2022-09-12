@@ -30,7 +30,7 @@ let package = Package(
             targets: ["InstabugLogger"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Instabug/Instabug-SP", .upToNextMajor(from: "10.7.0")),
+        .package(url: "https://github.com/Instabug/Instabug-SP", .upToNextMajor(from: "11.2.0")),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "8.0.0")),
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", .upToNextMajor(from: "3.6.0"))
     ],

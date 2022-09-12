@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Instabug/Instabug-SP",
       "state" : {
-        "revision" : "498b2bb7dd418c8faf24f41ed20c48a3de977a7e",
-        "version" : "10.13.1"
+        "revision" : "bce2d235b194736a7939a3cbe3cb3211844b05a8",
+        "version" : "11.2.0"
       }
     },
     {

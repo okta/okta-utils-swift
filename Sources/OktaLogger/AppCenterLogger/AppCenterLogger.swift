@@ -10,7 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+#if canImport(AppCenterAnalytics)
 import AppCenterAnalytics
+#endif
 import OktaLogger
 
 /**
@@ -18,6 +20,7 @@ import OktaLogger
  */
 class AppCenterLogger: OktaLoggerDestinationBase {
     override open func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
+        #if canImport(AppCenterAnalytics)
         switch level {
         case .error:
             guard let propertiesStrings = properties as? [String: String] else {
@@ -32,5 +35,6 @@ class AppCenterLogger: OktaLoggerDestinationBase {
             }
             Analytics.trackEvent(eventName, withProperties: propertiesStrings)
         }
+        #endif
     }
 }

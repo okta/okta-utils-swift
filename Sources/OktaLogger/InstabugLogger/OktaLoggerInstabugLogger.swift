@@ -10,7 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+#if canImport(Instabug)
 import Instabug
+#endif
 #if SWIFT_PACKAGE
 import LoggerCore
 #endif
@@ -18,6 +20,7 @@ import LoggerCore
 open class OktaLoggerInstabugLogger: OktaLoggerDestinationBase {
 
     override open func log(level: OktaLoggerLogLevel, eventName: String, message: String?, properties: [AnyHashable: Any]?, file: String, line: NSNumber, funcName: String) {
+        #if canImport(Instabug)
         guard Instabug.enabled else {
             return
         }
@@ -45,6 +48,7 @@ open class OktaLoggerInstabugLogger: OktaLoggerDestinationBase {
         default:
             return
         }
+        #endif
     }
 
     override open func stringValue(level: OktaLoggerLogLevel, eventName: String, message: String?, file: String, line: NSNumber, funcName: String) -> String {

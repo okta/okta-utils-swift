@@ -1,3 +1,5 @@
+require 'cocoapods-catalyst-support'
+
 platform :ios, '11.0'
 use_modular_headers!
 
@@ -15,4 +17,18 @@ target 'OktaLoggerDemoApp' do
     target 'OktaLoggerTests' do
       inherit! :search_paths
     end
+end
+
+# Configure your macCatalyst dependencies
+catalyst_configuration do
+	# Uncomment the next line for a verbose output
+	verbose!
+
+	ios 'Instabug' # This dependency will only be available for iOS
+	macos 'AppCenter' # This dependency will only be available for macOS
+end
+
+# Configure your macCatalyst App
+post_install do |installer|
+	installer.configure_catalyst
 end

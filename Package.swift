@@ -32,7 +32,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/Instabug/Instabug-SP", .upToNextMajor(from: "11.2.0")),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "8.0.0")),
-        .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", .upToNextMajor(from: "3.6.0"))
+        .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", .upToNextMajor(from: "3.6.0")),
+        .package(url: "https://github.com/microsoft/appcenter-sdk-apple.git", .upToNextMajor(from: "4.0.0"))
     ],
     targets: [
         .target(
@@ -41,7 +42,7 @@ let package = Package(
                 .target(name: "FileLogger"),
                 .target(name: "FirebaseCrashlyticsLogger"),
                 .target(name: "InstabugLogger"),
-                .target(name: "LoggerCore")
+                .target(name: "LoggerCore"),
             ],
             exclude: ["AppCenterLogger",
                       "FileLoggers",

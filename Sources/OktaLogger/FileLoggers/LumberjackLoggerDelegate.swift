@@ -49,7 +49,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      */
     @objc
     func directoryPath() -> String? {
-        let path: String? = self.fileLogger.currentLogFileInfo?.filePath
+        let path: String? = fileLogger.currentLogFileInfo?.filePath
         return path
     }
 
@@ -61,8 +61,8 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     */
     @objc
     func getLogs() -> [Data] {
-        self.fileLogger.flush()
-        return self.getLogPaths().compactMap { url in
+        fileLogger.flush()
+        return getLogPaths().compactMap { url in
             try? Data(contentsOf: url, options: Data.ReadingOptions.mappedIfSafe)
         }
     }
@@ -103,9 +103,9 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         if !logsCanBePurged() {
             return
         }
-        self.fileLogger.flush()
-        self.fileLogger.rollLogFile {
-            for info in self.fileLogger.logFileManager.unsortedLogFileInfos {
+        fileLogger.flush()
+        fileLogger.rollLogFile { [fileLogger] in
+            for info in fileLogger.logFileManager.unsortedLogFileInfos {
                 try? FileManager.default.removeItem(atPath: info.filePath)
             }
         }
@@ -135,6 +135,6 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      Remove all Loggers during deallocate
      */
     deinit {
-        DDLog.remove(self.fileLogger)
+        DDLog.remove(fileLogger)
     }
 }

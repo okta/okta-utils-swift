@@ -12,7 +12,7 @@
 import UIKit
 import OktaLogger
 
-protocol LoggerDemoViewControllerProtocol: class {
+protocol LoggerDemoViewControllerProtocol: AnyObject {
     func refreshUI()
     func browseFileLogs(_ logs: String)
 }

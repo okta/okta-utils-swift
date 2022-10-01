@@ -104,7 +104,7 @@ Destination is an entity which perform log operation according to its implementa
 1. [Console (OktaLoggerConsoleLogger)](#console-destination)
 2. [File (OktaLoggerFileLogger)](#file-destination)
 3. [Firebase (OktaLoggerFirebaseCrashlyticsLogger)](#firebase-crashlytics-destination)
-4. [AppCenter (AppCenterLogger)](#app-center-destination)
+4. [Instabug (OktaLoggerInstabugLogger)](#instabug-destination)
 
 All of the default logging destinations are thread-safe and could be used from any thread.
 
@@ -116,17 +116,17 @@ Each destination also has `defaultProperties` parameter. This is key-value struc
 
 ### Console destination
 
-Related class - [OktaLoggerConsoleLogger](OktaLogger/OktaLoggerConsoleLogger.swift).  
-This destination is using `os_log` function to print log messages to the console. It does not contain any 3rd party dependencies and mainly used during the XCode debug sessions.
+Related class - [OktaLoggerConsoleLogger](Sources/OktaLogger/OktaLoggerConsoleLogger.swift).  
+This destination is using `os_log` function to print log messages to the console. It does not contain any 3rd party dependencies and mainly used during the Xcode debug sessions.
 
 ### File destination
 
-Related class - [OktaLoggerFileLogger](OktaLogger/FileLoggers/OktaLoggerFileLogger.swift).  
+Related class - [OktaLoggerFileLogger](Sources/OktaLogger/FileLoggers/OktaLoggerFileLogger.swift).  
 The purpose of this destination is storing logs on the disk.  
 There are several features available:
 
 - Writing logs to filesystem in the specified location;
-- Configure amount of logs that should be collected and the rolling policy (see [OktaLoggerFileLoggerConfig](OktaLogger/FileLoggers/OktaLoggerFileLoggerConfig.swift));
+- Configure amount of logs that should be collected and the rolling policy (see [OktaLoggerFileLoggerConfig](Sources/OktaLogger/FileLoggers/OktaLoggerFileLoggerConfig.swift));
 - Retrieve log data and log files paths;
 - Purge existing logs.
 
@@ -134,7 +134,7 @@ File logging destination is using [CocoaLumberjack](https://github.com/CocoaLumb
 
 ### Firebase Crashlytics destination
 
-Related class - [OktaLoggerFirebaseCrashlyticsLogger](OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift).  
+Related class - [OktaLoggerFirebaseCrashlyticsLogger](Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift).  
 This destination is using FirebaseCrashlytics SDK to log messages, so they can be accessed from Firebase console.  
 There are few important features and restrictions in this destination:
 
@@ -150,7 +150,7 @@ This destination is using [Firebase Crashlytics SDK](https://github.com/firebase
 ### Instabug destination
 
 Related class -
-[OktaLoggerInstabugLogger](OktaLogger/InstabugLogger/OktaLoggerInstabugLogger.swift).  
+[OktaLoggerInstabugLogger](Sources/OktaLogger/InstabugLogger/OktaLoggerInstabugLogger.swift).  
 This destination uses the Instabug SDK to send events, so they can be accessed from the Instabug console in bug report or improvement suggestion.
 There are a few important features and restrictions in this destination:
 
@@ -173,7 +173,7 @@ This destination is using [Instabug iOS SDK](https://github.com/Instabug/Instabu
 
 If you want to create your custom destination it is recommended to inherit it from `OktaLoggerDestinationBase` class, as this class implements some basic functionality. Hovewer, the only requirement for destinations is to conform to `OktaLoggerDestinationProtocol`.
 
-If you choose to inherit from `OktaLoggerDestinationBase`, than you need to implement `log()` method in order to make it work. You can use `stringValue()` method to receive default log message string representation. Please, refer to [OktaLoggerConsoleLogger](OktaLogger/OktaLoggerConsoleLogger.swift) as an example of logger destination implementation.
+If you choose to inherit from `OktaLoggerDestinationBase`, than you need to implement `log()` method in order to make it work. You can use `stringValue()` method to receive default log message string representation. Please, refer to [OktaLoggerConsoleLogger](Sources/OktaLogger/OktaLoggerConsoleLogger.swift) as an example of logger destination implementation.
 
 ## OktaAnalytics
 

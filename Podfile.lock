@@ -128,7 +128,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   Instabug: 2153fb2bc805bca730ce97251e3dc6cd04864171
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  OktaAnalytics: fc9c038258ccb56c202fb02376ba7345a52dd485
+  OktaAnalytics: 691bfd30b0cf79acc5a8dd7c5e814d7572cf33c0
   OktaLogger: 7788647b3748015cc367e3b767d40b0c9e3a391a
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   SwiftLint: 32ee33ded0636d0905ef6911b2b67bbaeeedafa5

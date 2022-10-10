@@ -184,6 +184,7 @@ If you choose to inherit from `OktaLoggerDestinationBase`, than you need to impl
  Steps to use `OktaAnalytics` 
  -  Client have to implement `AnalyticsProviderProtocol` and provide information about provider (or) use create `AppCenterAnalyticsProvider` instance by providing `AppCenterAnalytics.Analytics.Type` with `init`
     if client is implementing `AnalyticsProviderProtocol` protocol, `func trackEvent(_ eventName: String, withProperties: [String: String]?)` has to be overridden and add tracking event calls of provider by the client.
+ - If client use `AppCenterAnalyticsProvider`, needs to register/start services using `start(withAppSecret appSecret:, services:)`
  - Add `AnalyticsProviderProtocol` type instance to `OktaAnalytics` using `addProvider(_: provider)` function 
     ```swift
      OktaAnalytics.addProvider(appCenterAnalyticsProvider)

@@ -19,7 +19,6 @@ import AppCenterAnalytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     let appCenterAnalyticsProvider: AnalyticsProviderProtocol = {
-        AppCenter.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
         let logger = OktaLogger()
         logger.addDestination(
             OktaLoggerConsoleLogger(
@@ -28,7 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 defaultProperties: nil
             )
         )
-        return AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
+        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
+        appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
+        return appCenterAnalyticsProvider
     }()
 
     var timer: Timer?

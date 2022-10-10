@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaAnalytics"
-  s.version          = "1.0.0"
+  s.version          = "1.0.1"
   s.summary          = "Implementation of Analytics logger destination"
   s.description      = "Implementation of Analytics logger destination. Requires OktaLogger/Core"
   s.homepage         = "https://github.com/okta/okta-logger-swift"

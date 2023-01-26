@@ -38,7 +38,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
         case .debug:
             return .debug
         case .info, .uiEvent:
-             return .info
+             return .default
         case .error, .warning:
             return .error
         default:

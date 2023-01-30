@@ -16,6 +16,10 @@ commands:
     description: "Run Swiftlint"
     steps:
       - run: swiftlint
+  pods:
+    description: "Cocoapods install"
+    steps:
+      - run: pod install
 
 jobs:
   test:
@@ -24,7 +28,7 @@ jobs:
       - checkout
       - install_dependencies
       - swiftlint
-      - pod install
+      - pods
       - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14"
 
 workflows:

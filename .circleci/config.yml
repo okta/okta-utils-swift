@@ -11,6 +11,11 @@ commands:
     steps:
       - run: gem install xcpretty
       - run: gem install cocoapods
+      - run: gem install swiftlint
+  "run swiftlint":
+    description: "Run Swiftlint"
+    steps:
+      - run: swiftlint
 
 jobs:
   test:

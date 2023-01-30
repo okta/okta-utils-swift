@@ -12,7 +12,7 @@ commands:
       - run: gem install xcpretty
       - run: gem install cocoapods
 
-run:
+jobs:
   test:
     executor: xcode
     steps:

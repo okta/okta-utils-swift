@@ -12,7 +12,7 @@ commands:
       - run: gem install xcpretty
       - run: gem install cocoapods
       - run: gem install swiftlint
-  "run swiftlint":
+  swiftlint:
     description: "Run Swiftlint"
     steps:
       - run: swiftlint
@@ -23,7 +23,7 @@ jobs:
     steps:
       - checkout
       - install_dependencies
-      - run swiftlint
+      - swiftlint
       - pod install
       - xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14"
 

@@ -25,7 +25,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
                                            file: file, line: line, funcName: funcName)
         // translate log level into relevant console type level
         let type = self.consoleLogType(level: level)
-        os_log("%s", type: type, logMessage)
+        os_log("%{public}s", type: type, logMessage)
     }
 
     // MARK: Private + Internal
@@ -38,7 +38,7 @@ public class OktaLoggerConsoleLogger: OktaLoggerDestinationBase {
         case .debug:
             return .debug
         case .info, .uiEvent:
-             return .info
+             return .default
         case .error, .warning:
             return .error
         default:

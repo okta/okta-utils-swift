@@ -1,0 +1,36 @@
+version: 2.1
+
+executors:
+  xcode:
+    macos:
+      xcode: 14.2.0
+
+commands:
+  install_dependencies:
+    description: "Install Dependencies"
+    steps:
+      - run: gem install xcpretty
+      - run: gem install cocoapods
+  pods:
+    description: "Cocoapods install"
+    steps:
+      - run: pod install
+  test:
+    description: "Run tests"
+    steps:
+      - run: xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14"
+
+jobs:
+  test:
+    executor: xcode
+    steps:
+      - checkout
+      - install_dependencies
+      - pods
+      - test
+
+workflows:
+  test:
+    jobs:
+      - test
+

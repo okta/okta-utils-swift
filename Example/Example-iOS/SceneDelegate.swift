@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import UIKit
+import OktaAnalytics
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -21,5 +22,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let _ = (scene as? UIWindowScene) else { return }
     }
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5")) }
+    }
 
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5")) }
+    }
+
+    func sceneWillResignActive(_ scene: UIScene) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneWillResignActive", value: "5")) }
+    }
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5")) }
+    }
 }

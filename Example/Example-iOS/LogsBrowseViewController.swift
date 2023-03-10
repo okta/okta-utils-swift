@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import UIKit
+import OktaAnalytics
 
 class LogsBrowseViewController: UIViewController {
 
@@ -20,5 +21,6 @@ class LogsBrowseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.text = logs.isEmpty ? "Logs are empty" : logs
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "LogsBrowseViewController.viewDidLoad", value: "4")) }
     }
 }

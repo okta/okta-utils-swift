@@ -37,6 +37,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
+        OktaAnalytics.startScenario("Application") { $0?.send(Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")) }
         return true
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "AppDelegate.applicationDidEnterBackground", value: "5")) }
+    }
+
+    func applicationWillEnterForeground(_ application:UIApplication) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "AppDelegate.applicationWillEnterForeground", value: "6")) }
+    }
+
+    func applicationWillTerminate(_ application:UIApplication) {
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "AppDelegate.applicationWillTerminate", value: "7")) }
+        OktaAnalytics.endSceanrio("Application")
     }
 }

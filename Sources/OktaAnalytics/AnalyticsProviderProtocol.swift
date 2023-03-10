@@ -11,37 +11,28 @@
  */
 
 import Foundation
+import Combine
 import OktaLogger
 
 /**
  Protocol: Client needs to implement this protocol and provide the information about provider
  */
-@objc
 public protocol AnalyticsProviderProtocol: AnyObject {
 
-    /// provider name, eg: Firebase, AppCenter etc.
+    /// The name of the provider, e.g. Firebase, AppCenter, etc.
     var name: String { get set }
-    /// logger to post logs on it's destination
+
+    /// The logger to post logs on its destination
     var logger: OktaLoggerProtocol? { get set }
-    /// default properties that post with all events
+
+    /// The default properties that are posted with all events
     var defaultProperties: [String: String]? { get set }
-    /// Tracks event to the provider
-    func trackEvent(_ eventName: String, withProperties: [String: String]?)
+
+    /// Tracks an event to the provider
+    func trackEvent(_ eventName: EventName, withProperties: [String: String]?)
 }
 
 public extension AnalyticsProviderProtocol {
     var defaultProperties: [String: String]? { nil }
     var logger: OktaLoggerProtocol? { nil }
-}
-
-
-/// TODO: change to public when start working on phase II
-private extension AnalyticsProviderProtocol {
-    func trackOperation(_ operation: TrackedOperation) { }
-}
-
-private protocol TrackedOperation {
-    func start()
-    func pause()
-    func stop()
 }

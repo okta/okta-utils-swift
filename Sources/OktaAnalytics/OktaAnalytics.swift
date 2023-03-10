@@ -10,6 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import Foundation
+import Combine
 import OktaLogger
 
 /**
@@ -20,6 +21,7 @@ public final class OktaAnalytics: NSObject {
 
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
+    private static var scenarios: [EventName: EventScenario]? = [:]
 
     /**
      Adds provider to collection
@@ -102,10 +104,83 @@ public final class OktaAnalytics: NSObject {
      - eventName: `event name` provided by client
      - withProperties: `properties/metadata` associated with event
      */
-    public static func trackEvent(_ eventName: String, withProperties: [String: String]?) {
+    public static func trackEvent(_ eventName: String, withProperties: Properties) {
         lock.readLock()
         defer { lock.unlock() }
         providers.forEach { $1.trackEvent(eventName, withProperties: withProperties) }
+    }
+
+    /**
+        Starts an event scenario with the specified name.
+
+        - Parameters:
+           - eventName: The name of the event scenario to start.
+           - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
+        */
+    public static func startScenario(_ eventName: EventName, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
+        lock.readLock()
+        defer { lock.unlock() }
+        if let scenario = Self.scenarios?[eventName],
+           !scenario.isEventExpiredOrInterrupted {
+            Self.providers.forEach {
+                $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) already in flight", properties: nil, file: #file, line: #line, funcName: #function)
+            }
+            propertySubject(scenario.eventStream)
+            return
+        }
+        Self.providers.forEach {
+            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) started", properties: nil, file: #file, line: #line, funcName: #function)
+        }
+        let scenario = EventScenario(eventName) { Self.trackEvent(eventName, withProperties: $0) }
+        Self.scenarios?[eventName] = scenario
+        propertySubject(scenario.start())
+    }
+
+    /**
+        add a property scenario with the values.
+
+        - Parameters:
+           - eventName: The name of the event scenario .
+           - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
+        */
+    public static func updateScenario(_ eventName: EventName, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
+        lock.readLock()
+        defer { lock.unlock() }
+        guard let scenario = Self.scenarios?[eventName] else {
+            assert(false, "startScenario should be called before updateScenario")
+            propertySubject(nil)
+            return
+        }
+        Self.providers.forEach {
+            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) Updated", properties: nil, file: #file, line: #line, funcName: #function)
+        }
+        propertySubject(scenario.eventStream)
+    }
+
+    /**
+        end scenario
+
+        - Parameters:
+           - eventName: The name of the event scenario .
+        */
+    public static func endSceanrio(_ eventName: String) {
+        lock.readLock()
+        defer { lock.unlock() }
+        Self.providers.forEach {
+            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) ended", properties: nil, file: #file, line: #line, funcName: #function)
+        }
+        Self.scenarios?[eventName]?.eventStream?.send(completion: .finished)
+        Self.scenarios?[eventName] = nil
+    }
+
+    /// Dispose Scenarios associated with the mprovider
+    public static func disposeAllScenarios() {
+        lock.readLock()
+        defer { lock.unlock() }
+        Self.scenarios?.values.forEach {
+            $0.dispose()
+        }
+        Self.scenarios?.removeAll()
     }
 
     /**

@@ -31,7 +31,9 @@ class EventScenario {
     // User defaults object to store properties
     private let userDefaults: UserDefaults
 
-    private let eventDateKey: String = "EventDate"
+    private var eventDateKey: String {
+        "EventDate" + eventName
+    }
 
     private let scenarioCompletion: (Properties) -> Void?
 
@@ -53,17 +55,19 @@ class EventScenario {
     func start() -> PassthroughSubject<Property, Never>? {
 
         // check if previous event exists in memory without ended
-        if var properties = userDefaults.value(forKey: eventName) as? Properties,
-           let eventDate = userDefaults.value(forKey: eventDateKey) as? TimeInterval {
+        if let properties = userDefaults.value(forKey: eventName) as? Properties,
+           let eventDate = userDefaults.value(forKey: eventDateKey) as? Date {
+            var properties = properties
             var eventStatus = EventScenario.Status.expired
-            if Calendar.current.dateComponents([.second], from: Date(timeIntervalSince1970: eventDate), to: Date()).second ?? 0 > 5 /* secs */ {
+            if eventDate.distance(to: Date()) < 5 * 60 /* secs */ {
                 eventStatus = .interrupted
             }
 
             properties?[scenarioStatusPropertyKey] = eventStatus.rawValue
-            properties?[durationMSPropertyKey] = "\(Calendar.current.dateComponents([.second], from: Date(timeIntervalSince1970: eventDate), to: Date()).second ?? 0 * 1000)"
+            properties?[durationMSPropertyKey] = "\(eventDate.distance(to: Date()) * 1000)"
             scenarioCompletion(properties)
             userDefaults.removeObject(forKey: eventName)
+            userDefaults.removeObject(forKey: eventDateKey)
             eventStream = nil
         }
 
@@ -75,7 +79,7 @@ class EventScenario {
         time = Date()
 
         // Save Event date to use next time for pending events that was not sent to provider
-        properties?[eventDateKey] = "\(time.timeIntervalSince1970)"
+        userDefaults.set(time, forKey: eventDateKey)
 
         cancellable = eventStream?
             .sink { [weak self] completion in
@@ -85,7 +89,6 @@ class EventScenario {
                     self.properties?[self.scenarioStatusPropertyKey] = EventScenario.Status.completed.rawValue
                     self.end()
                 case .failure:
-                    self.properties?[self.durationMSPropertyKey] = EventScenario.Status.interrupted.rawValue
                     self.end()
                 }
             } receiveValue: { [weak self] property in

@@ -10,32 +10,54 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import UIKit
+import Firebase
+import OktaLogger
 import OktaAnalytics
+import AppCenterAnalytics
+
+let scenario = Scenario(name: "Application", successSuffix: "Launched", failureSuffix: "Closed")
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    let appCenterAnalyticsProvider: AnalyticsProviderProtocol = {
+        let logger = OktaLogger()
+        logger.addDestination(
+            OktaLoggerConsoleLogger(
+                identifier: "com.okta.loggerDemo.console",
+                level: OktaLoggerLogLevel.debug,
+                defaultProperties: nil
+            )
+        )
+        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
+        appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
+        return appCenterAnalyticsProvider
+    }()
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        FirebaseApp.configure()
+        OktaAnalytics.addProvider(appCenterAnalyticsProvider)
+        OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
+        OktaAnalytics.startScenario(scenario) { $0?.send(Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")) }
         guard let _ = (scene as? UIWindowScene) else { return }
     }
-    
     func sceneWillEnterForeground(_ scene: UIScene) {
-        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5")) }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5")) }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneWillResignActive", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneWillResignActive", value: "5")) }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5")) }
     }
 }

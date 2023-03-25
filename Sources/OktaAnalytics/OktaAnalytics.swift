@@ -117,23 +117,20 @@ public final class OktaAnalytics: NSObject {
            - eventName: The name of the event scenario to start.
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func startScenario(_ eventName: EventName, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
+    public static func startScenario(_ scenario: Scenario, _ propertySubject: (PassthroughSubject<Property, SceanrioError>?) -> Void) {
+
         lock.readLock()
         defer { lock.unlock() }
-        if let scenario = Self.scenarios?[eventName],
-           !scenario.isEventExpiredOrInterrupted {
-            Self.providers.forEach {
-                $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) already in flight", properties: nil, file: #file, line: #line, funcName: #function)
-            }
-            propertySubject(scenario.eventStream)
-            return
+
+        let scenario = EventScenario(scenario) {
+            Self.trackEvent($0.eventName, withProperties: $0.properties)
         }
-        Self.providers.forEach {
-            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) started", properties: nil, file: #file, line: #line, funcName: #function)
-        }
-        let scenario = EventScenario(eventName) { Self.trackEvent(eventName, withProperties: $0) }
-        Self.scenarios?[eventName] = scenario
+        Self.scenarios?[scenario.name] = scenario
         propertySubject(scenario.start())
+
+        Self.providers.forEach {
+            $1.logger?.log(level: .debug, eventName: scenario.name, message: "\($0) Scenario \(scenario.name) already in flight", properties: nil, file: #file, line: #line, funcName: #function)
+        }
     }
 
     /**
@@ -143,34 +140,18 @@ public final class OktaAnalytics: NSObject {
            - eventName: The name of the event scenario .
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func updateScenario(_ eventName: EventName, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
+    public static func updateScenario(_ scenario: Scenario, _ propertySubject: (PassthroughSubject<Property, SceanrioError>?) -> Void) {
         lock.readLock()
         defer { lock.unlock() }
-        guard let scenario = Self.scenarios?[eventName] else {
+        guard let scenario = Self.scenarios?[scenario.name] else {
             assert(false, "startScenario should be called before updateScenario")
             propertySubject(nil)
             return
         }
         Self.providers.forEach {
-            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) Updated", properties: nil, file: #file, line: #line, funcName: #function)
+            $1.logger?.log(level: .debug, eventName: scenario.name, message: "\($0) Scenario \(scenario.name) Updated", properties: nil, file: #file, line: #line, funcName: #function)
         }
         propertySubject(scenario.eventStream)
-    }
-
-    /**
-        end scenario
-
-        - Parameters:
-           - eventName: The name of the event scenario .
-        */
-    public static func endSceanrio(_ eventName: String) {
-        lock.readLock()
-        defer { lock.unlock() }
-        Self.providers.forEach {
-            $1.logger?.log(level: .debug, eventName: eventName, message: "\($0) Scenario \(eventName) ended", properties: nil, file: #file, line: #line, funcName: #function)
-        }
-        Self.scenarios?[eventName]?.eventStream?.send(completion: .finished)
-        Self.scenarios?[eventName] = nil
     }
 
     /// Dispose Scenarios associated with the mprovider
@@ -226,4 +207,9 @@ private extension OktaAnalytics {
 
         private var lock: pthread_rwlock_t
     }
+}
+
+public enum SceanrioError: Error {
+    case reason(Property)
+    case never
 }

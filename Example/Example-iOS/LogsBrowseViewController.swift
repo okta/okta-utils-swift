@@ -21,6 +21,6 @@ class LogsBrowseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         textView.text = logs.isEmpty ? "Logs are empty" : logs
-        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "LogsBrowseViewController.viewDidLoad", value: "4")) }
+        OktaAnalytics.updateScenario(scenario) { [.update(Property(key: "LogsBrowseViewController.viewDidLoad", value: "4"))] }
     }
 }

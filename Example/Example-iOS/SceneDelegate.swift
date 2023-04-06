@@ -15,7 +15,7 @@ import OktaLogger
 import OktaAnalytics
 import AppCenterAnalytics
 
-let scenario = Scenario(name: "Application", successSuffix: "Launched", failureSuffix: "Closed")
+let scenario = "Application"
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -42,22 +42,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         FirebaseApp.configure()
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
-        OktaAnalytics.startScenario(scenario) { $0?.send(Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")) }
+        OktaAnalytics.startScenario(scenario) { [.start, .update(Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1"))] }
         guard let _ = (scene as? UIWindowScene) else { return }
     }
     func sceneWillEnterForeground(_ scene: UIScene) {
-        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { [.update(Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5"))] }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { [.update(Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5"))] }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneWillResignActive", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { [.update(Property(key: "SceneDelegate.sceneWillResignActive", value: "5"))] }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        OktaAnalytics.updateScenario(scenario) { $0?.send(Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5")) }
+        OktaAnalytics.updateScenario(scenario) { [.update(Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5"))] }
     }
 }

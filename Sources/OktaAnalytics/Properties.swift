@@ -15,6 +15,9 @@ import Foundation
 /// The EventName typealias is an alias for `String`
 public typealias EventName = String
 
+/// The EventName typealias is an alias for `String`
+public typealias ScenarioName = String
+
 /// Properties typealias is an alias for an optional dictionary of `String` keys and `String` values.
 public typealias Properties = [String: String]?
 
@@ -32,17 +35,9 @@ public struct Property {
     }
 }
 
-public struct Scenario: Codable {
-
-    public typealias Name = String
-
-    let name: Name
-    let successSuffix: String
-    let failureSuffix: String
-
-    public init(name: Name, successSuffix: String, failureSuffix: String) {
-        self.name = name
-        self.successSuffix = successSuffix
-        self.failureSuffix = failureSuffix
-    }
+public enum ScenarioState {
+    case start(name: ScenarioName)
+    case end(eventDisplayName: String)
+    case update(propety: Property)
+    case update(properties: [Property])
 }

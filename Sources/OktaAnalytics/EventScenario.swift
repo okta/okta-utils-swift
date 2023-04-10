@@ -24,12 +24,19 @@ extension Date {
 class EventScenario {
 
     // eventName is a constant property, initialized with the value passed to the init method
-    var name: String
+    private let scenario: Scenario
+
+    var name: String {
+        scenario.name
+    }
 
     // properties is a dictionary of strings, initialized as an empty dictionary
     private var properties: Properties = [:]
     // time is a property of type Date, initialized as the current date
     private var time = Date()
+
+    // eventStream is a PassthroughSubject, which is private set
+    private(set) var eventStream: PassthroughSubject<Property, SceanrioError>?
 
     // cancellable is an AnyCancellable, which is private
     private var cancellable: AnyCancellable?
@@ -38,52 +45,30 @@ class EventScenario {
     private let userDefaults: UserDefaults
 
     private var eventDateKey: String {
-        "EventDate"
+        "EventDate" + scenario.name
     }
+
+    private let scenarioCompletion: (EventData) -> Void?
 
     private let scenarioStatusPropertyKey = "ScenarioStatus"
     private let durationMSPropertyKey = "DurationMS"
 
-    private var isEventExpiredOrInterrupted: Bool {
+    var isEventExpiredOrInterrupted: Bool {
         time.distance(to: Date()) > 5.0 * 60 /* secs */
     }
 
-    private let scenarioCompletion: (EventData) -> Void
-
-    private(set) lazy var scenarioPassThrough: ([ScenarioState]) -> Void = { [weak self] scenarios in
-        guard let `self` = self else { return }
-        scenarios.forEach {
-            switch $0 {
-            case .start:
-                self.start()
-            case .update(let property):
-                guard !self.isEventExpiredOrInterrupted else {
-                    return
-                }
-                self.properties?[property.key] = property.value
-                self.userDefaults.set(self.properties, forKey: self.name)
-            case .finished(eventDisplayName: let displayName):
-                self.properties?[self.durationMSPropertyKey] = "\(self.time.distance(to: Date()) * 1000)"
-                self.scenarioCompletion(EventData(displayName, self.properties))
-            case .error(eventDisplayName: let displayName):
-                self.properties?[self.durationMSPropertyKey] = "\(self.time.distance(to: Date()) * 1000)"
-                self.scenarioCompletion(EventData(displayName, self.properties))
-            }
-        }
-    }
-
     // Initializer which assigns the passed in name to the eventName property
-    init(_ name: ScenarioName, userDefaults: UserDefaults = UserDefaults.standard/*, _ scenarioPassThrough: @escaping (Scenario) -> Void*/, _ scenarioCompletion: @escaping (EventData) -> Void) {
-        self.name = name
+    init(_ scenario: Scenario, userDefaults: UserDefaults = UserDefaults.standard, _ scenarioCompletion: @escaping (EventData) -> Void) {
+        self.scenario = scenario
         self.userDefaults = userDefaults
         self.scenarioCompletion = scenarioCompletion
-//        self.scenarioPassThrough = scenarioPassThrough
     }
 
     // Method which starts the event stream, assigns the current time to the time property and sets up a sink to receive values
-    func start() {
+    func start() -> PassthroughSubject<Property, SceanrioError>? {
+
         // check if previous event exists in memory without ended
-        if var properties = userDefaults.value(forKey: name) as? Properties,
+        if var properties = userDefaults.value(forKey: scenario.name) as? Properties,
            let eventDate = userDefaults.value(forKey: eventDateKey) as? Date {
             var eventStatus = EventScenario.Status.expired
             if eventDate.distance(to: Date()) < 5 * 60 /* secs */ {
@@ -92,71 +77,62 @@ class EventScenario {
 
             properties?[scenarioStatusPropertyKey] = eventStatus.rawValue
             properties?[durationMSPropertyKey] = "\(eventDate.distance(to: Date()) * 1000)"
-//            scenarioCompletion(EventData(scenario.name + scenario.failureSuffix, properties))
-            userDefaults.removeObject(forKey: name)
+            scenarioCompletion(EventData(scenario.name + scenario.failureSuffix, properties))
+            userDefaults.removeObject(forKey: scenario.name)
             userDefaults.removeObject(forKey: eventDateKey)
         }
 
+        eventStream = PassthroughSubject()
         time = Date()
 
         // Save Event date to use next time for pending events that was not sent to provider
         userDefaults.set(time, forKey: eventDateKey)
+
+        cancellable = eventStream?
+            .sink { [weak self] completion in
+                guard let `self` = self else { return }
+                self.properties?[self.durationMSPropertyKey] = "\(self.time.distance(to: Date()) * 1000)"
+                switch completion {
+                case .finished:
+//                    self.properties?[self.scenarioStatusPropertyKey] = EventScenario.Status.completed.rawValue
+                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.successSuffix, self.properties))
+                case .failure(let error):
+                    if case let .reason(property) = error {
+                        self.properties?[property.key] = property.value
+                    }
+//                    self.properties?[self.scenarioStatusPropertyKey] = EventScenario.Status.completed.rawValue
+                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.failureSuffix, self.properties))
+                }
+
+                self.userDefaults.removeObject(forKey: self.scenario.name)
+                self.dispose()
+            } receiveValue: { [weak self] property in
+                guard let `self` = self, !self.isEventExpiredOrInterrupted else {
+                    self?.dispose()
+                    return
+                }
+                self.properties?[property.key] = property.value
+                self.userDefaults.set(self.properties, forKey: self.scenario.name)
+            }
+        return eventStream
     }
 
-//    // Method which starts the event stream, assigns the current time to the time property and sets up a sink to receive values
-//    func start() -> PassthroughSubject<Property, SceanrioError>? {
-//
-//        // check if previous event exists in memory without ended
-//        if var properties = userDefaults.value(forKey: scenario.name) as? Properties,
-//           let eventDate = userDefaults.value(forKey: eventDateKey) as? Date {
-//            var eventStatus = EventScenario.Status.expired
-//            if eventDate.distance(to: Date()) < 5 * 60 /* secs */ {
-//                eventStatus = .interrupted
-//            }
-//
-//            properties?[scenarioStatusPropertyKey] = eventStatus.rawValue
-//            properties?[durationMSPropertyKey] = "\(eventDate.distance(to: Date()) * 1000)"
-//            scenarioCompletion(EventData(scenario.name + scenario.failureSuffix, properties))
-//            userDefaults.removeObject(forKey: scenario.name)
-//            userDefaults.removeObject(forKey: eventDateKey)
-//        }
-//
-//        eventStream = PassthroughSubject()
-//        time = Date()
-//
-//        // Save Event date to use next time for pending events that was not sent to provider
-//        userDefaults.set(time, forKey: eventDateKey)
-//
-//        cancellable = eventStream?
-//            .sink { [weak self] completion in
-//                guard let `self` = self else { return }
-//                self.properties?[self.durationMSPropertyKey] = "\(self.time.distance(to: Date()) * 1000)"
-//                switch completion {
-//                case .finished:
-//                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.successSuffix, self.properties))
-//                case .failure(let error):
-//                    if case let .reason(property) = error {
-//                        self.properties?[property.key] = property.value
-//                    }
-//                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.failureSuffix, self.properties))
-//                }
-//
-//                self.userDefaults.removeObject(forKey: self.scenario.name)
-//                self.dispose()
-//            } receiveValue: { [weak self] property in
-//                guard let `self` = self, !self.isEventExpiredOrInterrupted else {
-//                    self?.dispose()
-//                    return
-//                }
-//                self.properties?[property.key] = property.value
-//                self.userDefaults.set(self.properties, forKey: self.scenario.name)
-//            }
-//        return eventStream
-//    }
+    // Method which calls the end method and sets the eventStream to nil
+    func dispose() {
+        cancellable?.cancel()
+        eventStream = nil
+    }
+
+    deinit {
+        cancellable?.cancel()
+        cancellable = nil
+    }
 }
 
 extension EventScenario {
     enum Status: String {
+//        case completed
+//        case failed
         case expired
         case interrupted
     }

@@ -26,7 +26,7 @@ class LoggerDemoViewController: UITableViewController, LoggerDemoViewControllerP
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.view = self
-        OktaAnalytics.updateScenario("Application") { [.update(Property(key: "LoggerDemoViewController.viewDidLoad", value: "3"))] }
+        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "LoggerDemoViewController.viewDidLoad", value: "3")) }
     }
 
     func refreshUI() {
@@ -68,7 +68,7 @@ class LoggerDemoViewController: UITableViewController, LoggerDemoViewControllerP
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "BrowseLocalLogs":
-            OktaAnalytics.updateScenario("Application") { [.update(Property(key: "LoggerDemoViewController.BrowseLocalLogs", value: "3"))] }
+            OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "LoggerDemoViewController.BrowseLocalLogs", value: "3")) }
             (segue.destination as? LogsBrowseViewController)?.logs = self.localLogs
         default:
             break

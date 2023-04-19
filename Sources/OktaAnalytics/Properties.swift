@@ -13,7 +13,7 @@
 import Foundation
 
 /// The EventName typealias is an alias for `String`
-public typealias EventName = String
+public typealias Name = String
 
 /// Properties typealias is an alias for an optional dictionary of `String` keys and `String` values.
 public typealias Properties = [String: String]?
@@ -32,17 +32,34 @@ public struct Property {
     }
 }
 
-public struct Scenario: Codable {
+public typealias ScenarioEvent = Event
 
-    public typealias Name = String
+public typealias ScenarioID = String
 
-    let name: Name
-    let successSuffix: String
-    let failureSuffix: String
+public struct Event: Hashable {
 
-    public init(name: Name, successSuffix: String, failureSuffix: String) {
+    public lazy var id: ScenarioID = {
+        "\(name)\(UUID().uuidString)"
+    }()
+
+    public let name: Name
+    public var properties: Properties
+
+    private(set) var date: Date
+
+    public init(name: Name) {
         self.name = name
-        self.successSuffix = successSuffix
-        self.failureSuffix = failureSuffix
+        properties = [:]
+        date = Date()
+    }
+
+    mutating func update(property: Property) {
+        properties?[property.key] = property.value
+    }
+
+    mutating func update(properties: Properties) {
+        properties?.forEach {
+            self.properties?[$0] = $1
+        }
     }
 }

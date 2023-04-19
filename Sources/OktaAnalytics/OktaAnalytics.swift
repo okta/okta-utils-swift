@@ -12,6 +12,7 @@
 import Foundation
 import Combine
 import OktaLogger
+import CoreData
 
 /**
  Analytics class for holding and tracking for different tracking provider
@@ -21,7 +22,11 @@ public final class OktaAnalytics: NSObject {
 
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
-    private static var scenarios: [EventName: EventScenario]? = [:]
+    private static var scenarios: [ScenarioID: EventScenario]? = [:]
+
+    static var coreDataStack: CoreDataStack = {
+        CoreDataStack(modelName: "OktaAnalytics")
+    }()
 
     /**
      Adds provider to collection
@@ -117,33 +122,33 @@ public final class OktaAnalytics: NSObject {
            - eventName: The name of the event scenario to start.
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func startScenario(_ scenario: Scenario, _ propertySubject: (PassthroughSubject<Property, SceanrioError>?) -> Void) {
+    public static func startScenario(_ scenarioName: Name, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) -> ScenarioID {
 
         lock.readLock()
         defer { lock.unlock() }
 
-        let scenario = EventScenario(scenario) {
-            Self.trackEvent($0.eventName, withProperties: $0.properties)
-        }
-        Self.scenarios?[scenario.name] = scenario
-        propertySubject(scenario.start())
+        var scenario = ScenarioEvent(name: scenarioName)
+        let eventScenario = EventScenario(scenario, managedContext: coreDataStack.managedContext)
+        Self.scenarios?[scenario.id] = eventScenario
+        propertySubject(eventScenario.start())
 
         Self.providers.forEach {
             $1.logger?.log(level: .debug, eventName: scenario.name, message: "\($0) Scenario \(scenario.name) already in flight", properties: nil, file: #file, line: #line, funcName: #function)
         }
+        return scenario.id
     }
 
     /**
-        add a property scenario with the values.
+        update a property scenario with the values.
 
         - Parameters:
-           - eventName: The name of the event scenario .
+           - scenarioID: unique sceario ID returned from `startScenario(_ , _)` .
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func updateScenario(_ scenario: Scenario, _ propertySubject: (PassthroughSubject<Property, SceanrioError>?) -> Void) {
+    public static func updateScenario(_ scenarioID: ScenarioID, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
         lock.readLock()
         defer { lock.unlock() }
-        guard let scenario = Self.scenarios?[scenario.name] else {
+        guard let scenario = Self.scenarios?[scenarioID] else {
             assert(false, "startScenario should be called before updateScenario")
             propertySubject(nil)
             return
@@ -154,7 +159,133 @@ public final class OktaAnalytics: NSObject {
         propertySubject(scenario.eventStream)
     }
 
-    /// Dispose Scenarios associated with the mprovider
+    /**
+        end sceanrio with ID. send properties to provider and clears local storage.
+
+        - Parameters:
+           - scenarioID: unique sceario ID returned from `startScenario(_ , _)` .
+           - eventDisplayName: event name to display on provider dashboard.
+        */
+    public static func endScenario(_ scenarioID: ScenarioID, eventDisplayName: Name) {
+        lock.readLock()
+        defer { lock.unlock() }
+
+        guard let scenario = Self.scenarios?[scenarioID] else {
+            assert(false, "No Scenario to end")
+            return
+        }
+
+        scenario.eventStream?.send(completion: .finished)
+
+        Self.trackEvent(eventDisplayName, withProperties: scenario.properties)
+        Self.scenarios?.removeValue(forKey: scenarioID)
+
+        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
+        scenarioFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
+        do {
+            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
+            for scenario in scenarios {
+                Self.coreDataStack.managedContext.delete(scenario)
+            }
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
+        Self.coreDataStack.managedContext.saveContext()
+
+        let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
+        scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
+        do {
+            let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
+            for scenarioProperty in scenarioProperties {
+                Self.coreDataStack.managedContext.delete(scenarioProperty)
+            }
+        } catch {
+            assert(false, "Failed to fetch scenario properties")
+        }
+        Self.coreDataStack.managedContext.saveContext()
+    }
+
+    /**
+        end sceanrio with scenario name. send all properties to provider and clears local storage.
+
+        - Parameters:
+           - name: scenario name
+        */
+    public static func endScenario(_ name: Name) {
+        lock.readLock()
+        defer { lock.unlock() }
+
+        func fetchProperties(_ scenarioName: Name) -> [String: String] {
+            var properties = [String: String]()
+            let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
+            scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
+            do {
+                let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
+                for scenarioProperty in scenarioProperties {
+                    if let key = scenarioProperty.key {
+                        properties[key] = scenarioProperty.value
+                    }
+                    Self.coreDataStack.managedContext.delete(scenarioProperty)
+                }
+            } catch {
+                assert(false, "Failed to fetch scenario properties")
+            }
+            Self.coreDataStack.managedContext.saveContext()
+            return properties
+        }
+
+        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
+        scenarioFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
+        do {
+            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
+            for scenario in scenarios {
+                if let displayName = scenario.displayName {
+                    Self.trackEvent(displayName, withProperties: fetchProperties(name))
+                }
+                Self.coreDataStack.managedContext.delete(scenario)
+            }
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
+        Self.coreDataStack.managedContext.saveContext()
+    }
+
+    /**
+        end sceanrio with scenario name. clears local storage.
+
+        - Parameters:
+           - name: scenario name
+        */
+    public static func disposeScenario(_ name: Name) {
+        lock.readLock()
+        defer { lock.unlock() }
+
+        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
+        scenarioFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
+        do {
+            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
+            for scenario in scenarios {
+                Self.coreDataStack.managedContext.delete(scenario)
+            }
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
+        Self.coreDataStack.managedContext.saveContext()
+
+        let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
+        scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
+        do {
+            let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
+            for scenarioProperty in scenarioProperties {
+                Self.coreDataStack.managedContext.delete(scenarioProperty)
+            }
+        } catch {
+            assert(false, "Failed to fetch scenario properties")
+        }
+        Self.coreDataStack.managedContext.saveContext()
+    }
+
+    /// Dispose Scenarios from local storage
     public static func disposeAllScenarios() {
         lock.readLock()
         defer { lock.unlock() }
@@ -162,6 +293,13 @@ public final class OktaAnalytics: NSObject {
             $0.dispose()
         }
         Self.scenarios?.removeAll()
+
+        do {
+            try Self.coreDataStack.managedContext.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: "Scenario")))
+            try Self.coreDataStack.managedContext.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: "ScenarioProperty")))
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
     }
 
     /**
@@ -207,9 +345,4 @@ private extension OktaAnalytics {
 
         private var lock: pthread_rwlock_t
     }
-}
-
-public enum SceanrioError: Error {
-    case reason(Property)
-    case never
 }

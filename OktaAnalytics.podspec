@@ -12,7 +12,8 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.static_framework = true
 
-  s.source_files = 'Sources/OktaAnalytics/**/*'
+  s.source_files = 'Sources/OktaAnalytics/**/*.{h,m,swift}'
+  s.resources = 'Sources/OktaAnalytics/CoreData/OktaAnalytics.xcdatamodeld'
   s.dependency 'AppCenter','4.3.0'
   s.dependency 'OktaLogger/Core', '~>1'
 end

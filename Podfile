@@ -14,6 +14,6 @@ target 'OktaLoggerDemoApp' do
     pod 'Firebase/Crashlytics', '10.4.0'
 
     target 'OktaLoggerTests' do
-      inherit! :search_paths
+      pod 'OktaAnalytics', :path => '.'
     end
 end

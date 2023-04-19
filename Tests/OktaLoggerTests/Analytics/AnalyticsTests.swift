@@ -10,4 +10,66 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import Foundation
+import XCTest
+
+@testable import OktaLogger
+#if SWIFT_PACKAGE
+@testable import LoggerCore
+#endif
+
+@testable import OktaAnalytics
+import CoreData
+import Combine
+
+class AnalyticsTests: XCTestCase {
+    let coreDataStack = OktaAnalytics.coreDataStack
+
+    func test_Sceanrio() {
+        let scenarioName = "Test"
+        let scenarioID = OktaAnalytics.startScenario(scenarioName) { $0?.send(Property(key: "Start", value: "1")) }
+        XCTAssertTrue(checkIfScenarioExistsInDB(scenarioID))
+        XCTAssertEqual(scenarioPropertiesCount(scenarioID), 1)
+
+        OktaAnalytics.updateScenario(scenarioName) { $0?.send(Property(key: "Start1", value: "2")) }
+        XCTAssertTrue(checkIfScenarioExistsInDB(scenarioID))
+        XCTAssertEqual(scenarioPropertiesCount(scenarioID), 2)
+
+        OktaAnalytics.updateScenario(scenarioName) { $0?.send(Property(key: "Start2", value: "3")) }
+        XCTAssertTrue(checkIfScenarioExistsInDB(scenarioID))
+        XCTAssertEqual(scenarioPropertiesCount(scenarioID), 3)
+
+        OktaAnalytics.updateScenario(scenarioName) { $0?.send(Property(key: "Start3", value: "4")) }
+        XCTAssertTrue(checkIfScenarioExistsInDB(scenarioID))
+        XCTAssertEqual(scenarioPropertiesCount(scenarioID), 4)
+
+        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "send")
+        XCTAssertFalse(checkIfScenarioExistsInDB(scenarioID))
+        XCTAssertEqual(scenarioPropertiesCount(scenarioID), 0)
+    }
+
+    override class func tearDown() {
+        OktaAnalytics.disposeAllScenarios()
+    }
+
+    func checkIfScenarioExistsInDB(_ scenarioID: ScenarioID) -> Bool {
+        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
+        scenarioFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
+        do {
+            return try !coreDataStack.managedContext.fetch(scenarioFetchRequest).isEmpty
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
+        return false
+    }
+
+    func scenarioPropertiesCount(_ scenarioID: ScenarioID) -> Int {
+        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "ScenarioProperty")
+        scenarioFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
+        do {
+            return try coreDataStack.managedContext.fetch(scenarioFetchRequest).count
+        } catch {
+            assert(false, "Failed to fetch scenarios")
+        }
+        return 0
+    }
+}

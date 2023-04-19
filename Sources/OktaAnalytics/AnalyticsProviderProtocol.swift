@@ -29,7 +29,7 @@ public protocol AnalyticsProviderProtocol: AnyObject {
     var defaultProperties: [String: String]? { get set }
 
     /// Tracks an event to the provider
-    func trackEvent(_ eventName: EventName, withProperties: [String: String]?)
+    func trackEvent(_ eventName: Name, withProperties: [String: String]?)
 }
 
 public extension AnalyticsProviderProtocol {

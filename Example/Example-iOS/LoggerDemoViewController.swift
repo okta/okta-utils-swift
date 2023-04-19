@@ -26,7 +26,7 @@ class LoggerDemoViewController: UITableViewController, LoggerDemoViewControllerP
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.view = self
-        OktaAnalytics.updateScenario("Application") { $0?.send(Property(key: "LoggerDemoViewController.viewDidLoad", value: "3")) }
+        OktaAnalytics.updateScenario(scenarioID) { $0?.send(Property(key: "LoggerDemoViewController.viewDidLoad", value: "3")) }
     }
 
     func refreshUI() {

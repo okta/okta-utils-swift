@@ -9,18 +9,11 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import UIKit
-import OktaAnalytics
 
-class LogsBrowseViewController: UIViewController {
+import Foundation
+import CoreData
 
-    var logs: String = ""
+@objc(ScenarioProperty)
+public class ScenarioProperty: NSManagedObject {
 
-    @IBOutlet private weak var textView: UITextView!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        textView.text = logs.isEmpty ? "Logs are empty" : logs
-        OktaAnalytics.updateScenario(scenarioID) { $0?.send(Property(key: "LogsBrowseViewController.viewDidLoad", value: "4")) }
-    }
 }

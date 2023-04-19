@@ -11,6 +11,7 @@
  */
 import Foundation
 import Combine
+import CoreData
 
 // Extension to the Date struct, defines the subtraction operator, returning the time interval between two dates
 extension Date {
@@ -24,31 +25,25 @@ extension Date {
 class EventScenario {
 
     // eventName is a constant property, initialized with the value passed to the init method
-    private let scenario: Scenario
+    private var scenario: ScenarioEvent
 
     var name: String {
         scenario.name
     }
 
     // properties is a dictionary of strings, initialized as an empty dictionary
-    private var properties: Properties = [:]
+    private(set) var properties: Properties = [:]
     // time is a property of type Date, initialized as the current date
     private var time = Date()
 
     // eventStream is a PassthroughSubject, which is private set
-    private(set) var eventStream: PassthroughSubject<Property, SceanrioError>?
+    private(set) var eventStream: PassthroughSubject<Property, Never>?
 
     // cancellable is an AnyCancellable, which is private
     private var cancellable: AnyCancellable?
 
-    // User defaults object to store properties
-    private let userDefaults: UserDefaults
-
-    private var eventDateKey: String {
-        "EventDate" + scenario.name
-    }
-
-    private let scenarioCompletion: (EventData) -> Void?
+    // CoreData Stack
+    private let managedContext: NSManagedObjectContext
 
     private let scenarioStatusPropertyKey = "ScenarioStatus"
     private let durationMSPropertyKey = "DurationMS"
@@ -58,53 +53,23 @@ class EventScenario {
     }
 
     // Initializer which assigns the passed in name to the eventName property
-    init(_ scenario: Scenario, userDefaults: UserDefaults = UserDefaults.standard, _ scenarioCompletion: @escaping (EventData) -> Void) {
+    init(_ scenario: ScenarioEvent, managedContext: NSManagedObjectContext) {
         self.scenario = scenario
-        self.userDefaults = userDefaults
-        self.scenarioCompletion = scenarioCompletion
+        self.managedContext = managedContext
     }
 
     // Method which starts the event stream, assigns the current time to the time property and sets up a sink to receive values
-    func start() -> PassthroughSubject<Property, SceanrioError>? {
-
-        // check if previous event exists in memory without ended
-        if var properties = userDefaults.value(forKey: scenario.name) as? Properties,
-           let eventDate = userDefaults.value(forKey: eventDateKey) as? Date {
-            var eventStatus = EventScenario.Status.expired
-            if eventDate.distance(to: Date()) < 5 * 60 /* secs */ {
-                eventStatus = .interrupted
-            }
-
-            properties?[scenarioStatusPropertyKey] = eventStatus.rawValue
-            properties?[durationMSPropertyKey] = "\(eventDate.distance(to: Date()) * 1000)"
-            scenarioCompletion(EventData(scenario.name + scenario.failureSuffix, properties))
-            userDefaults.removeObject(forKey: scenario.name)
-            userDefaults.removeObject(forKey: eventDateKey)
-        }
-
+    func start() -> PassthroughSubject<Property, Never>? {
         eventStream = PassthroughSubject()
-        time = Date()
-
-        // Save Event date to use next time for pending events that was not sent to provider
-        userDefaults.set(time, forKey: eventDateKey)
-
+        let scenario = Scenario(context: managedContext)
+        scenario.setValue(self.scenario.id, forKeyPath: #keyPath(Scenario.scenarioID))
+        scenario.setValue(self.scenario.name, forKeyPath: #keyPath(Scenario.name))
+        scenario.setValue(self.scenario.date, forKeyPath: #keyPath(Scenario.startTime))
+        managedContext.saveContext()
         cancellable = eventStream?
             .sink { [weak self] completion in
                 guard let `self` = self else { return }
                 self.properties?[self.durationMSPropertyKey] = "\(self.time.distance(to: Date()) * 1000)"
-                switch completion {
-                case .finished:
-//                    self.properties?[self.scenarioStatusPropertyKey] = EventScenario.Status.completed.rawValue
-                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.successSuffix, self.properties))
-                case .failure(let error):
-                    if case let .reason(property) = error {
-                        self.properties?[property.key] = property.value
-                    }
-//                    self.properties?[self.scenarioStatusPropertyKey] = EventScenario.Status.completed.rawValue
-                    self.scenarioCompletion(EventData(self.scenario.name + self.scenario.failureSuffix, self.properties))
-                }
-
-                self.userDefaults.removeObject(forKey: self.scenario.name)
                 self.dispose()
             } receiveValue: { [weak self] property in
                 guard let `self` = self, !self.isEventExpiredOrInterrupted else {
@@ -112,7 +77,12 @@ class EventScenario {
                     return
                 }
                 self.properties?[property.key] = property.value
-                self.userDefaults.set(self.properties, forKey: self.scenario.name)
+                let scenarioProperty = ScenarioProperty(context: self.managedContext)
+                scenarioProperty.setValue(self.scenario.id, forKeyPath: #keyPath(ScenarioProperty.scenarioID))
+                scenarioProperty.setValue(property.key, forKeyPath: #keyPath(ScenarioProperty.key))
+                scenarioProperty.setValue(property.value, forKeyPath: #keyPath(ScenarioProperty.value))
+                scenarioProperty.setValue(self.scenario.name, forKeyPath: #keyPath(ScenarioProperty.name))
+                self.managedContext.saveContext()
             }
         return eventStream
     }
@@ -129,20 +99,11 @@ class EventScenario {
     }
 }
 
-extension EventScenario {
-    enum Status: String {
-//        case completed
-//        case failed
-        case expired
-        case interrupted
-    }
-}
-
 struct EventData {
-    let eventName: EventName
+    let eventName: Name
     let properties: Properties
 
-    init(_ eventName: EventName, _ properties: Properties) {
+    init(_ eventName: Name, _ properties: Properties) {
         self.eventName = eventName
         self.properties = properties
     }

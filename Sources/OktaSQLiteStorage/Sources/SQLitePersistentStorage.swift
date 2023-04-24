@@ -1,0 +1,124 @@
+/*
+* Copyright (c) 2023, Okta, Inc. and/or its affiliates. All rights reserved.
+* The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+*
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*
+* See the License for the specific language governing permissions and limitations under the License.
+*/
+
+import Foundation
+import GRDB
+
+class SQLiteStorage: SQLiteStorageProtocol {
+    let schema: SQLiteSchema
+    let sqliteURL: URL
+    let sqlitePool: DatabasePool
+    let storageMigrator: any SQLiteMigratable
+
+    init(at sqliteURL: URL,
+         schema: SQLiteSchema,
+         walModeEnabled: Bool,
+         configuration: Configuration?,
+         storageMigrator: any SQLiteMigratable,
+         connectionBuilder: SQLiteConnectionBuilderProtocol = SQLiteConnectionBuilder()) throws {
+        self.sqliteURL = sqliteURL
+        self.schema = schema
+        self.storageMigrator = storageMigrator
+
+        do {
+            let fileManager = FileManager.default
+            let hasDBStored = fileManager.fileExists(atPath: sqliteURL.path)
+            if !hasDBStored {
+                try fileManager.createDirectory(at: sqliteURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+            }
+            let coordinator = NSFileCoordinator(filePresenter: nil)
+            var coordinatorError: NSError?
+            var dbPool: DatabasePool!
+            var dbError: Error?
+            let coordinationBlock: (URL) -> Void = { url in
+                do {
+                    dbPool = try connectionBuilder.databasePool(at: url, walModeEnabled: walModeEnabled, configuration: configuration)
+                } catch {
+                    dbError = error
+                }
+            }
+            coordinator.coordinate(writingItemAt: sqliteURL, options: .forMerging, error: &coordinatorError, byAccessor: coordinationBlock)
+            if let error = dbError ?? coordinatorError {
+                throw SQLiteStorageError.sqliteError(error.localizedDescription)
+            }
+            self.sqlitePool = dbPool
+        } catch {
+            //logger.error(eventName: "Error on sqlitePool initialization", message: "Error: \(error)")
+            throw SQLiteStorageError.sqliteError(error.localizedDescription)
+        }
+    }
+
+    func initialize() async throws {
+        do {
+            try await sqlitePool.read { db in
+                let sqlUserVersion = try Int.fetchOne(db, sql: "PRAGMA user_version") ?? 0
+                if sqlUserVersion == self.schema.version.rawValue {
+                    // db schema is up to date
+                    return
+                } else if sqlUserVersion == 0 {
+                    // need to build db schema and update schema version
+                    try self.buildDatabaseSchema()
+                } else {
+                    guard let currentVersion = self.schema.version.versionByRawValue(sqlUserVersion) as (any SchemaVersionType)? else {
+                        throw SQLiteStorageError.generalError("Unexpected schema version \(sqlUserVersion) in sqlite database")
+                    }
+                    // Perform migration from the last known version to the current version declared by versionable storage, one-by-one in "cascade" fashion
+                    //try storageMigrator.willStartIncrementalStorageMigrationSequence(startVersion: currentVersion, endVersion: schema.version)
+                    try self.migrateToTargetVersion(
+                                fromVersion: currentVersion,
+                                targetVersionRawValue: self.schema.version.rawValue,
+                                migrator: self.storageMigrator)
+                }
+            }
+        } catch {
+            throw SQLiteStorageError.sqliteError(error.localizedDescription)
+        }
+    }
+
+    func migrateToTargetVersion<T, S>(fromVersion: T, targetVersionRawValue: Int, migrator: S) throws where T: SchemaVersionType, S: SQLiteMigratable {
+        // swiftlint:disable:next force_cast
+        try migrator.willStartIncrementalStorageMigrationSequence(startVersion: fromVersion as! S.Version, endVersion: schema.version as! S.Version)
+
+        let allCases = T.allCases.sorted()
+        guard let currentVersionIndex = allCases.firstIndex(of: fromVersion) else {
+            throw SQLiteStorageError.generalError("Unexpected db version")
+        }
+        guard let targetVersionIndex = allCases.firstIndex(where: { $0.rawValue == targetVersionRawValue }) else {
+            throw SQLiteStorageError.generalError("Unknown target db version")
+        }
+
+        let nextVersionIndex = currentVersionIndex + 1
+        guard nextVersionIndex < allCases.count else {
+            // swiftlint:disable:next force_cast
+            migrator.didFinishStorageIncrementalMigrationSequence(startVersion: fromVersion as! S.Version, endVersion: schema.version as! S.Version)
+            return
+        }
+
+        for index in nextVersionIndex...targetVersionIndex {
+            try sqlitePool.write { db in
+                // swiftlint:disable:next force_cast
+                try migrator.performIncrementalStorageMigration(allCases[index] as! S.Version, database: db)
+                try db.execute(sql: "PRAGMA user_version=\(allCases[index].rawValue)")
+            }
+        }
+
+        // swiftlint:disable:next force_cast
+        migrator.didFinishStorageIncrementalMigrationSequence(startVersion: fromVersion as! S.Version, endVersion: schema.version as! S.Version)
+    }
+
+    fileprivate func buildDatabaseSchema() throws {
+        try sqlitePool.write { db in
+            try db.execute(sql: schema.schema)
+            try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+        }
+    }
+}

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14E1018A17B69B840367198D /* libPods-OktaSQLiteStorageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 48E93CF1AAF7D9CA473F5167 /* libPods-OktaSQLiteStorageTests.a */; };
 		6582A2024047A1BC55BC98D3 /* LumberjackLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */; };
 		6582A2C33C06B4353D1538E3 /* FileLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582ABCA2C9C2759535A1B4E /* FileLoggerDelegate.swift */; };
 		6C2BE44628E3B1E10031902A /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2BE44528E3B1E10031902A /* AnalyticsTests.swift */; };
@@ -24,7 +25,19 @@
 		806FF25E24B95A3300994D4D /* OktaLoggerFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */; };
 		80AA110224BE799800981074 /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA110124BE799800981074 /* DemoTableViewCell.swift */; };
 		8DCF5EB8263CACAD008698CD /* DDLogFileManagerCustomName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF5EB7263CACAC008698CD /* DDLogFileManagerCustomName.swift */; };
+		9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */; };
+		9F26663029F747490064EF50 /* SQLiteConnectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */; };
+		9F26663129F747490064EF50 /* SQLitePersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662B29F747490064EF50 /* SQLitePersistentStorage.swift */; };
+		9F26663229F747490064EF50 /* SQLiteStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662C29F747490064EF50 /* SQLiteStorageProtocol.swift */; };
+		9F26663429F747490064EF50 /* SchemaVersionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662E29F747490064EF50 /* SchemaVersionType.swift */; };
+		9F26663529F747490064EF50 /* SQLiteStorageError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662F29F747490064EF50 /* SQLiteStorageError.swift */; };
+		9F26663729F747760064EF50 /* SQLiteStorageBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26663629F747760064EF50 /* SQLiteStorageBuilder.swift */; };
+		9F4F57D529F8842000E10771 /* SQLiteSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57D429F8841F00E10771 /* SQLiteSchema.swift */; };
+		9F4F57D929F9B47900E10771 /* SQLiteMigratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */; };
+		9F4F57DC29F9F42700E10771 /* SQLiteStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */; };
+		9F4F57DF29FC387F00E10771 /* SQLiteConnectionBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57DD29FC36F600E10771 /* SQLiteConnectionBuilderTests.swift */; };
 		B3E071E3B33C4657A8B4381B /* libPods-OktaLogger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 62BB891524DBDEF8FC8E9711 /* libPods-OktaLogger.a */; };
+		C142C538D3A5FACA48D338AA /* libPods-OktaSQLiteStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7D060555BF31C095461D4D7 /* libPods-OktaSQLiteStorage.a */; };
 		C4AA0759EDAC342A3B6B6796 /* libPods-OktaLoggerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */; };
 		D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C824D42469DBF1005CF747 /* OktaLogger.framework */; };
 		D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */; };
@@ -51,6 +64,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		9F26660F29F728540064EF50 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9F26660529F728530064EF50;
+			remoteInfo = OktaSQLiteStorage;
+		};
 		D54461C4246A02C800C755F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
@@ -95,8 +115,10 @@
 		028D1912AB9DB1ABBDD5EC94 /* Pods-OktaLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.release.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.release.xcconfig"; sourceTree = "<group>"; };
 		1626D76D3FE5CD1504C6A51A /* Pods-OktaLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerTests.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
 		2212750F97DBDF374821CF2C /* Pods-OktaLogger_.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger_.release.xcconfig"; path = "Target Support Files/Pods-OktaLogger_/Pods-OktaLogger_.release.xcconfig"; sourceTree = "<group>"; };
+		235FDEE37C9BE50EDFF8F22D /* Pods-OktaSQLiteStorageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorageTests.release.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests.release.xcconfig"; sourceTree = "<group>"; };
 		2BE105519632BEE1AAED7056 /* Pods-OktaLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.debug.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.debug.xcconfig"; sourceTree = "<group>"; };
 		330F4ED2C904A636A557BACB /* Pods_OktaLoggerDemoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaLoggerDemoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		48E93CF1AAF7D9CA473F5167 /* libPods-OktaSQLiteStorageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaSQLiteStorageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		62BB891524DBDEF8FC8E9711 /* libPods-OktaLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLogger.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumberjackLoggerDelegate.swift; sourceTree = "<group>"; };
@@ -118,6 +140,22 @@
 		806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLogger.swift; sourceTree = "<group>"; };
 		80AA110124BE799800981074 /* DemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewCell.swift; sourceTree = "<group>"; };
 		8DCF5EB7263CACAC008698CD /* DDLogFileManagerCustomName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDLogFileManagerCustomName.swift; sourceTree = "<group>"; };
+		9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaSQLiteStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F26660D29F728540064EF50 /* OktaSQLiteStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OktaSQLiteStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteConnectionBuilder.swift; path = OktaSQLiteStorage/Sources/SQLiteConnectionBuilder.swift; sourceTree = "<group>"; };
+		9F26662B29F747490064EF50 /* SQLitePersistentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLitePersistentStorage.swift; path = OktaSQLiteStorage/Sources/SQLitePersistentStorage.swift; sourceTree = "<group>"; };
+		9F26662C29F747490064EF50 /* SQLiteStorageProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteStorageProtocol.swift; path = OktaSQLiteStorage/Sources/SQLiteStorageProtocol.swift; sourceTree = "<group>"; };
+		9F26662E29F747490064EF50 /* SchemaVersionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SchemaVersionType.swift; path = OktaSQLiteStorage/Sources/SchemaVersionType.swift; sourceTree = "<group>"; };
+		9F26662F29F747490064EF50 /* SQLiteStorageError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteStorageError.swift; path = OktaSQLiteStorage/Sources/SQLiteStorageError.swift; sourceTree = "<group>"; };
+		9F26663629F747760064EF50 /* SQLiteStorageBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteStorageBuilder.swift; path = OktaSQLiteStorage/Sources/SQLiteStorageBuilder.swift; sourceTree = "<group>"; };
+		9F4F57D429F8841F00E10771 /* SQLiteSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteSchema.swift; path = OktaSQLiteStorage/Sources/SQLiteSchema.swift; sourceTree = "<group>"; };
+		9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteMigratable.swift; path = OktaSQLiteStorage/Sources/SQLiteMigratable.swift; sourceTree = "<group>"; };
+		9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteStorageTests.swift; path = SQLiteStorageTests/SQLiteStorageTests.swift; sourceTree = "<group>"; };
+		9F4F57DD29FC36F600E10771 /* SQLiteConnectionBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteConnectionBuilderTests.swift; path = SQLiteStorageTests/SQLiteConnectionBuilderTests.swift; sourceTree = "<group>"; };
+		9F4F57E029FC482E00E10771 /* OktaSQLiteStorage.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OktaSQLiteStorage.xctestplan; sourceTree = "<group>"; };
+		A7D060555BF31C095461D4D7 /* libPods-OktaSQLiteStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaSQLiteStorage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A91EB4B6CDE2BB40D2F8449B /* Pods-OktaSQLiteStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorage.debug.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorage/Pods-OktaSQLiteStorage.debug.xcconfig"; sourceTree = "<group>"; };
+		BA850EA89BC3778AE481F501 /* Pods-OktaSQLiteStorageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorageTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C58A9E54B6CE1A902894264C /* Pods-OktaLoggerDemoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp.debug.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D55F2C1C246F153200680A96 /* MockLoggerDestination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockLoggerDestination.h; sourceTree = "<group>"; };
 		D55F2C1D246F153200680A96 /* MockLoggerDestination.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockLoggerDestination.m; sourceTree = "<group>"; };
@@ -150,9 +188,27 @@
 		E251E809248AD1B800EF466D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E251E80B248AD1B800EF466D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2E7C95225196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerDefaultPropertiesTests.swift; sourceTree = "<group>"; };
+		FA30FA2CE6EE332C472D9B83 /* Pods-OktaSQLiteStorage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorage.release.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorage/Pods-OktaSQLiteStorage.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		9F26660329F728530064EF50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C142C538D3A5FACA48D338AA /* libPods-OktaSQLiteStorage.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F26660A29F728540064EF50 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */,
+				14E1018A17B69B840367198D /* libPods-OktaSQLiteStorageTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5C824D12469DBF1005CF747 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -202,6 +258,7 @@
 		7FC0389428243B2900C16169 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				9F26662929F747340064EF50 /* OktaSQLiteStorage */,
 				6CC1629C284EBD85009EA8F3 /* OktaAnalytics */,
 				7FC0389828243BDC00C16169 /* OktaLogger */,
 			);
@@ -223,6 +280,7 @@
 		7FC0389928243C5F00C16169 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				9F4F57DA29F9F3D900E10771 /* OktaSQLiteStorageTests */,
 				D5C824E12469DBF1005CF747 /* OktaLoggerTests */,
 			);
 			path = Tests;
@@ -259,8 +317,35 @@
 				62BB891524DBDEF8FC8E9711 /* libPods-OktaLogger.a */,
 				DF75E3D21D2B9A971A2CAEC7 /* libPods-OktaLoggerDemoApp.a */,
 				4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */,
+				A7D060555BF31C095461D4D7 /* libPods-OktaSQLiteStorage.a */,
+				48E93CF1AAF7D9CA473F5167 /* libPods-OktaSQLiteStorageTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9F26662929F747340064EF50 /* OktaSQLiteStorage */ = {
+			isa = PBXGroup;
+			children = (
+				9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */,
+				9F26662C29F747490064EF50 /* SQLiteStorageProtocol.swift */,
+				9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */,
+				9F26662B29F747490064EF50 /* SQLitePersistentStorage.swift */,
+				9F26662E29F747490064EF50 /* SchemaVersionType.swift */,
+				9F26662F29F747490064EF50 /* SQLiteStorageError.swift */,
+				9F26663629F747760064EF50 /* SQLiteStorageBuilder.swift */,
+				9F4F57D429F8841F00E10771 /* SQLiteSchema.swift */,
+			);
+			name = OktaSQLiteStorage;
+			sourceTree = "<group>";
+		};
+		9F4F57DA29F9F3D900E10771 /* OktaSQLiteStorageTests */ = {
+			isa = PBXGroup;
+			children = (
+				9F4F57E029FC482E00E10771 /* OktaSQLiteStorage.xctestplan */,
+				9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */,
+				9F4F57DD29FC36F600E10771 /* SQLiteConnectionBuilderTests.swift */,
+			);
+			name = OktaSQLiteStorageTests;
 			sourceTree = "<group>";
 		};
 		D5C824CA2469DBF1005CF747 = {
@@ -284,6 +369,8 @@
 				D5C824D42469DBF1005CF747 /* OktaLogger.framework */,
 				D5C824DD2469DBF1005CF747 /* OktaLoggerTests.xctest */,
 				E251E7FB248AD1B400EF466D /* OktaLoggerDemoApp.app */,
+				9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */,
+				9F26660D29F728540064EF50 /* OktaSQLiteStorageTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -378,6 +465,10 @@
 				028D1912AB9DB1ABBDD5EC94 /* Pods-OktaLogger.release.xcconfig */,
 				672ADCC5504F41DBB4546AB0 /* Pods-OktaLogger_.debug.xcconfig */,
 				2212750F97DBDF374821CF2C /* Pods-OktaLogger_.release.xcconfig */,
+				A91EB4B6CDE2BB40D2F8449B /* Pods-OktaSQLiteStorage.debug.xcconfig */,
+				FA30FA2CE6EE332C472D9B83 /* Pods-OktaSQLiteStorage.release.xcconfig */,
+				BA850EA89BC3778AE481F501 /* Pods-OktaSQLiteStorageTests.debug.xcconfig */,
+				235FDEE37C9BE50EDFF8F22D /* Pods-OktaSQLiteStorageTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -385,6 +476,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		9F26660129F728530064EF50 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5C824CF2469DBF1005CF747 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -395,6 +493,44 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		9F26660529F728530064EF50 /* OktaSQLiteStorage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F26661929F728540064EF50 /* Build configuration list for PBXNativeTarget "OktaSQLiteStorage" */;
+			buildPhases = (
+				1B72C2381AD36732B7E62B29 /* [CP] Check Pods Manifest.lock */,
+				9F26660129F728530064EF50 /* Headers */,
+				9F26660229F728530064EF50 /* Sources */,
+				9F26660329F728530064EF50 /* Frameworks */,
+				9F26660429F728530064EF50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OktaSQLiteStorage;
+			productName = OktaSQLiteStorage;
+			productReference = 9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9F26660C29F728540064EF50 /* OktaSQLiteStorageTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F26661A29F728540064EF50 /* Build configuration list for PBXNativeTarget "OktaSQLiteStorageTests" */;
+			buildPhases = (
+				E1D1BF0E705243FA67468EE2 /* [CP] Check Pods Manifest.lock */,
+				9F26660929F728540064EF50 /* Sources */,
+				9F26660A29F728540064EF50 /* Frameworks */,
+				9F26660B29F728540064EF50 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9F26661029F728540064EF50 /* PBXTargetDependency */,
+			);
+			name = OktaSQLiteStorageTests;
+			productName = OktaSQLiteStorageTests;
+			productReference = 9F26660D29F728540064EF50 /* OktaSQLiteStorageTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		D5C824D32469DBF1005CF747 /* OktaLogger */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D5C824E82469DBF1005CF747 /* Build configuration list for PBXNativeTarget "OktaLogger" */;
@@ -464,10 +600,18 @@
 		D5C824CB2469DBF1005CF747 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1130;
+				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Okta, Inc.";
 				TargetAttributes = {
+					9F26660529F728530064EF50 = {
+						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1430;
+					};
+					9F26660C29F728540064EF50 = {
+						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1430;
+					};
 					D5C824D32469DBF1005CF747 = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1130;
@@ -497,11 +641,27 @@
 				E251E7FA248AD1B400EF466D /* OktaLoggerDemoApp */,
 				D5C824D32469DBF1005CF747 /* OktaLogger */,
 				D5C824DC2469DBF1005CF747 /* OktaLoggerTests */,
+				9F26660529F728530064EF50 /* OktaSQLiteStorage */,
+				9F26660C29F728540064EF50 /* OktaSQLiteStorageTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		9F26660429F728530064EF50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F26660B29F728540064EF50 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5C824D22469DBF1005CF747 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -546,6 +706,28 @@
 			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-OktaLoggerTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1B72C2381AD36732B7E62B29 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OktaSQLiteStorage-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -666,9 +848,55 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
 		};
+		E1D1BF0E705243FA67468EE2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-OktaSQLiteStorageTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		9F26660229F728530064EF50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F26663029F747490064EF50 /* SQLiteConnectionBuilder.swift in Sources */,
+				9F4F57D529F8842000E10771 /* SQLiteSchema.swift in Sources */,
+				9F26663429F747490064EF50 /* SchemaVersionType.swift in Sources */,
+				9F4F57D929F9B47900E10771 /* SQLiteMigratable.swift in Sources */,
+				9F26663729F747760064EF50 /* SQLiteStorageBuilder.swift in Sources */,
+				9F26663229F747490064EF50 /* SQLiteStorageProtocol.swift in Sources */,
+				9F26663529F747490064EF50 /* SQLiteStorageError.swift in Sources */,
+				9F26663129F747490064EF50 /* SQLitePersistentStorage.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F26660929F728540064EF50 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F4F57DF29FC387F00E10771 /* SQLiteConnectionBuilderTests.swift in Sources */,
+				9F4F57DC29F9F42700E10771 /* SQLiteStorageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D5C824D02469DBF1005CF747 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -726,6 +954,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		9F26661029F728540064EF50 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9F26660529F728530064EF50 /* OktaSQLiteStorage */;
+			targetProxy = 9F26660F29F728540064EF50 /* PBXContainerItemProxy */;
+		};
 		D54461C5246A02C800C755F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D5C824D32469DBF1005CF747 /* OktaLogger */;
@@ -758,6 +991,126 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		9F26661529F728540064EF50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A91EB4B6CDE2BB40D2F8449B /* Pods-OktaSQLiteStorage.debug.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Okta, Inc. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = OKTA.OktaSQLiteStorage;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9F26661629F728540064EF50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FA30FA2CE6EE332C472D9B83 /* Pods-OktaSQLiteStorage.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_MODULE_VERIFIER = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Okta, Inc. All rights reserved.";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGES = "objective-c objective-c++";
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu11 gnu++20";
+				PRODUCT_BUNDLE_IDENTIFIER = OKTA.OktaSQLiteStorage;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		9F26661729F728540064EF50 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA850EA89BC3778AE481F501 /* Pods-OktaSQLiteStorageTests.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OKTA.OktaSQLiteStorageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9F26661829F728540064EF50 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 235FDEE37C9BE50EDFF8F22D /* Pods-OktaSQLiteStorageTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = OKTA.OktaSQLiteStorageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		D5C824E62469DBF1005CF747 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1039,6 +1392,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		9F26661929F728540064EF50 /* Build configuration list for PBXNativeTarget "OktaSQLiteStorage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F26661529F728540064EF50 /* Debug */,
+				9F26661629F728540064EF50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9F26661A29F728540064EF50 /* Build configuration list for PBXNativeTarget "OktaSQLiteStorageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F26661729F728540064EF50 /* Debug */,
+				9F26661829F728540064EF50 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		D5C824CE2469DBF1005CF747 /* Build configuration list for PBXProject "OktaLogger" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

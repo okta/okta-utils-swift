@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "41DB2DAD-6088-4306-9EA1-30E5DF721483",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:OktaLogger.xcodeproj",
+        "identifier" : "9F26660C29F728540064EF50",
+        "name" : "OktaSQLiteStorageTests"
+      }
+    }
+  ],
+  "version" : 1
+}

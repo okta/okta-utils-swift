@@ -14,6 +14,13 @@ import Firebase
 import OktaLogger
 import OktaAnalytics
 import AppCenterAnalytics
+import OktaSQLiteStorage
+import GRDB
+
+enum DBVersions: Int, SchemaVersionType {
+    case v1 = 1
+    case v2 = 2
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
         appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
+        
         return appCenterAnalyticsProvider
     }()
 
@@ -37,6 +45,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
+        
+        var userCacheURL: URL!
+        if let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            userCacheURL = cacheURL.appendingPathComponent("sqlite.db")
+        }
+        
+        let queries = """
+        CREATE TABLE 'Example' (
+        'id' TEXT NOT NULL
+        );
+        """
+        let schema = SQLiteSchema(schema: queries, version: DBVersions.v2)
+
+        
+        Task {
+            do {
+                let storage = try await SQLiteStorageBuilder()
+                                            .setWALMode(enabled: true)
+                                            .build(schema: schema, storagePath: userCacheURL, storageMigrator: SQLiteMigrator())
+                
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+
         return true
+    }
+}
+
+class SQLiteMigrator: SQLiteMigratable {
+    typealias Version = DBVersions
+    
+    func willStartIncrementalStorageMigrationSequence(startVersion: DBVersions, endVersion: DBVersions) throws {
+        
+    }
+    
+    func performIncrementalStorageMigration(_ nextVersion: DBVersions, database: Database) throws {
+        let queries = """
+        CREATE TABLE 'Example2' (
+        'id' TEXT NOT NULL
+        );
+        """
+        try database.execute(sql: queries)
+        try database.execute(sql: "PRAGMA user_version=\(nextVersion.rawValue)")
+    }
+    
+    func didFinishStorageIncrementalMigrationSequence(startVersion: DBVersions, endVersion: DBVersions) {
     }
 }

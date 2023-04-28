@@ -1,9 +1,5 @@
 version: 2.1
 
-executors:
-  xcode:
-      xcode: 14.3.0
-
 commands:
   install_dependencies:
     description: "Install Dependencies"
@@ -19,14 +15,15 @@ commands:
     steps:
       - run:
          name: OktaLogger unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLogger" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLogger" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14"
       - run:
          name: OktaSQLiteStorage unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorage" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14"
 
 jobs:
-  test:
-    executor: xcode
+  build-and-test:
+    macos:
+      xcode: 14.2.0
     steps:
       - checkout
       - install_dependencies
@@ -36,5 +33,5 @@ jobs:
 workflows:
   test:
     jobs:
-      - test
+      - build-and-test
 

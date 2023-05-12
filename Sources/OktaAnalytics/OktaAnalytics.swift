@@ -13,20 +13,21 @@ import Foundation
 import Combine
 import OktaLogger
 import CoreData
+import OktaSQLiteStorage
+import GRDB
 
 /**
  Analytics class for holding and tracking for different tracking provider
  */
+
 @objc
 public final class OktaAnalytics: NSObject {
 
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
-    private static var scenarios: [ScenarioID: EventScenario]? = [:]
+    private static var scenarios: [ScenarioID: Scenario]? = [:]
 
-    static var coreDataStack: CoreDataStack = {
-        CoreDataStack(modelName: "OktaAnalytics")
-    }()
+    private static var databasePool: DatabasePool?
 
     /**
      Adds provider to collection
@@ -37,6 +38,7 @@ public final class OktaAnalytics: NSObject {
     public static func addProvider(_ provider: AnalyticsProviderProtocol) {
         lock.writeLock()
         defer { lock.unlock() }
+        Task(priority: .high) { try await Self.checkAndInitializeDB() }
         providers[provider.name] = provider
     }
 
@@ -49,6 +51,7 @@ public final class OktaAnalytics: NSObject {
     public static func addProviders(_ providers: [AnalyticsProviderProtocol]) {
         lock.writeLock()
         defer { lock.unlock() }
+        Task(priority: .high) { try await Self.checkAndInitializeDB() }
         providers.forEach {
             Self.providers[$0.name] = $0
         }
@@ -122,19 +125,26 @@ public final class OktaAnalytics: NSObject {
            - eventName: The name of the event scenario to start.
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func startScenario(_ scenarioName: Name, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) -> ScenarioID {
-
+    public static func startScenario(_ scenarioName: Name, _ properties: [Property]) -> ScenarioID {
         lock.readLock()
+        Task(priority: .high) { try await checkAndInitializeDB() }
         defer { lock.unlock() }
-
-        var scenario = ScenarioEvent(name: scenarioName)
-        let eventScenario = EventScenario(scenario, managedContext: coreDataStack.managedContext)
-        Self.scenarios?[scenario.id] = eventScenario
-        propertySubject(eventScenario.start())
+        let databasePool = Self.databasePool
+        let scenario = Scenario(name: scenarioName, displayName: "", startTime: Date())
+        Self.scenarios?[scenario.id] = scenario
 
         Self.providers.forEach {
             $1.logger?.log(level: .debug, eventName: scenario.name, message: "\($0) Scenario \(scenario.name) already in flight", properties: nil, file: #file, line: #line, funcName: #function)
         }
+
+        do {
+            try databasePool?.write {
+                try scenario.insert($0)
+            }
+        } catch {
+            print(error)
+        }
+
         return scenario.id
     }
 
@@ -145,18 +155,26 @@ public final class OktaAnalytics: NSObject {
            - scenarioID: unique sceario ID returned from `startScenario(_ , _)` .
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
-    public static func updateScenario(_ scenarioID: ScenarioID, _ propertySubject: (PassthroughSubject<Property, Never>?) -> Void) {
+    public static func updateScenario(_ scenarioID: ScenarioID, _ properties: [Property]) {
         lock.readLock()
         defer { lock.unlock() }
         guard let scenario = Self.scenarios?[scenarioID] else {
             assert(false, "startScenario should be called before updateScenario")
-            propertySubject(nil)
             return
         }
         Self.providers.forEach {
             $1.logger?.log(level: .debug, eventName: scenario.name, message: "\($0) Scenario \(scenario.name) Updated", properties: nil, file: #file, line: #line, funcName: #function)
         }
-        propertySubject(scenario.eventStream)
+
+        do {
+            try databasePool?.write {
+                for property in properties {
+                    try ScenarioProperty(scenarioID: scenarioID, key: property.key, value: property.value).insert($0)
+                }
+            }
+        } catch {
+            print(error)
+        }
     }
 
     /**
@@ -169,40 +187,6 @@ public final class OktaAnalytics: NSObject {
     public static func endScenario(_ scenarioID: ScenarioID, eventDisplayName: Name) {
         lock.readLock()
         defer { lock.unlock() }
-
-        guard let scenario = Self.scenarios?[scenarioID] else {
-            assert(false, "No Scenario to end")
-            return
-        }
-
-        scenario.eventStream?.send(completion: .finished)
-
-        Self.trackEvent(eventDisplayName, withProperties: scenario.properties)
-        Self.scenarios?.removeValue(forKey: scenarioID)
-
-        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
-        scenarioFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
-        do {
-            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
-            for scenario in scenarios {
-                Self.coreDataStack.managedContext.delete(scenario)
-            }
-        } catch {
-            assert(false, "Failed to fetch scenarios")
-        }
-        Self.coreDataStack.managedContext.saveContext()
-
-        let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
-        scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "scenarioID CONTAINS %@", scenarioID)
-        do {
-            let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
-            for scenarioProperty in scenarioProperties {
-                Self.coreDataStack.managedContext.delete(scenarioProperty)
-            }
-        } catch {
-            assert(false, "Failed to fetch scenario properties")
-        }
-        Self.coreDataStack.managedContext.saveContext()
     }
 
     /**
@@ -214,40 +198,6 @@ public final class OktaAnalytics: NSObject {
     public static func endScenario(_ name: Name) {
         lock.readLock()
         defer { lock.unlock() }
-
-        func fetchProperties(_ scenarioName: Name) -> [String: String] {
-            var properties = [String: String]()
-            let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
-            scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
-            do {
-                let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
-                for scenarioProperty in scenarioProperties {
-                    if let key = scenarioProperty.key {
-                        properties[key] = scenarioProperty.value
-                    }
-                    Self.coreDataStack.managedContext.delete(scenarioProperty)
-                }
-            } catch {
-                assert(false, "Failed to fetch scenario properties")
-            }
-            Self.coreDataStack.managedContext.saveContext()
-            return properties
-        }
-
-        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
-        scenarioFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
-        do {
-            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
-            for scenario in scenarios {
-                if let displayName = scenario.displayName {
-                    Self.trackEvent(displayName, withProperties: fetchProperties(name))
-                }
-                Self.coreDataStack.managedContext.delete(scenario)
-            }
-        } catch {
-            assert(false, "Failed to fetch scenarios")
-        }
-        Self.coreDataStack.managedContext.saveContext()
     }
 
     /**
@@ -259,47 +209,13 @@ public final class OktaAnalytics: NSObject {
     public static func disposeScenario(_ name: Name) {
         lock.readLock()
         defer { lock.unlock() }
-
-        let scenarioFetchRequest = NSFetchRequest<Scenario>(entityName: "Scenario")
-        scenarioFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
-        do {
-            let scenarios = try Self.coreDataStack.managedContext.fetch(scenarioFetchRequest)
-            for scenario in scenarios {
-                Self.coreDataStack.managedContext.delete(scenario)
-            }
-        } catch {
-            assert(false, "Failed to fetch scenarios")
-        }
-        Self.coreDataStack.managedContext.saveContext()
-
-        let scenarioPropertiesFetchRequest = NSFetchRequest<ScenarioProperty>(entityName: "ScenarioProperty")
-        scenarioPropertiesFetchRequest.predicate = NSPredicate(format: "name CONTAINS %@", name)
-        do {
-            let scenarioProperties = try Self.coreDataStack.managedContext.fetch(scenarioPropertiesFetchRequest)
-            for scenarioProperty in scenarioProperties {
-                Self.coreDataStack.managedContext.delete(scenarioProperty)
-            }
-        } catch {
-            assert(false, "Failed to fetch scenario properties")
-        }
-        Self.coreDataStack.managedContext.saveContext()
     }
 
     /// Dispose Scenarios from local storage
     public static func disposeAllScenarios() {
         lock.readLock()
         defer { lock.unlock() }
-        Self.scenarios?.values.forEach {
-            $0.dispose()
-        }
         Self.scenarios?.removeAll()
-
-        do {
-            try Self.coreDataStack.managedContext.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: "Scenario")))
-            try Self.coreDataStack.managedContext.execute(NSBatchDeleteRequest(fetchRequest: NSFetchRequest(entityName: "ScenarioProperty")))
-        } catch {
-            assert(false, "Failed to fetch scenarios")
-        }
     }
 
     /**
@@ -344,5 +260,83 @@ private extension OktaAnalytics {
         }
 
         private var lock: pthread_rwlock_t
+    }
+
+    static func createTables(databasePool: DatabasePool) throws {
+        try Self.databasePool?.write { db in
+            try db.create(table: "scenario", options: .ifNotExists) { t in
+                t.column("scenarioID", .text)
+                t.column("name", .text)
+                t.column("displayName", .text)
+                t.column("startTime", .date)
+            }
+
+            try db.create(table: "scenarioProperty", options: .ifNotExists) { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.foreignKey(["scenarioID"], references: "scenario", columns: ["ScenarioID"])
+                t.column("value", .text)
+                t.column("key", .text)
+            }
+        }
+    }
+
+    static func checkAndInitializeDB() async throws {
+        if databasePool != nil { return }
+        guard let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+           fatalError()
+        }
+        let dbURL = cacheURL.appendingPathComponent("OktaAnalytics.db")
+        let queries = ""
+        print(dbURL)
+        let schema = SQLiteSchema(schema: queries, version: DBVersions.v1)
+
+        let sqliteStorage = try await SQLiteStorageBuilder()
+                                    .setWALMode(enabled: true)
+                                    .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigrator())
+        try createTables(databasePool: sqliteStorage.sqlitePool)
+        databasePool = sqliteStorage.sqlitePool
+    }
+}
+
+extension OktaAnalytics {
+    enum DBVersions: Int, SchemaVersionType {
+        case v1 = 1
+        case v2 = 2
+    }
+
+    class SQLiteMigrator: SQLiteMigratable {
+        typealias Version = DBVersions
+        func willStartIncrementalStorageMigrationSequence(startVersion: DBVersions, endVersion: DBVersions) throws { }
+        func performIncrementalStorageMigration(_ nextVersion: DBVersions, database: Database) throws { }
+        func didFinishStorageIncrementalMigrationSequence(startVersion: DBVersions, endVersion: DBVersions) { }
+    }
+
+}
+
+struct Scenario: Codable, FetchableRecord, PersistableRecord {
+    let id: String = UUID().uuidString
+    var name: String
+    var displayName: String
+    var startTime: Date
+    var properties: [ScenarioProperty]?
+}
+
+struct ScenarioProperty: Codable, FetchableRecord, PersistableRecord {
+    var id: Int64?
+    var scenarioID: String
+    var key: String
+    var value: String
+
+    init(id: Int64, scenarioID: String, key: String, value: String) {
+        self.id = id
+        self.scenarioID = scenarioID
+        self.key = key
+        self.value = value
+    }
+
+    init(scenarioID: String, key: String, value: String) {
+        self.scenarioID = scenarioID
+        self.key = key
+        self.value = value
     }
 }

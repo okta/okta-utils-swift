@@ -16,4 +16,6 @@ Pod::Spec.new do |s|
   s.resources = 'Sources/OktaAnalytics/CoreData/OktaAnalytics.xcdatamodeld'
   s.dependency 'AppCenter','4.3.0'
   s.dependency 'OktaLogger/Core', '~>1'
+  s.dependency 'OktaSQLiteStorage', '~>0'
+  s.dependency 'GRDB.swift','~>5'
 end

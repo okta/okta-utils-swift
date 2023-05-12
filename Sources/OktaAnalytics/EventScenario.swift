@@ -12,6 +12,8 @@
 import Foundation
 import Combine
 import CoreData
+import OktaSQLiteStorage
+import GRDB
 
 // Extension to the Date struct, defines the subtraction operator, returning the time interval between two dates
 extension Date {
@@ -43,7 +45,7 @@ class EventScenario {
     private var cancellable: AnyCancellable?
 
     // CoreData Stack
-    private let managedContext: NSManagedObjectContext
+    private let databasePool: DatabasePool?
 
     private let scenarioStatusPropertyKey = "ScenarioStatus"
     private let durationMSPropertyKey = "DurationMS"
@@ -53,19 +55,15 @@ class EventScenario {
     }
 
     // Initializer which assigns the passed in name to the eventName property
-    init(_ scenario: ScenarioEvent, managedContext: NSManagedObjectContext) {
+    init(_ scenario: ScenarioEvent, databasePool: DatabasePool?) {
         self.scenario = scenario
-        self.managedContext = managedContext
+        self.databasePool = databasePool
     }
 
     // Method which starts the event stream, assigns the current time to the time property and sets up a sink to receive values
     func start() -> PassthroughSubject<Property, Never>? {
         eventStream = PassthroughSubject()
-        let scenario = Scenario(context: managedContext)
-        scenario.setValue(self.scenario.id, forKeyPath: #keyPath(Scenario.scenarioID))
-        scenario.setValue(self.scenario.name, forKeyPath: #keyPath(Scenario.name))
-        scenario.setValue(self.scenario.date, forKeyPath: #keyPath(Scenario.startTime))
-        managedContext.saveContext()
+
         cancellable = eventStream?
             .sink { [weak self] completion in
                 guard let `self` = self else { return }
@@ -77,12 +75,6 @@ class EventScenario {
                     return
                 }
                 self.properties?[property.key] = property.value
-                let scenarioProperty = ScenarioProperty(context: self.managedContext)
-                scenarioProperty.setValue(self.scenario.id, forKeyPath: #keyPath(ScenarioProperty.scenarioID))
-                scenarioProperty.setValue(property.key, forKeyPath: #keyPath(ScenarioProperty.key))
-                scenarioProperty.setValue(property.value, forKeyPath: #keyPath(ScenarioProperty.value))
-                scenarioProperty.setValue(self.scenario.name, forKeyPath: #keyPath(ScenarioProperty.name))
-                self.managedContext.saveContext()
             }
         return eventStream
     }

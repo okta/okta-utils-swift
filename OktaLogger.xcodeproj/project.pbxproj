@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		331685856FE9F5BA5DB0F3B0 /* Pods_OktaSQLiteStorageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 661B134898A69F6F57D415B1 /* Pods_OktaSQLiteStorageTests.framework */; };
-		3E333651B6BBA071BBDFDE05 /* Pods_OktaAnalyticsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 011D60B90031E2CB01AF489B /* Pods_OktaAnalyticsTests.framework */; };
-		64890680C531DC5F7D5C177F /* Pods_OktaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC557C040BC573ADC7035A31 /* Pods_OktaAnalytics.framework */; };
+		267DBA321DB541728E814174 /* libPods-OktaSQLiteStorageTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93A9FAFF41280AA9710DFA32 /* libPods-OktaSQLiteStorageTests.a */; };
+		2D6BB886D8A0886C4A456277 /* libPods-OktaAnalyticsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6ACBBB0A66E14A807F1F72C5 /* libPods-OktaAnalyticsTests.a */; };
+		3ACEBF1D00067A95B4A2AB5E /* libPods-OktaAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 566673A3A200AE363CFC9CF9 /* libPods-OktaAnalytics.a */; };
+		4C224BF61C644D40470FC532 /* libPods-OktaSQLiteStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 985EDC5F8E77BD6FB9E00FA0 /* libPods-OktaSQLiteStorage.a */; };
+		52032D3EDFA38B54C647AEBA /* libPods-OktaLogger.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA2A83EAC1F47EB5D97E13A /* libPods-OktaLogger.a */; };
 		6582A2024047A1BC55BC98D3 /* LumberjackLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */; };
 		6582A2C33C06B4353D1538E3 /* FileLoggerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6582ABCA2C9C2759535A1B4E /* FileLoggerDelegate.swift */; };
-		661EA6DBBC0E4B7A03C4889D /* Pods_OktaLoggerDemoApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 467098E40AFB65262D635440 /* Pods_OktaLoggerDemoApp.framework */; };
-		6C2BE44628E3B1E10031902A /* AnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2BE44528E3B1E10031902A /* AnalyticsTests.swift */; };
 		7B13559F276BE69400F0516C /* OktaLoggerFirebaseLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B13559E276BE69400F0516C /* OktaLoggerFirebaseLoggerTests.swift */; };
 		7FC038A4282467C300C16169 /* OktaLoggerLogLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC0389E282467C300C16169 /* OktaLoggerLogLevel.swift */; };
 		7FC038A5282467C300C16169 /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC0389F282467C300C16169 /* ReadWriteLock.swift */; };
@@ -25,7 +25,7 @@
 		806FF25E24B95A3300994D4D /* OktaLoggerFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */; };
 		80AA110224BE799800981074 /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA110124BE799800981074 /* DemoTableViewCell.swift */; };
 		8DCF5EB8263CACAD008698CD /* DDLogFileManagerCustomName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF5EB7263CACAC008698CD /* DDLogFileManagerCustomName.swift */; };
-		9C15C50F39FFBEBFBDD873D4 /* Pods_OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64F2B2A65F04BBAE7F804D1F /* Pods_OktaLogger.framework */; };
+		920CCF661E3443FECE4C2A52 /* libPods-OktaLoggerDemoApp-OktaLoggerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A6556B6F59B07E5ADE94631 /* libPods-OktaLoggerDemoApp-OktaLoggerTests.a */; };
 		9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */; };
 		9F26663029F747490064EF50 /* SQLiteConnectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */; };
 		9F26663129F747490064EF50 /* SQLitePersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662B29F747490064EF50 /* SQLitePersistentStorage.swift */; };
@@ -37,6 +37,7 @@
 		9F4F57D929F9B47900E10771 /* SQLiteMigratable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */; };
 		9F4F57DC29F9F42700E10771 /* SQLiteStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */; };
 		9F4F57DF29FC387F00E10771 /* SQLiteConnectionBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F4F57DD29FC36F600E10771 /* SQLiteConnectionBuilderTests.swift */; };
+		CA613B8B34C062622145F4D3 /* libPods-OktaLoggerDemoApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 89FF5BFEBC68FE427416F14F /* libPods-OktaLoggerDemoApp.a */; };
 		D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C824D42469DBF1005CF747 /* OktaLogger.framework */; };
 		D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */; };
 		D5C824E32469DBF1005CF747 /* OktaLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */; };
@@ -58,19 +59,18 @@
 		E251E807248AD1B800EF466D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E251E806248AD1B800EF466D /* Assets.xcassets */; };
 		E251E80A248AD1B800EF466D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E251E808248AD1B800EF466D /* LaunchScreen.storyboard */; };
 		E2E7C95325196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2E7C95225196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift */; };
-		E71FB430F3C03AA810C0037B /* Pods_OktaLoggerDemoApp_OktaLoggerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537007CB46C12A1897B88512 /* Pods_OktaLoggerDemoApp_OktaLoggerTests.framework */; };
-		ECC31FCF7660B72D90FDC7FB /* Pods_OktaSQLiteStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A56BA4F4DA7EE549C4B6CA1 /* Pods_OktaSQLiteStorage.framework */; };
 		F3575F302A0AD1850008A965 /* OktaAnalytics.docc in Sources */ = {isa = PBXBuildFile; fileRef = F3575F2F2A0AD1850008A965 /* OktaAnalytics.docc */; };
 		F3575F362A0AD1850008A965 /* OktaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3575F2C2A0AD1840008A965 /* OktaAnalytics.framework */; };
-		F3575F3D2A0AD1850008A965 /* OktaAnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3575F3C2A0AD1850008A965 /* OktaAnalyticsTests.swift */; };
 		F3575F3E2A0AD1850008A965 /* OktaAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F3575F2E2A0AD1850008A965 /* OktaAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F3575F412A0AD1850008A965 /* OktaAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3575F2C2A0AD1840008A965 /* OktaAnalytics.framework */; };
 		F3575F422A0AD1850008A965 /* OktaAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F3575F2C2A0AD1840008A965 /* OktaAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F3575F492A0AD19A0008A965 /* AnalyticsProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD94F5828CEEB2000EE4254 /* AnalyticsProviderProtocol.swift */; };
 		F3575F4A2A0AD1A60008A965 /* AppCenterAnalyticsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CAB2C7728DD22750020221F /* AppCenterAnalyticsProvider.swift */; };
 		F3575F4C2A0AD1A60008A965 /* Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ACE11A29BADB03003C3403 /* Properties.swift */; };
-		F3575F4E2A0AD1A60008A965 /* EventScenario.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ACE11829BADAE4003C3403 /* EventScenario.swift */; };
 		F3575F4F2A0AD1A60008A965 /* OktaAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C98A0E828A308FD00DA6CA9 /* OktaAnalytics.swift */; };
+		F3C091362A1576780015E9FC /* AnalyticsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C091352A1576780015E9FC /* AnalyticsStorage.swift */; };
+		F3C091392A15D2080015E9FC /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C091372A1577B70015E9FC /* ReadWriteLock.swift */; };
+		F3C0913D2A1719BE0015E9FC /* OktaAnalyticsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C0913B2A16EFC90015E9FC /* OktaAnalyticsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,25 +144,22 @@
 
 /* Begin PBXFileReference section */
 		00EF841BC9AECECB76C176FE /* Pods-OktaLoggerDemoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp.release.xcconfig"; sourceTree = "<group>"; };
-		011D60B90031E2CB01AF489B /* Pods_OktaAnalyticsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaAnalyticsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		028D1912AB9DB1ABBDD5EC94 /* Pods-OktaLogger.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.release.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.release.xcconfig"; sourceTree = "<group>"; };
-		0A56BA4F4DA7EE549C4B6CA1 /* Pods_OktaSQLiteStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaSQLiteStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A6556B6F59B07E5ADE94631 /* libPods-OktaLoggerDemoApp-OktaLoggerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerDemoApp-OktaLoggerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1626D76D3FE5CD1504C6A51A /* Pods-OktaLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerTests.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
 		1D7062F280C40B11A6913CF3 /* Pods-OktaLoggerDemoApp-OktaLoggerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp-OktaLoggerTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp-OktaLoggerTests/Pods-OktaLoggerDemoApp-OktaLoggerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2212750F97DBDF374821CF2C /* Pods-OktaLogger_.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger_.release.xcconfig"; path = "Target Support Files/Pods-OktaLogger_/Pods-OktaLogger_.release.xcconfig"; sourceTree = "<group>"; };
 		235FDEE37C9BE50EDFF8F22D /* Pods-OktaSQLiteStorageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorageTests.release.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests.release.xcconfig"; sourceTree = "<group>"; };
 		2BE105519632BEE1AAED7056 /* Pods-OktaLogger.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger.debug.xcconfig"; path = "Target Support Files/Pods-OktaLogger/Pods-OktaLogger.debug.xcconfig"; sourceTree = "<group>"; };
 		330F4ED2C904A636A557BACB /* Pods_OktaLoggerDemoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaLoggerDemoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		467098E40AFB65262D635440 /* Pods_OktaLoggerDemoApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaLoggerDemoApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3AA2A83EAC1F47EB5D97E13A /* libPods-OktaLogger.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLogger.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E9D4ECBA693A6740AB18D1E /* Pods-OktaAnalytics.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaAnalytics.debug.xcconfig"; path = "Target Support Files/Pods-OktaAnalytics/Pods-OktaAnalytics.debug.xcconfig"; sourceTree = "<group>"; };
 		4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		537007CB46C12A1897B88512 /* Pods_OktaLoggerDemoApp_OktaLoggerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaLoggerDemoApp_OktaLoggerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		64F2B2A65F04BBAE7F804D1F /* Pods_OktaLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		566673A3A200AE363CFC9CF9 /* libPods-OktaAnalytics.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaAnalytics.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6582AABCF4A4B6E5E05FC2E4 /* LumberjackLoggerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LumberjackLoggerDelegate.swift; sourceTree = "<group>"; };
 		6582ABCA2C9C2759535A1B4E /* FileLoggerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileLoggerDelegate.swift; sourceTree = "<group>"; };
-		661B134898A69F6F57D415B1 /* Pods_OktaSQLiteStorageTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaSQLiteStorageTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		672ADCC5504F41DBB4546AB0 /* Pods-OktaLogger_.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLogger_.debug.xcconfig"; path = "Target Support Files/Pods-OktaLogger_/Pods-OktaLogger_.debug.xcconfig"; sourceTree = "<group>"; };
-		6C2BE44528E3B1E10031902A /* AnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsTests.swift; sourceTree = "<group>"; };
+		6ACBBB0A66E14A807F1F72C5 /* libPods-OktaAnalyticsTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaAnalyticsTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C98A0E828A308FD00DA6CA9 /* OktaAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAnalytics.swift; sourceTree = "<group>"; };
 		6CAB2C7728DD22750020221F /* AppCenterAnalyticsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCenterAnalyticsProvider.swift; sourceTree = "<group>"; };
 		6CD94F5828CEEB2000EE4254 /* AnalyticsProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsProviderProtocol.swift; sourceTree = "<group>"; };
@@ -178,8 +175,11 @@
 		806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaLoggerFileLogger.swift; sourceTree = "<group>"; };
 		80AA110124BE799800981074 /* DemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewCell.swift; sourceTree = "<group>"; };
 		811E540BAC9B91409FC5DAD0 /* Pods-OktaAnalyticsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaAnalyticsTests.release.xcconfig"; path = "Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests.release.xcconfig"; sourceTree = "<group>"; };
+		89FF5BFEBC68FE427416F14F /* libPods-OktaLoggerDemoApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerDemoApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A9DAE193EBBC6DCFB1368F5 /* Pods-OktaAnalytics.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaAnalytics.release.xcconfig"; path = "Target Support Files/Pods-OktaAnalytics/Pods-OktaAnalytics.release.xcconfig"; sourceTree = "<group>"; };
 		8DCF5EB7263CACAC008698CD /* DDLogFileManagerCustomName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDLogFileManagerCustomName.swift; sourceTree = "<group>"; };
+		93A9FAFF41280AA9710DFA32 /* libPods-OktaSQLiteStorageTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaSQLiteStorageTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		985EDC5F8E77BD6FB9E00FA0 /* libPods-OktaSQLiteStorage.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaSQLiteStorage.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaSQLiteStorage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F26660D29F728540064EF50 /* OktaSQLiteStorageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OktaSQLiteStorageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteConnectionBuilder.swift; path = OktaSQLiteStorage/Sources/SQLiteConnectionBuilder.swift; sourceTree = "<group>"; };
@@ -195,7 +195,6 @@
 		9F4F57E029FC482E00E10771 /* OktaSQLiteStorage.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = OktaSQLiteStorage.xctestplan; sourceTree = "<group>"; };
 		A91EB4B6CDE2BB40D2F8449B /* Pods-OktaSQLiteStorage.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorage.debug.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorage/Pods-OktaSQLiteStorage.debug.xcconfig"; sourceTree = "<group>"; };
 		BA850EA89BC3778AE481F501 /* Pods-OktaSQLiteStorageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorageTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests.debug.xcconfig"; sourceTree = "<group>"; };
-		BC557C040BC573ADC7035A31 /* Pods_OktaAnalytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OktaAnalytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C36822277ADB38E478342FB1 /* Pods-OktaAnalyticsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaAnalyticsTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C39390D4671A1E9CEAC61836 /* Pods-OktaLoggerDemoApp-OktaLoggerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp-OktaLoggerTests.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp-OktaLoggerTests/Pods-OktaLoggerDemoApp-OktaLoggerTests.release.xcconfig"; sourceTree = "<group>"; };
 		C58A9E54B6CE1A902894264C /* Pods-OktaLoggerDemoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp.debug.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -233,10 +232,11 @@
 		F3575F2E2A0AD1850008A965 /* OktaAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaAnalytics.h; sourceTree = "<group>"; };
 		F3575F2F2A0AD1850008A965 /* OktaAnalytics.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = OktaAnalytics.docc; sourceTree = "<group>"; };
 		F3575F352A0AD1850008A965 /* OktaAnalyticsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OktaAnalyticsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F3575F3C2A0AD1850008A965 /* OktaAnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAnalyticsTests.swift; sourceTree = "<group>"; };
 		F3575F532A0AD5FA0008A965 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = OktaSQLiteStorage/README.md; sourceTree = "<group>"; };
-		F3ACE11829BADAE4003C3403 /* EventScenario.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventScenario.swift; sourceTree = "<group>"; };
 		F3ACE11A29BADB03003C3403 /* Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Properties.swift; sourceTree = "<group>"; };
+		F3C091352A1576780015E9FC /* AnalyticsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsStorage.swift; sourceTree = "<group>"; };
+		F3C091372A1577B70015E9FC /* ReadWriteLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadWriteLock.swift; sourceTree = "<group>"; };
+		F3C0913B2A16EFC90015E9FC /* OktaAnalyticsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAnalyticsTests.swift; sourceTree = "<group>"; };
 		FA30FA2CE6EE332C472D9B83 /* Pods-OktaSQLiteStorage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorage.release.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorage/Pods-OktaSQLiteStorage.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -245,7 +245,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECC31FCF7660B72D90FDC7FB /* Pods_OktaSQLiteStorage.framework in Frameworks */,
+				4C224BF61C644D40470FC532 /* libPods-OktaSQLiteStorage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,7 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */,
-				331685856FE9F5BA5DB0F3B0 /* Pods_OktaSQLiteStorageTests.framework in Frameworks */,
+				267DBA321DB541728E814174 /* libPods-OktaSQLiteStorageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +262,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C15C50F39FFBEBFBDD873D4 /* Pods_OktaLogger.framework in Frameworks */,
+				52032D3EDFA38B54C647AEBA /* libPods-OktaLogger.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,7 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */,
-				E71FB430F3C03AA810C0037B /* Pods_OktaLoggerDemoApp_OktaLoggerTests.framework in Frameworks */,
+				920CCF661E3443FECE4C2A52 /* libPods-OktaLoggerDemoApp-OktaLoggerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3575F412A0AD1850008A965 /* OktaAnalytics.framework in Frameworks */,
-				661EA6DBBC0E4B7A03C4889D /* Pods_OktaLoggerDemoApp.framework in Frameworks */,
+				CA613B8B34C062622145F4D3 /* libPods-OktaLoggerDemoApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +288,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64890680C531DC5F7D5C177F /* Pods_OktaAnalytics.framework in Frameworks */,
+				3ACEBF1D00067A95B4A2AB5E /* libPods-OktaAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,38 +297,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				F3575F362A0AD1850008A965 /* OktaAnalytics.framework in Frameworks */,
-				3E333651B6BBA071BBDFDE05 /* Pods_OktaAnalyticsTests.framework in Frameworks */,
+				2D6BB886D8A0886C4A456277 /* libPods-OktaAnalyticsTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6C2BE44428E3B1B80031902A /* Analytics */ = {
-			isa = PBXGroup;
-			children = (
-				6C2BE44528E3B1E10031902A /* AnalyticsTests.swift */,
-			);
-			path = Analytics;
-			sourceTree = "<group>";
-		};
-		6CC1629C284EBD85009EA8F3 /* OktaAnalytics */ = {
-			isa = PBXGroup;
-			children = (
-				6CD94F5828CEEB2000EE4254 /* AnalyticsProviderProtocol.swift */,
-				6CAB2C7728DD22750020221F /* AppCenterAnalyticsProvider.swift */,
-				6C98A0E828A308FD00DA6CA9 /* OktaAnalytics.swift */,
-				F3ACE11829BADAE4003C3403 /* EventScenario.swift */,
-				F3ACE11A29BADB03003C3403 /* Properties.swift */,
-			);
-			path = OktaAnalytics;
-			sourceTree = "<group>";
-		};
 		7FC0389428243B2900C16169 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				F3575F2D2A0AD1850008A965 /* OktaAnalytics */,
 				9F26662929F747340064EF50 /* OktaSQLiteStorage */,
-				6CC1629C284EBD85009EA8F3 /* OktaAnalytics */,
 				7FC0389828243BDC00C16169 /* OktaLogger */,
 			);
 			path = Sources;
@@ -349,6 +329,7 @@
 		7FC0389928243C5F00C16169 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				F3575F3B2A0AD1850008A965 /* OktaAnalyticsTests */,
 				9F4F57DA29F9F3D900E10771 /* OktaSQLiteStorageTests */,
 				D5C824E12469DBF1005CF747 /* OktaLoggerTests */,
 			);
@@ -384,13 +365,13 @@
 			isa = PBXGroup;
 			children = (
 				4FFB48B8C0D4F4DD1D258FFD /* libPods-OktaLoggerTests.a */,
-				BC557C040BC573ADC7035A31 /* Pods_OktaAnalytics.framework */,
-				011D60B90031E2CB01AF489B /* Pods_OktaAnalyticsTests.framework */,
-				64F2B2A65F04BBAE7F804D1F /* Pods_OktaLogger.framework */,
-				467098E40AFB65262D635440 /* Pods_OktaLoggerDemoApp.framework */,
-				537007CB46C12A1897B88512 /* Pods_OktaLoggerDemoApp_OktaLoggerTests.framework */,
-				0A56BA4F4DA7EE549C4B6CA1 /* Pods_OktaSQLiteStorage.framework */,
-				661B134898A69F6F57D415B1 /* Pods_OktaSQLiteStorageTests.framework */,
+				566673A3A200AE363CFC9CF9 /* libPods-OktaAnalytics.a */,
+				6ACBBB0A66E14A807F1F72C5 /* libPods-OktaAnalyticsTests.a */,
+				3AA2A83EAC1F47EB5D97E13A /* libPods-OktaLogger.a */,
+				89FF5BFEBC68FE427416F14F /* libPods-OktaLoggerDemoApp.a */,
+				0A6556B6F59B07E5ADE94631 /* libPods-OktaLoggerDemoApp-OktaLoggerTests.a */,
+				985EDC5F8E77BD6FB9E00FA0 /* libPods-OktaSQLiteStorage.a */,
+				93A9FAFF41280AA9710DFA32 /* libPods-OktaSQLiteStorageTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -429,8 +410,6 @@
 				7FC0389428243B2900C16169 /* Sources */,
 				7FC0389928243C5F00C16169 /* Tests */,
 				E251E7F5248AD13D00EF466D /* Example */,
-				F3575F2D2A0AD1850008A965 /* OktaAnalytics */,
-				F3575F3B2A0AD1850008A965 /* OktaAnalyticsTests */,
 				D5C824D52469DBF1005CF747 /* Products */,
 				FF24FFA3DDFB489FAC52ED9D /* Pods */,
 				9200B49349EABD23B114BB0F /* Frameworks */,
@@ -455,7 +434,6 @@
 		D5C824E12469DBF1005CF747 /* OktaLoggerTests */ = {
 			isa = PBXGroup;
 			children = (
-				6C2BE44428E3B1B80031902A /* Analytics */,
 				D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */,
 				DEF2CC22260A341300F8B644 /* OktaLoggerMultithreadingTests.swift */,
 				E2E7C95225196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift */,
@@ -534,6 +512,12 @@
 		F3575F2D2A0AD1850008A965 /* OktaAnalytics */ = {
 			isa = PBXGroup;
 			children = (
+				6CD94F5828CEEB2000EE4254 /* AnalyticsProviderProtocol.swift */,
+				6CAB2C7728DD22750020221F /* AppCenterAnalyticsProvider.swift */,
+				6C98A0E828A308FD00DA6CA9 /* OktaAnalytics.swift */,
+				F3ACE11A29BADB03003C3403 /* Properties.swift */,
+				F3C091352A1576780015E9FC /* AnalyticsStorage.swift */,
+				F3C091372A1577B70015E9FC /* ReadWriteLock.swift */,
 				F3575F2E2A0AD1850008A965 /* OktaAnalytics.h */,
 				F3575F2F2A0AD1850008A965 /* OktaAnalytics.docc */,
 			);
@@ -543,7 +527,7 @@
 		F3575F3B2A0AD1850008A965 /* OktaAnalyticsTests */ = {
 			isa = PBXGroup;
 			children = (
-				F3575F3C2A0AD1850008A965 /* OktaAnalyticsTests.swift */,
+				F3C0913B2A16EFC90015E9FC /* OktaAnalyticsTests.swift */,
 			);
 			path = OktaAnalyticsTests;
 			sourceTree = "<group>";
@@ -628,7 +612,6 @@
 				9F26660929F728540064EF50 /* Sources */,
 				9F26660A29F728540064EF50 /* Frameworks */,
 				9F26660B29F728540064EF50 /* Resources */,
-				6B37FF77EC1508115142DEF6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -670,7 +653,6 @@
 				D5C824DA2469DBF1005CF747 /* Frameworks */,
 				D5C824DB2469DBF1005CF747 /* Resources */,
 				9ECAD1E0171C5273C443BE35 /* [CP] Embed Pods Frameworks */,
-				7FA7DC8BED91511631055C08 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -693,7 +675,6 @@
 				80DDE77E24B961B400D0E2F3 /* Embed Frameworks */,
 				DEC5276724DBFE6C0022B698 /* ShellScript */,
 				20382702DB652A5C8D9E415D /* [CP] Embed Pods Frameworks */,
-				49AB982EE3732949FCCE12FB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -733,7 +714,6 @@
 				F3575F312A0AD1850008A965 /* Sources */,
 				F3575F322A0AD1850008A965 /* Frameworks */,
 				F3575F332A0AD1850008A965 /* Resources */,
-				8FD95E22B7436F4AF4B00722 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -780,7 +760,6 @@
 					};
 					F3575F342A0AD1850008A965 = {
 						CreatedOnToolsVersion = 14.2;
-						TestTargetID = E251E7FA248AD1B400EF466D;
 					};
 				};
 			};
@@ -970,40 +949,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		49AB982EE3732949FCCE12FB /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6B37FF77EC1508115142DEF6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6C0850698E3B2C729FC69D9E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1043,40 +988,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --config \"${PROJECT_DIR}/.swiftlint.yml\"\n";
-		};
-		7FA7DC8BED91511631055C08 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp-OktaLoggerTests/Pods-OktaLoggerDemoApp-OktaLoggerTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp-OktaLoggerTests/Pods-OktaLoggerDemoApp-OktaLoggerTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp-OktaLoggerTests/Pods-OktaLoggerDemoApp-OktaLoggerTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8FD95E22B7436F4AF4B00722 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		9ECAD1E0171C5273C443BE35 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1218,7 +1129,6 @@
 				7B13559F276BE69400F0516C /* OktaLoggerFirebaseLoggerTests.swift in Sources */,
 				D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */,
 				E2E7C95325196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift in Sources */,
-				6C2BE44628E3B1E10031902A /* AnalyticsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1241,9 +1151,10 @@
 			files = (
 				F3575F4A2A0AD1A60008A965 /* AppCenterAnalyticsProvider.swift in Sources */,
 				F3575F302A0AD1850008A965 /* OktaAnalytics.docc in Sources */,
-				F3575F4E2A0AD1A60008A965 /* EventScenario.swift in Sources */,
+				F3C091362A1576780015E9FC /* AnalyticsStorage.swift in Sources */,
 				F3575F492A0AD19A0008A965 /* AnalyticsProviderProtocol.swift in Sources */,
 				F3575F4F2A0AD1A60008A965 /* OktaAnalytics.swift in Sources */,
+				F3C091392A15D2080015E9FC /* ReadWriteLock.swift in Sources */,
 				F3575F4C2A0AD1A60008A965 /* Properties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1252,7 +1163,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F3575F3D2A0AD1850008A965 /* OktaAnalyticsTests.swift in Sources */,
+				F3C0913D2A1719BE0015E9FC /* OktaAnalyticsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1717,17 +1628,17 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7WXXBW6Z2Y;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Okta, Inc. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
@@ -1736,13 +1647,16 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = okta.oktaAnalytics.OktaAnalytics;
+				PRODUCT_BUNDLE_IDENTIFIER = okta.OktaAnalytics;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1755,17 +1669,17 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7WXXBW6Z2Y;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Okta, Inc. All rights reserved.";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
@@ -1774,13 +1688,16 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = okta.oktaAnalytics.OktaAnalytics;
+				PRODUCT_BUNDLE_IDENTIFIER = okta.OktaAnalytics;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1794,20 +1711,23 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = okta.oktaAnalytics.OktaAnalyticsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaLoggerDemoApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OktaLoggerDemoApp";
 			};
 			name = Debug;
 		};
@@ -1818,20 +1738,23 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = okta.oktaAnalytics.OktaAnalyticsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OktaLoggerDemoApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OktaLoggerDemoApp";
 			};
 			name = Release;
 		};

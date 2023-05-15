@@ -14,6 +14,9 @@ commands:
     description: "Run tests"
     steps:
       - run:
+         name: OktaAnalytics unit tests"
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalytics" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+      - run:
          name: OktaSQLiteStorage unit tests"
          command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
       - run:

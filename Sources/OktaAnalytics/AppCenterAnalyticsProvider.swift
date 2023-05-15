@@ -23,7 +23,7 @@ public class AppCenterAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
     public var name: String
     public var logger: OktaLoggerProtocol?
 
-    private var appCenter: AppCenterAnalytics.Analytics.Type
+    private var appCenter: AppCenterAnalytics.Analytics.Type = AppCenterAnalytics.Analytics.self
     private var isServicesStarted = false
 
     // MARK: - Initializer
@@ -35,9 +35,8 @@ public class AppCenterAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
            - logger: An optional logger to use for logging events.
            - appCenter: An optional instance of `AppCenterAnalytics.Analytics.Type`.
         */
-    public init(name: String, logger: OktaLoggerProtocol? = OktaLogger(), appCenter: AppCenterAnalytics.Analytics.Type = AppCenterAnalytics.Analytics.self) {
+    public init(name: String, logger: OktaLoggerProtocol? = OktaLogger()) {
         self.name = name
-        self.appCenter = appCenter
         self.logger = logger
     }
 

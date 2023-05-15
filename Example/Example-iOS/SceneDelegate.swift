@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 defaultProperties: nil
             )
         )
-        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
+        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger)
         appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
         return appCenterAnalyticsProvider
     }()
@@ -42,18 +42,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         FirebaseApp.configure()
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
-        scenarioID = OktaAnalytics.startScenario("Application", [Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")])
+        OktaAnalytics.startScenario(ScenarioEvent(name: "Application", properties: [Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")])) {
+            scenarioID = $0 ?? ""
+        }
         guard let _ = (scene as? UIWindowScene) else { return }
     }
     func sceneWillEnterForeground(_ scene: UIScene) {
         if scenarioID.isEmpty {
-            scenarioID = OktaAnalytics.startScenario("Application", [Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")])
+            OktaAnalytics.startScenario(ScenarioEvent(name: "Application", properties: [Property(key: "AppDelegate.application.sceneWillEnterForeground", value: "1")])) {
+                scenarioID = $0 ?? ""
+            }
+        } else {
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "SceneDelegate.sceneWillEnterForeground", value: "2")])
         }
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "SceneDelegate.sceneWillEnterForeground", value: "5")])
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "SceneDelegate.sceneDidBecomeActive", value: "5")])
+        if scenarioID.isEmpty {
+            OktaAnalytics.startScenario(ScenarioEvent(name: "Application", properties: [Property(key: "AppDelegate.application.sceneWillEnterForeground", value: "1")])) {
+                scenarioID = $0 ?? ""
+            }
+        } else {
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "SceneDelegate.sceneDidBecomeActive", value: "4")])
+        }
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -62,7 +73,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidEnterBackground(_ scene: UIScene) {
         OktaAnalytics.updateScenario(scenarioID, [Property(key: "SceneDelegate.sceneDidEnterBackground", value: "5")])
-        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Finished")
+        OktaAnalytics.getOngoingScenarioIds("Application") {
+            print($0)
+        }
         scenarioID = ""
+//        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Entered background")
+//        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Entered background")
     }
 }

@@ -19,7 +19,7 @@ public typealias Name = String
 public typealias Properties = [String: String]?
 
 /// The Property struct contains two constant properties: key and value, both of which are of type String. The struct has an initializer that takes in two parameters, key and value, and assigns them to the struct's properties.
-public struct Property {
+public struct Property: Hashable {
     // key is a constant property, initialized with the value passed to the struct's initializer
     public let key: String
     // value is a constant property, initialized with the value passed to the struct's initializer
@@ -38,28 +38,16 @@ public typealias ScenarioID = String
 
 public struct Event: Hashable {
 
-    public lazy var id: ScenarioID = {
-        "\(name)\(UUID().uuidString)"
-    }()
-
     public let name: Name
-    public var properties: Properties
+    public var properties: [Property]
+    public var displayName: Name
 
-    private(set) var date: Date
+    let startTime = Date()
+    let id = UUID().uuidString
 
-    public init(name: Name) {
+    public init(name: Name, displayName: Name = "", properties: [Property] = []) {
         self.name = name
-        properties = [:]
-        date = Date()
-    }
-
-    mutating func update(property: Property) {
-        properties?[property.key] = property.value
-    }
-
-    mutating func update(properties: Properties) {
-        properties?.forEach {
-            self.properties?[$0] = $1
-        }
+        self.properties = properties
+        self.displayName = displayName
     }
 }

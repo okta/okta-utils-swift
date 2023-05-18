@@ -9,7 +9,7 @@ Okta SQLite storage wrapper on top of GRDB framework
   s.homepage         = 'https://github.com/okta/okta-logger-swift.git'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com" }
-  s.source           = { :git => 'https://github.com/okta/okta-logger-swift.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/okta/okta-logger-swift.git', :tag => "OktaSQLiteStorage-"+s.version.to_s }
   s.swift_version = '5.0'
 
   s.ios.deployment_target = '13.0'

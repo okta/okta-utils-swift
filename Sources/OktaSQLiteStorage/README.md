@@ -19,9 +19,10 @@ CREATE TABLE 'Example' (
 
 let schema = SQLiteSchema(schema: queries, version: SchemaVersions.v1)
 
-let sqliteStorageBuilder = SQLiteStorageBuilder()
 let sqliteStorage = try await SQLiteStorageBuilder()
                             .setWALMode(enabled: true)
                             .build(schema: schema, storagePath: dbURL)
+
+try await sqliteStorage.initialize(storageMigrator: SQLiteMigrator())
 
 ```

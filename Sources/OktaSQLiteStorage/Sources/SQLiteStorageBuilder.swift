@@ -42,8 +42,7 @@ public class SQLiteStorageBuilder {
     ///   - storagePath: Location of sqlite database and service files
     /// - Returns: Constructed object that conforms to OktaSQLiteStorageProtocol protocol
     public func build(schema: SQLiteSchema,
-                      storagePath: URL,
-                      storageMigrator: any SQLiteMigratable) async throws -> SQLiteStorageProtocol {
+                      storagePath: URL) async throws -> SQLiteStorageProtocol {
         if schema.version.rawValue == 0 || schema.version.rawValue < 0 {
             throw SQLiteStorageError.generalError("Invalid schema version")
         }
@@ -51,10 +50,7 @@ public class SQLiteStorageBuilder {
         let sqliteStorage = try SQLiteStorage(at: storagePath,
                                               schema: schema,
                                               walModeEnabled: walModeEnabled,
-                                              configuration: configuration,
-                                              storageMigrator: storageMigrator)
-        try await sqliteStorage.initialize()
-
+                                              configuration: configuration)
         return sqliteStorage
     }
 }

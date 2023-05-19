@@ -17,17 +17,14 @@ class SQLiteStorage: SQLiteStorageProtocol {
     let schema: SQLiteSchema
     let sqliteURL: URL
     let sqlitePool: DatabasePool
-    let storageMigrator: any SQLiteMigratable
 
     init(at sqliteURL: URL,
          schema: SQLiteSchema,
          walModeEnabled: Bool,
          configuration: Configuration?,
-         storageMigrator: any SQLiteMigratable,
          connectionBuilder: SQLiteConnectionBuilderProtocol = SQLiteConnectionBuilder()) throws {
         self.sqliteURL = sqliteURL
         self.schema = schema
-        self.storageMigrator = storageMigrator
 
         do {
             let fileManager = FileManager.default
@@ -57,7 +54,7 @@ class SQLiteStorage: SQLiteStorageProtocol {
         }
     }
 
-    func initialize() async throws {
+    func initialize(storageMigrator: any SQLiteMigratable) async throws {
         do {
             try await sqlitePool.read { db in
                 let sqlUserVersion = try Int.fetchOne(db, sql: "PRAGMA user_version") ?? 0
@@ -76,24 +73,30 @@ class SQLiteStorage: SQLiteStorageProtocol {
                     try self.migrateToTargetVersion(
                                 fromVersion: currentVersion,
                                 targetVersionRawValue: self.schema.version.rawValue,
-                                migrator: self.storageMigrator)
+                                migrator: storageMigrator)
                 }
             }
+        } catch let error as SQLiteStorageError {
+            throw error
         } catch {
             throw SQLiteStorageError.sqliteError(error.localizedDescription)
         }
     }
 
     func migrateToTargetVersion<T, S>(fromVersion: T, targetVersionRawValue: Int, migrator: S) throws where T: SchemaVersionType, S: SQLiteMigratable {
+        guard fromVersion.rawValue <= targetVersionRawValue else {
+            throw SQLiteStorageError.migrationError(.downgradeAttempt)
+        }
+
         // swiftlint:disable:next force_cast
         try migrator.willStartIncrementalStorageMigrationSequence(startVersion: fromVersion as! S.Version, endVersion: schema.version as! S.Version)
 
         let allCases = T.allCases.sorted()
         guard let currentVersionIndex = allCases.firstIndex(of: fromVersion) else {
-            throw SQLiteStorageError.generalError("Unexpected db version")
+            throw SQLiteStorageError.migrationError(.badCurrentVersion)
         }
         guard let targetVersionIndex = allCases.firstIndex(where: { $0.rawValue == targetVersionRawValue }) else {
-            throw SQLiteStorageError.generalError("Unknown target db version")
+            throw SQLiteStorageError.migrationError(.badTargetVersion)
         }
 
         let nextVersionIndex = currentVersionIndex + 1

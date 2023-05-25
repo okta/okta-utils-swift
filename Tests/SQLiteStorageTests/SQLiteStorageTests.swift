@@ -106,7 +106,7 @@ final class SQLiteStorageTests: XCTestCase {
 
     func testDBDowngrade() throws {
         try testMigration()
-        let endOfAsycTest = expectation(description: "End of async test")
+        let endOfAsycTest1 = expectation(description: "End of async test")
 
         Task {
             do {
@@ -121,11 +121,37 @@ final class SQLiteStorageTests: XCTestCase {
                 } else {
                     XCTFail("Unexpected error type")
                 }
-                endOfAsycTest.fulfill()
+                endOfAsycTest1.fulfill()
             }
         }
 
-        wait(for: [endOfAsycTest], timeout: 1)
+        wait(for: [endOfAsycTest1], timeout: 1)
+
+        let endOfAsycTest2 = expectation(description: "End of async test")
+
+        Task {
+
+            enum UnexpectedSchemaVersions: Int, SchemaVersionType {
+                case v1 = 1
+            }
+
+            do {
+                let schema = SQLiteSchema(schema: "", version: UnexpectedSchemaVersions.v1)
+                let storage = try await SQLiteStorageBuilder()
+                    .setWALMode(enabled: true)
+                    .build(schema: schema, storagePath: dbURL)
+                try await storage.initialize(storageMigrator: SQLiteMigratorMock())
+            } catch {
+                if case SQLiteStorageError.migrationError(let errorType) = error {
+                    XCTAssertTrue(errorType == .downgradeAttempt)
+                } else {
+                    XCTFail("Unexpected error type")
+                }
+                endOfAsycTest2.fulfill()
+            }
+        }
+
+        wait(for: [endOfAsycTest2], timeout: 1)
     }
 }
 

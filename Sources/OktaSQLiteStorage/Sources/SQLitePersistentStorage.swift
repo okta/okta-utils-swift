@@ -66,7 +66,7 @@ class SQLiteStorage: SQLiteStorageProtocol {
                     try self.buildDatabaseSchema()
                 } else {
                     guard let currentVersion = self.schema.version.versionByRawValue(sqlUserVersion) as (any SchemaVersionType)? else {
-                        throw SQLiteStorageError.generalError("Unexpected schema version \(sqlUserVersion) in sqlite database")
+                        throw SQLiteStorageError.migrationError(.downgradeAttempt)
                     }
                     // Perform migration from the last known version to the current version declared by versionable storage, one-by-one in "cascade" fashion
                     //try storageMigrator.willStartIncrementalStorageMigrationSequence(startVersion: currentVersion, endVersion: schema.version)

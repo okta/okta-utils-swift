@@ -32,7 +32,8 @@ class AnalyticsStorage {
         do {
             let sqliteStorage = try await SQLiteStorageBuilder()
                 .setWALMode(enabled: true)
-                .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigrator())
+                .build(schema: schema, storagePath: dbURL)
+            try await sqliteStorage.initialize(storageMigrator: SQLiteMigrator())
             databasePool = sqliteStorage.sqlitePool
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
@@ -200,7 +201,7 @@ private extension AnalyticsStorage {
     }
 
     func dbURL(forSecurityApplicationGroupIdentifier groupIdentifier: String) -> URL? {
-        guard let cacheURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) ?? FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+        guard let cacheURL = !groupIdentifier.isEmpty ? FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) : FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             assert(false, "cache DB URL failed")
             return nil
         }

@@ -14,6 +14,15 @@ import Foundation
 
 public enum SQLiteStorageError: Error {
     case generalError(String)
+    case migrationError(MigrationError)
     case sqliteError(String)
     case internalError(String)
 }
+
+public enum MigrationError {
+    case badCurrentVersion
+    case badTargetVersion
+    case downgradeAttempt
+}
+
+extension MigrationError: Equatable {}

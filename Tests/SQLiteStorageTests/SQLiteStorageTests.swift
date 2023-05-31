@@ -24,7 +24,7 @@ final class SQLiteStorageTests: XCTestCase {
                                                                        includingPropertiesForKeys: nil,
                                                                        options: .skipsHiddenFiles)
             for fileURL in fileURLs {
-                try FileManager.default.removeItem(at: fileURL)
+                try? FileManager.default.removeItem(at: fileURL)
             }
             dbURL = cacheURL.appendingPathComponent("sqlite.db")
         }
@@ -45,7 +45,8 @@ final class SQLiteStorageTests: XCTestCase {
             let schema = SQLiteSchema(schema: schemaQueries, version: SchemaVersions.v1)
             let storage = try await SQLiteStorageBuilder()
                 .setWALMode(enabled: true)
-                .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigratorMock())
+                .build(schema: schema, storagePath: dbURL)
+            try await storage.initialize(storageMigrator: SQLiteMigratorMock())
 
             XCTAssertEqual(storage.sqliteURL, dbURL)
             try await storage.sqlitePool.write { db in
@@ -81,7 +82,8 @@ final class SQLiteStorageTests: XCTestCase {
             let schema = SQLiteSchema(schema: schemaQueries, version: SchemaVersions.v2)
             let storage = try await SQLiteStorageBuilder()
                 .setWALMode(enabled: true)
-                .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigratorMock())
+                .build(schema: schema, storagePath: dbURL)
+            try await storage.initialize(storageMigrator: SQLiteMigratorMock())
 
             try await storage.sqlitePool.write { db in
                 try db.execute(literal: "INSERT INTO Example2 (id) VALUES (5) ")
@@ -100,6 +102,56 @@ final class SQLiteStorageTests: XCTestCase {
         }
         
         wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
+    }
+
+    func testDBDowngrade() throws {
+        try testMigration()
+        let endOfAsycTest1 = expectation(description: "End of async test")
+
+        Task {
+            do {
+                let schema = SQLiteSchema(schema: "", version: SchemaVersions.v1)
+                let storage = try await SQLiteStorageBuilder()
+                    .setWALMode(enabled: true)
+                    .build(schema: schema, storagePath: dbURL)
+                try await storage.initialize(storageMigrator: SQLiteMigratorMock())
+            } catch {
+                if case SQLiteStorageError.migrationError(let errorType) = error {
+                    XCTAssertTrue(errorType == .downgradeAttempt)
+                } else {
+                    XCTFail("Unexpected error type")
+                }
+                endOfAsycTest1.fulfill()
+            }
+        }
+
+        wait(for: [endOfAsycTest1], timeout: 1)
+
+        let endOfAsycTest2 = expectation(description: "End of async test")
+
+        Task {
+
+            enum UnexpectedSchemaVersions: Int, SchemaVersionType {
+                case v1 = 1
+            }
+
+            do {
+                let schema = SQLiteSchema(schema: "", version: UnexpectedSchemaVersions.v1)
+                let storage = try await SQLiteStorageBuilder()
+                    .setWALMode(enabled: true)
+                    .build(schema: schema, storagePath: dbURL)
+                try await storage.initialize(storageMigrator: SQLiteMigratorMock())
+            } catch {
+                if case SQLiteStorageError.migrationError(let errorType) = error {
+                    XCTAssertTrue(errorType == .downgradeAttempt)
+                } else {
+                    XCTFail("Unexpected error type")
+                }
+                endOfAsycTest2.fulfill()
+            }
+        }
+
+        wait(for: [endOfAsycTest2], timeout: 1)
     }
 }
 

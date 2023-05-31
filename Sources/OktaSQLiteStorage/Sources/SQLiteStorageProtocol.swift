@@ -20,4 +20,7 @@ public protocol SQLiteStorageProtocol {
 
     /// Location of a database
     var sqliteURL: URL { get }
+
+    /// Asynchronously initializes databases and starts migration if required
+    func initialize(storageMigrator: any SQLiteMigratable) async throws
 }

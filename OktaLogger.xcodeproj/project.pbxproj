@@ -188,6 +188,8 @@
 		9F26662E29F747490064EF50 /* SchemaVersionType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SchemaVersionType.swift; path = OktaSQLiteStorage/Sources/SchemaVersionType.swift; sourceTree = "<group>"; };
 		9F26662F29F747490064EF50 /* SQLiteStorageError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteStorageError.swift; path = OktaSQLiteStorage/Sources/SQLiteStorageError.swift; sourceTree = "<group>"; };
 		9F26663629F747760064EF50 /* SQLiteStorageBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteStorageBuilder.swift; path = OktaSQLiteStorage/Sources/SQLiteStorageBuilder.swift; sourceTree = "<group>"; };
+		9F42AB2F2A1BF294002EDEE7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = OktaSQLiteStorage/README.md; sourceTree = "<group>"; };
+		9F42AB302A1BF3B2002EDEE7 /* OktaSQLiteStorage.podspec */ = {isa = PBXFileReference; lastKnownFileType = file; path = OktaSQLiteStorage.podspec; sourceTree = SOURCE_ROOT; };
 		9F4F57D429F8841F00E10771 /* SQLiteSchema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteSchema.swift; path = OktaSQLiteStorage/Sources/SQLiteSchema.swift; sourceTree = "<group>"; };
 		9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteMigratable.swift; path = OktaSQLiteStorage/Sources/SQLiteMigratable.swift; sourceTree = "<group>"; };
 		9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SQLiteStorageTests.swift; path = SQLiteStorageTests/SQLiteStorageTests.swift; sourceTree = "<group>"; };
@@ -379,6 +381,8 @@
 		9F26662929F747340064EF50 /* OktaSQLiteStorage */ = {
 			isa = PBXGroup;
 			children = (
+				9F42AB302A1BF3B2002EDEE7 /* OktaSQLiteStorage.podspec */,
+				9F42AB2F2A1BF294002EDEE7 /* README.md */,
 				9F4F57D829F9B47900E10771 /* SQLiteMigratable.swift */,
 				9F26662C29F747490064EF50 /* SQLiteStorageProtocol.swift */,
 				9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */,

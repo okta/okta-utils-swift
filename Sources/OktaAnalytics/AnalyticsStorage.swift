@@ -15,9 +15,9 @@ import GRDB
 
 class AnalyticsStorage {
 
-    private var lock = ReadWriteLock()
     private let logger: OktaLoggerProtocol
-    private var databasPool: DatabasePool?
+    private var databasePool: DatabasePool?
+    private let writeQueue = DispatchQueue(label: "com.AnalyticsStorage", qos: .userInitiated)
 
     init(logger: OktaLoggerProtocol) {
         self.logger = logger
@@ -26,157 +26,153 @@ class AnalyticsStorage {
     func initializeDB(forSecurityApplicationGroupIdentifier groupIdentifier: String) async throws {
 
         guard let dbURL = dbURL(forSecurityApplicationGroupIdentifier: groupIdentifier) else {
-           assert(false, "cache DB URL failed")
+            assert(false, "cache DB URL failed")
         }
         let schema = SQLiteSchema(schema: schema, version: DBVersions.v1)
         do {
             let sqliteStorage = try await SQLiteStorageBuilder()
-                                        .setWALMode(enabled: true)
-                                        .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigrator())
-            databasPool = sqliteStorage.sqlitePool
+                .setWALMode(enabled: true)
+                .build(schema: schema, storagePath: dbURL, storageMigrator: SQLiteMigrator())
+            databasePool = sqliteStorage.sqlitePool
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.unlock()
         }
     }
 
     func insertScenario(_ scenarioEvent: ScenarioEvent, completion: @escaping (ScenarioID?) -> Void) {
-        do {
-            lock.writeLock()
-            try databasPool?.write {
-                try Scenario(id: scenarioEvent.id, name: scenarioEvent.name, displayName: scenarioEvent.displayName, startTime: scenarioEvent.startTime).insert($0)
-                insertScenarioProperties(db: $0, scenarioEvent.properties.compactMap { ScenarioProperty(scenarioID: scenarioEvent.id, key: $0.key, value: $0.value) })
-                completion(scenarioEvent.id)
-                lock.unlock()
+        writeQueue.async { [weak databasePool, weak self] in
+            do {
+                try databasePool?.write {
+                    try Scenario(id: scenarioEvent.id, name: scenarioEvent.name, displayName: scenarioEvent.displayName, startTime: scenarioEvent.startTime).insert($0)
+                }
+
+                try databasePool?.write {
+                    self?.insertScenarioProperties(db: $0, scenarioEvent.properties.compactMap { ScenarioProperty(scenarioID: scenarioEvent.id, key: $0.key, value: $0.value) })
+                    completion(scenarioEvent.id)
+                }
+            } catch {
+                self?.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                completion(nil)
             }
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            completion(nil)
-            lock.unlock()
         }
     }
 
     func insertScenarioProperties(_ scenarioProperties: [ScenarioProperty]) {
-        do {
-            lock.writeLock()
-            try databasPool?.write {
-                for property in scenarioProperties {
-                    try property.insert($0)
+        writeQueue.async { [weak databasePool, weak logger] in
+            do {
+                try databasePool?.write {
+                    for property in scenarioProperties {
+                        try property.insert($0)
+                    }
                 }
-                lock.unlock()
+            } catch {
+                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.unlock()
         }
     }
 
     func fetchScenario(_ scenarioID: ScenarioID, completion: @escaping (Scenario?) -> Void) {
         do {
-            lock.readLock()
-            try databasPool?.read {
+            try databasePool?.read {
                 completion(try Scenario.fetchOne($0, sql: "SELECT * FROM Scenario WHERE id = \'\(scenarioID)\'"))
-                lock.unlock()
             }
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion(nil)
-            lock.unlock()
         }
     }
 
     func fetchScenarioAndProperties(_ scenarioID: ScenarioID, completion: @escaping (Scenario?, [ScenarioProperty]) -> Void) {
+        var scenario: Scenario?
+
         do {
-            lock.readLock()
-            try databasPool?.read {
-                lock.readLock()
-                completion(try Scenario.fetchOne($0, sql: "SELECT * FROM Scenario WHERE id = \'\(scenarioID)\'"), try ScenarioProperty.fetchAll($0, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\(scenarioID)\'"))
+            try databasePool?.read {
+                scenario = try Scenario.fetchOne($0, sql: "SELECT * FROM Scenario WHERE id = \'\(scenarioID)\'")
+            }
+
+            try databasePool?.read {
+                let scenarioProperties = try ScenarioProperty.fetchAll($0, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\(scenarioID)\'")
+                completion(scenario, scenarioProperties)
             }
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.readLock()
             completion(nil, [])
         }
     }
 
     func fetchScenarios(by scenarioName: Name, completion: @escaping ([ScenarioEvent]) -> Void) {
+        var scenarios: [Scenario] = []
+
         do {
-            lock.readLock()
-            try databasPool?.read { db in
+            try databasePool?.read { db in
+                scenarios = try Scenario.fetchAll(db, sql: "SELECT * FROM Scenario WHERE name = \'\(scenarioName)\'")
+            }
+
+            try databasePool?.read { db in
                 var scenarioEvents: [ScenarioEvent] = []
-                let scenarios = try Scenario.fetchAll(db, sql: "SELECT * FROM Scenario WHERE name = \'\(scenarioName)\'")
                 try scenarios.forEach {
                     let scenarioProperties = try ScenarioProperty.fetchAll(db, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\($0.id)\'")
                     scenarioEvents.append(ScenarioEvent(name: $0.name, displayName: $0.displayName, properties: scenarioProperties.compactMap { Property(key: $0.key, value: $0.value) }))
                 }
                 completion(scenarioEvents)
-                lock.unlock()
             }
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion([])
-            lock.unlock()
         }
     }
 
     func fetchScenarioProperties(by scenarioID: ScenarioID, completion: @escaping ([ScenarioProperty]) -> Void) {
         do {
-            lock.readLock()
-            try databasPool?.read {
+            try databasePool?.read {
                 completion(try ScenarioProperty.fetchAll($0, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\(scenarioID)\'"))
-                lock.unlock()
             }
         } catch {
             logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion([])
-            lock.unlock()
         }
     }
 
     func deleteScenariosByIds(_ scenarioIDs: [ScenarioID]) {
-        do {
-            lock.writeLock()
-            try databasPool?.write { db in
-                try scenarioIDs.forEach {
-                    try db.execute(sql: "DELETE FROM Scenario WHERE id = \'\($0)\'")
+        writeQueue.async { [weak databasePool, weak logger] in
+            do {
+                try databasePool?.write { db in
+                    try scenarioIDs.forEach {
+                        try db.execute(sql: "DELETE FROM Scenario WHERE id = \'\($0)\'")
+                    }
                 }
-                lock.unlock()
+            } catch {
+                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.unlock()
         }
     }
 
     func deleteScenariosByNames(_ scenarioNames: [Name]) {
-        do {
-            lock.writeLock()
-            try databasPool?.write { db in
-                try scenarioNames.forEach {
-                    try db.execute(sql: "DELETE FROM Scenario WHERE name = \'\($0)\'")
+        writeQueue.sync { [weak databasePool, weak logger] in
+            do {
+                try databasePool?.write { db in
+                    try scenarioNames.forEach {
+                        try db.execute(sql: "DELETE FROM Scenario WHERE name = \'\($0)\'")
+                    }
                 }
-                lock.unlock()
+            } catch {
+                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.unlock()
         }
     }
 
     func deleteScenarios() {
-        do {
-            lock.writeLock()
-            try databasPool?.write {
-                try $0.execute(sql: "DELETE FROM Scenario")
-                lock.unlock()
+        writeQueue.async { [weak databasePool, weak logger] in
+            do {
+                try databasePool?.write {
+                    try $0.execute(sql: "DELETE FROM Scenario")
+                }
+            } catch {
+                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-            lock.unlock()
         }
     }
 }
-
 
 private extension AnalyticsStorage {
 
@@ -204,9 +200,8 @@ private extension AnalyticsStorage {
     }
 
     func dbURL(forSecurityApplicationGroupIdentifier groupIdentifier: String) -> URL? {
-        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier)
-        guard let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-           assert(false, "cache DB URL failed")
+        guard let cacheURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) ?? FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            assert(false, "cache DB URL failed")
             return nil
         }
         return cacheURL.appendingPathComponent("OktaAnalytics.db")

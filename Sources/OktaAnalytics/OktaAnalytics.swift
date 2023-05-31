@@ -24,8 +24,9 @@ public final class OktaAnalytics: NSObject {
 
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
+    private static var storage: AnalyticsStorage?
 
-    private static var storage: AnalyticsStorage = {
+    public static func initializeStorageWith(securityAppGroupIdentifier: String) {
         let logger = OktaLogger()
         logger.addDestination(
             OktaLoggerConsoleLogger(
@@ -34,25 +35,19 @@ public final class OktaAnalytics: NSObject {
                 defaultProperties: nil
             )
         )
-        let storage = AnalyticsStorage(logger: logger)
+        storage = AnalyticsStorage(logger: logger)
         lock.writeLock()
         Task(priority: .high) {
             do {
-                try await storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
+                try await storage?.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
                 lock.unlock()
             } catch {
                 lock.unlock()
                 logger.log(error: error as NSError)
             }
         }
-        return storage
-    }()
-
-    public static var securityAppGroupIdentifier = "" {
-        didSet {
-            _ = storage
-        }
     }
+
     /**
      Adds provider to collection
 
@@ -178,7 +173,7 @@ extension OktaAnalytics {
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
     public static func startScenario(_ scenarioEvent: ScenarioEvent, _ completion: @escaping (ScenarioID?) -> Void) {
-        storage.insertScenario(scenarioEvent) { scenarioID in
+        storage?.insertScenario(scenarioEvent) { scenarioID in
            guard let scenarioID = scenarioID else {
                completion(nil)
                Self.providers.forEach {
@@ -201,11 +196,11 @@ extension OktaAnalytics {
            - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
     public static func updateScenario(_ scenarioID: ScenarioID, _ properties: [Property]) {
-        storage.insertScenarioProperties(properties.compactMap { ScenarioProperty(scenarioID: scenarioID, key: $0.key, value: $0.value) })
+        storage?.insertScenarioProperties(properties.compactMap { ScenarioProperty(scenarioID: scenarioID, key: $0.key, value: $0.value) })
     }
 
     public static func getScenarioEventByID(_ scenarioID: ScenarioID, _ completion: @escaping (ScenarioEvent?) -> Void) {
-        storage.fetchScenarioAndProperties(scenarioID) { scenario, scenarioProperties in
+        storage?.fetchScenarioAndProperties(scenarioID) { scenario, scenarioProperties in
             guard let scenario = scenario else {
                 completion(nil)
                 Self.providers.forEach {
@@ -218,7 +213,7 @@ extension OktaAnalytics {
     }
 
     public static func getOngoingScenarioIds(_ scenarioName: Name, _ completion: @escaping ([ScenarioID]) -> Void) {
-        storage.fetchScenarios(by: scenarioName) {
+        storage?.fetchScenarios(by: scenarioName) {
             completion($0.compactMap { $0.id })
         }
     }
@@ -231,17 +226,25 @@ extension OktaAnalytics {
            - eventDisplayName: event name to display on provider dashboard.
         */
     public static func endScenario(_ scenarioID: ScenarioID, eventDisplayName: Name) {
-        storage.fetchScenarioAndProperties(scenarioID) { scenario, properties in
+        storage?.fetchScenarioAndProperties(scenarioID) { scenario, properties in
             guard let scenario = scenario else {
                 Self.providers.forEach {
-                    $1.logger?.log(level: .debug, eventName: scenarioID, message: "Failed to end scenario \(scenarioID) because scenario won't exists", properties: nil, file: #file, line: #line, funcName: #function)
+                    $1.logger?.log(
+                        level: .debug,
+                        eventName: scenarioID,
+                        message: "Failed to end scenario \(scenarioID) because scenario won't exists",
+                        properties: nil,
+                        file: #file,
+                        line: #line,
+                        funcName: #function
+                    )
                 }
                 return
             }
             var propertiesDict: Dictionary = .init(uniqueKeysWithValues: properties.lazy.map { ($0.key, $0.value) })
             propertiesDict["DurationMS"] = "\(scenario.startTime.distance(to: Date()) * 1000)"
             trackEvent(eventDisplayName, withProperties: propertiesDict)
-            storage.deleteScenariosByIds([scenarioID])
+            storage?.deleteScenariosByIds([scenarioID])
         }
     }
 
@@ -252,13 +255,13 @@ extension OktaAnalytics {
            - name: scenario name
         */
     public static func endScenario(_ name: Name) {
-        storage.fetchScenarios(by: name) {
+        storage?.fetchScenarios(by: name) {
             $0.forEach { scenario in
                 var properties: Dictionary = .init(uniqueKeysWithValues: scenario.properties.lazy.map { ($0.key, $0.value) })
                     properties["DurationMS"] = "\(scenario.startTime.distance(to: Date()) * 1000)"
                     trackEvent(scenario.displayName, withProperties: properties)
-                    storage.deleteScenariosByNames([scenario.name])
             }
+            disposeScenario(name)
         }
     }
 
@@ -269,12 +272,12 @@ extension OktaAnalytics {
            - name: scenario name
         */
     public static func disposeScenario(_ name: Name) {
-        storage.deleteScenariosByNames([name])
+        storage?.deleteScenariosByNames([name])
     }
 
     /// Dispose Scenarios from local storage
     /// Note: events wont be reported to providers
     public static func disposeAllScenarios() {
-        storage.deleteScenarios()
+        storage?.deleteScenarios()
     }
 }

@@ -40,6 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         FirebaseApp.configure()
+        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String ?? "")
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
         OktaAnalytics.startScenario(ScenarioEvent(name: "Application", properties: [Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")])) {
@@ -76,8 +77,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         OktaAnalytics.getOngoingScenarioIds("Application") {
             print($0)
         }
+        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Entered background")
         scenarioID = ""
-//        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Entered background")
-//        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Entered background")
     }
 }

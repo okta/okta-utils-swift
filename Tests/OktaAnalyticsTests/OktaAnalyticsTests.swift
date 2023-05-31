@@ -31,6 +31,7 @@ class OktaAnalyticsTests: XCTestCase {
             appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
             return appCenterAnalyticsProvider
         }()
+        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: "")
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
     }
 
@@ -43,11 +44,25 @@ class OktaAnalyticsTests: XCTestCase {
     }
 
     func testScenario() throws {
-        var scenarioID = ""
-        OktaAnalytics.startScenario(ScenarioEvent(name: "Test")) {
-            scenarioID = $0 ?? ""
+        DispatchQueue.concurrentPerform(iterations: 15) { index in
+            var scenarioID = ""
+            OktaAnalytics.startScenario(ScenarioEvent(name: "Test\(index)")) {
+                scenarioID = $0 ?? ""
+            }
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test1", value: "1")])
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test2", value: "2")])
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test3", value: "3")])
+
+            OktaAnalytics.getScenarioEventByID(scenarioID) {
+                XCTAssertNotNil($0)
+            }
+
+            OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Test\(index)")
+            
+            OktaAnalytics.getScenarioEventByID(scenarioID) {
+                XCTAssertNil($0)
+            }
         }
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test", value: "1")])
     }
 
     override class func tearDown() {

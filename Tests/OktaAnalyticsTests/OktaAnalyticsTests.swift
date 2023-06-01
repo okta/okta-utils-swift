@@ -46,7 +46,7 @@ class OktaAnalyticsTests: XCTestCase {
     func testScenario() throws {
         DispatchQueue.concurrentPerform(iterations: 15) { index in
             var scenarioID = ""
-            OktaAnalytics.startScenario(ScenarioEvent(name: "Test\(index)")) {
+            OktaAnalytics.startScenario(ScenarioEvent(name: "Test\(index)", displayName: "\(index)")) {
                 scenarioID = $0 ?? ""
             }
             OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test1", value: "1")])

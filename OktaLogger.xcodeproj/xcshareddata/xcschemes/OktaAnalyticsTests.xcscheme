@@ -18,7 +18,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F3575F342A0AD1850008A965"
+               BlueprintIdentifier = "F3D5EA152A283E5E00530838"
                BuildableName = "OktaAnalyticsTests.xctest"
                BlueprintName = "OktaAnalyticsTests"
                ReferencedContainer = "container:OktaLogger.xcodeproj">

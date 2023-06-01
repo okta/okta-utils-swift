@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "29F360E5-0144-40BE-A5FD-641737AF12E6",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:OktaLogger.xcodeproj",
+        "identifier" : "F3575F342A0AD1850008A965",
+        "name" : "OktaAnalyticsTests"
+      }
+    }
+  ],
+  "version" : 1
+}

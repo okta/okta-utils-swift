@@ -24,10 +24,11 @@ class AnalyticsStorage {
     }
 
     func initializeDB(forSecurityApplicationGroupIdentifier groupIdentifier: String) async throws {
-
+        
         guard let dbURL = dbURL(forSecurityApplicationGroupIdentifier: groupIdentifier) else {
             assert(false, "cache DB URL failed")
         }
+        logger.info(eventName: "DBURL", message: dbURL.absoluteString, properties: nil, file: #file, line: #line, funcName: #function)
         let schema = SQLiteSchema(schema: schema, version: DBVersions.v1)
         do {
             let sqliteStorage = try await SQLiteStorageBuilder()

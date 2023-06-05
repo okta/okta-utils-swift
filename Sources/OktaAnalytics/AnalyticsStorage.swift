@@ -17,69 +17,77 @@ class AnalyticsStorage {
 
     private let logger: OktaLoggerProtocol
     private var databasePool: DatabasePool?
+
     private let writeQueue = DispatchQueue(label: "com.AnalyticsStorage", qos: .userInitiated)
+
+    private var semaphore = DispatchSemaphore(value: 0)
 
     init(logger: OktaLoggerProtocol) {
         self.logger = logger
     }
 
-    func initializeDB(forSecurityApplicationGroupIdentifier groupIdentifier: String) async throws {
-        
-        guard let dbURL = dbURL(forSecurityApplicationGroupIdentifier: groupIdentifier) else {
-            assert(false, "cache DB URL failed")
-        }
-        logger.info(eventName: "DBURL", message: dbURL.absoluteString, properties: nil, file: #file, line: #line, funcName: #function)
-        let schema = SQLiteSchema(schema: schema, version: DBVersions.v1)
-        do {
-            let sqliteStorage = try await SQLiteStorageBuilder()
-                .setWALMode(enabled: true)
-                .build(schema: schema, storagePath: dbURL)
-            try await sqliteStorage.initialize(storageMigrator: SQLiteMigrator())
-            databasePool = sqliteStorage.sqlitePool
-        } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+    func initializeDB(forSecurityApplicationGroupIdentifier groupIdentifier: String) {
+        writeQueue.async {
+            guard let dbURL = self.dbURL(forSecurityApplicationGroupIdentifier: groupIdentifier) else {
+                assert(false, "cache DB URL failed")
+            }
+            self.logger.info(eventName: "DBURL", message: dbURL.absoluteString, properties: nil, file: #file, line: #line, funcName: #function)
+            let schema = SQLiteSchema(schema: self.schema, version: DBVersions.v1)
+            Task(priority: .high) {
+                do {
+                    let sqliteStorage = try await SQLiteStorageBuilder()
+                        .setWALMode(enabled: true)
+                        .build(schema: schema, storagePath: dbURL)
+                    try await sqliteStorage.initialize(storageMigrator: SQLiteMigrator())
+                    self.databasePool = sqliteStorage.sqlitePool
+                } catch {
+                    self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                }
+                self.semaphore.signal()
+            }
+            self.semaphore.wait()
         }
     }
 
     func insertScenario(_ scenarioEvent: ScenarioEvent, completion: @escaping (ScenarioID?) -> Void) {
-        writeQueue.async { [weak databasePool, weak self] in
+        writeQueue.async {
             do {
-                try databasePool?.write {
+                try self.databasePool?.write {
                     try Scenario(id: scenarioEvent.id, name: scenarioEvent.name, displayName: scenarioEvent.displayName, startTime: scenarioEvent.startTime).insert($0)
                 }
 
-                try databasePool?.write {
-                    self?.insertScenarioProperties(db: $0, scenarioEvent.properties.compactMap { ScenarioProperty(scenarioID: scenarioEvent.id, key: $0.key, value: $0.value) })
+                try self.databasePool?.write {
+                    self.insertScenarioProperties(db: $0, scenarioEvent.properties.compactMap { ScenarioProperty(scenarioID: scenarioEvent.id, key: $0.key, value: $0.value) })
                     completion(scenarioEvent.id)
                 }
             } catch {
-                self?.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
                 completion(nil)
             }
         }
     }
 
     func insertScenarioProperties(_ scenarioProperties: [ScenarioProperty]) {
-        writeQueue.async { [weak databasePool, weak logger] in
+        writeQueue.async {
             do {
-                try databasePool?.write {
+                try self.databasePool?.write {
                     for property in scenarioProperties {
                         try property.insert($0)
                     }
                 }
             } catch {
-                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
         }
     }
 
     func fetchScenario(_ scenarioID: ScenarioID, completion: @escaping (Scenario?) -> Void) {
         do {
-            try databasePool?.read {
+            try self.databasePool?.read {
                 completion(try Scenario.fetchOne($0, sql: "SELECT * FROM Scenario WHERE id = \'\(scenarioID)\'"))
             }
         } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+            self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion(nil)
         }
     }
@@ -88,16 +96,16 @@ class AnalyticsStorage {
         var scenario: Scenario?
 
         do {
-            try databasePool?.read {
+            try self.databasePool?.read {
                 scenario = try Scenario.fetchOne($0, sql: "SELECT * FROM Scenario WHERE id = \'\(scenarioID)\'")
             }
 
-            try databasePool?.read {
+            try self.databasePool?.read {
                 let scenarioProperties = try ScenarioProperty.fetchAll($0, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\(scenarioID)\'")
                 completion(scenario, scenarioProperties)
             }
         } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+            self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion(nil, [])
         }
     }
@@ -106,11 +114,11 @@ class AnalyticsStorage {
         var scenarios: [Scenario] = []
 
         do {
-            try databasePool?.read { db in
+            try self.databasePool?.read { db in
                 scenarios = try Scenario.fetchAll(db, sql: "SELECT * FROM Scenario WHERE name = \'\(scenarioName)\'")
             }
 
-            try databasePool?.read { db in
+            try self.databasePool?.read { db in
                 var scenarioEvents: [ScenarioEvent] = []
                 try scenarios.forEach {
                     let scenarioProperties = try ScenarioProperty.fetchAll(db, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\($0.id)\'")
@@ -119,7 +127,7 @@ class AnalyticsStorage {
                 completion(scenarioEvents)
             }
         } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+            self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion([])
         }
     }
@@ -130,47 +138,47 @@ class AnalyticsStorage {
                 completion(try ScenarioProperty.fetchAll($0, sql: "SELECT * FROM ScenarioProperty WHERE scenarioID = \'\(scenarioID)\'"))
             }
         } catch {
-            logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+            self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             completion([])
         }
     }
 
     func deleteScenariosByIds(_ scenarioIDs: [ScenarioID]) {
-        writeQueue.async { [weak databasePool, weak logger] in
+        writeQueue.async {
             do {
-                try databasePool?.write { db in
+                try self.databasePool?.write { db in
                     try scenarioIDs.forEach {
                         try db.execute(sql: "DELETE FROM Scenario WHERE id = \'\($0)\'")
                     }
                 }
             } catch {
-                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
         }
     }
 
     func deleteScenariosByNames(_ scenarioNames: [Name]) {
-        writeQueue.sync { [weak databasePool, weak logger] in
+        writeQueue.sync {
             do {
-                try databasePool?.write { db in
+                try self.databasePool?.write { db in
                     try scenarioNames.forEach {
                         try db.execute(sql: "DELETE FROM Scenario WHERE name = \'\($0)\'")
                     }
                 }
             } catch {
-                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
         }
     }
 
     func deleteScenarios() {
-        writeQueue.async { [weak databasePool, weak logger] in
+        writeQueue.async {
             do {
-                try databasePool?.write {
+                try self.databasePool?.write {
                     try $0.execute(sql: "DELETE FROM Scenario")
                 }
             } catch {
-                logger?.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
             }
         }
     }

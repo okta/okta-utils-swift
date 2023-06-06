@@ -26,10 +26,10 @@ public protocol AnalyticsProviderProtocol: AnyObject {
     var logger: OktaLoggerProtocol? { get set }
 
     /// The default properties that are posted with all events
-    var defaultProperties: [String: String]? { get set }
+    var defaultProperties: Properties { get set }
 
     /// Tracks an event to the provider
-    func trackEvent(_ eventName: Name, withProperties: [String: String]?)
+    func trackEvent(_ eventName: Name, withProperties: Properties)
 }
 
 public extension AnalyticsProviderProtocol {

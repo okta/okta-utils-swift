@@ -36,10 +36,16 @@ public typealias ScenarioEvent = Event
 
 public typealias ScenarioID = String
 
+/// Event for the given provider
 public struct Event: Hashable {
 
+    // Name of the event
     public let name: Name
+
+    // Initial properties on the event
     public var properties: [Property]
+
+    // Display Name to appear on provider dashboard
     public var displayName: Name
 
     let startTime = Date()

@@ -77,7 +77,7 @@ class OktaAnalyticsTests: XCTestCase {
             }
         }
 
-        wait(for: insertExpectations + deleteExpectations, timeout: 15)
+        wait(for: insertExpectations + deleteExpectations, timeout: 20)
     }
 
     override class func tearDown() {

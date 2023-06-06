@@ -53,11 +53,10 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - OktaAnalytics (1.0.1):
+  - OktaAnalytics (2.0.0):
     - AppCenter (= 4.3.0)
-    - GRDB.swift (~> 5)
     - OktaLogger/Core (~> 1)
-    - OktaSQLiteStorage (~> 0.0.1)
+    - OktaSQLiteStorage (~> 0.0.2)
   - OktaLogger (1.3.14):
     - OktaLogger/Complete (= 1.3.14)
     - SwiftLint
@@ -86,9 +85,9 @@ PODS:
   - SwiftLint (0.51.0)
 
 DEPENDENCIES:
-  - AppCenter (= 4.3.0)
+  - AppCenter (~> 4.3.0)
   - CocoaLumberjack/Swift (~> 3.6.0)
-  - Firebase/Crashlytics (= 10.4.0)
+  - Firebase/Crashlytics (~> 10.4.0)
   - GRDB.swift (~> 5)
   - Instabug (= 11.7.0)
   - OktaAnalytics (from `.`)
@@ -134,12 +133,12 @@ SPEC CHECKSUMS:
   GRDB.swift: e98cd55ec99dea5da99355d588149063e4cfa0eb
   Instabug: 7c9b72efb697e0f11c21ddf74e5d57a2b67ce9f7
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  OktaAnalytics: ca657b90a72ed7f21b02cfd7c3879d315605a8fb
+  OktaAnalytics: ae0d5524ccb56937c5d0e7d48da1f8ac9694ef78
   OktaLogger: 431c11de4d0b819ea4d0b1ac3734f953f5864c32
   OktaSQLiteStorage: f512b3aca1d4d497a12a9527c59b0b08f4701a51
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
 
-PODFILE CHECKSUM: fde7cbb6d979697f6a09029203f8e6bff84260ff
+PODFILE CHECKSUM: 5056d33029b352bd74ef9e1045ebafe2023c7ec9
 
 COCOAPODS: 1.11.3

@@ -24,6 +24,7 @@ public final class OktaAnalytics: NSObject {
 
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
+
     private static var storage: AnalyticsStorage = {
         let logger = OktaLogger()
         logger.addDestination(
@@ -36,6 +37,12 @@ public final class OktaAnalytics: NSObject {
         return AnalyticsStorage(logger: logger)
     }()
 
+    /**
+     Adds provider to collection
+
+     - Parameters:
+        - securityAppGroupIdentifier: shared group Identifier to be data shared between app, extensions, app and widgets.
+     */
     public static func initializeStorageWith(securityAppGroupIdentifier: String) {
         storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
     }
@@ -44,7 +51,7 @@ public final class OktaAnalytics: NSObject {
      Adds provider to collection
 
      - Parameters:
-     - provider: `AnalyticsProviderProtocol` provided by client
+        - provider: `AnalyticsProviderProtocol` provided by client
      */
     public static func addProvider(_ provider: AnalyticsProviderProtocol) {
         lock.writeLock()
@@ -56,7 +63,7 @@ public final class OktaAnalytics: NSObject {
      Adds providers to collection
 
      - Parameters:
-     - providers: `AnalyticsProviderProtocol`s provided by client
+        - providers: `AnalyticsProviderProtocol`s provided by client
      */
     public static func addProviders(_ providers: [AnalyticsProviderProtocol]) {
         lock.writeLock()
@@ -70,7 +77,7 @@ public final class OktaAnalytics: NSObject {
      removes providers by name
 
      - Parameters:
-     - provider: name of the provider
+        - provider: name of the provider
      */
     public static func removeProvider(_ provider: String) {
         lock.writeLock()
@@ -82,7 +89,7 @@ public final class OktaAnalytics: NSObject {
      Remove providers from collection
 
      - Parameters:
-     - providers: `Provider`s provided by client, if exists
+        - providers: `Provider`s provided by client, if exists
      */
     public static func removeProviders(_ providers: [String]) {
         lock.writeLock()
@@ -94,7 +101,7 @@ public final class OktaAnalytics: NSObject {
      Remove provider from collection
 
      - Parameters:
-     - provider: `AnalyticsProviderProtocol` provided by client, if exists
+        - provider: `AnalyticsProviderProtocol` provided by client, if exists
      */
     static func removeProvider(_ provider: AnalyticsProviderProtocol) {
         lock.writeLock()
@@ -106,7 +113,7 @@ public final class OktaAnalytics: NSObject {
      Remove providers from collection
 
      - Parameters:
-     - providers: `AnalyticsProviderProtocol`s provided by client, if exists
+        - providers: `AnalyticsProviderProtocol`s provided by client, if exists
      */
     static func removeProviders(_ providers: [AnalyticsProviderProtocol]) {
         lock.writeLock()
@@ -162,7 +169,6 @@ extension OktaAnalytics {
 
         - Parameters:
            - eventName: The name of the event scenario to start.
-           - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
         */
     public static func startScenario(_ scenarioEvent: ScenarioEvent, _ completion: @escaping (ScenarioID?) -> Void) {
         completion(scenarioEvent.id)
@@ -185,12 +191,18 @@ extension OktaAnalytics {
 
         - Parameters:
            - scenarioID: unique sceario ID returned from `startScenario(_ , _)` .
-           - propertySubject: A closure that takes a `PassthroughSubject` of `Property` objects as a parameter.
+           - properties: properties associated to scenario .
         */
     public static func updateScenario(_ scenarioID: ScenarioID, _ properties: [Property]) {
         storage.insertScenarioProperties(properties.compactMap { ScenarioProperty(scenarioID: scenarioID, key: $0.key, value: $0.value) })
     }
 
+    /**
+        Returns `ScenarioEvent` object for a given scenario ID. if exists.
+
+        - Parameters:
+           - scenarioID: unique sceario ID returned from `startScenario(_ , _)` .
+        */
     public static func getScenarioEventByID(_ scenarioID: ScenarioID, _ completion: @escaping (ScenarioEvent?) -> Void) {
         storage.fetchScenarioAndProperties(scenarioID) { scenario, scenarioProperties in
             guard let scenario = scenario else {
@@ -204,6 +216,12 @@ extension OktaAnalytics {
         }
     }
 
+    /**
+        Returns scenario Ids in completion for a given scenario name.
+
+        - Parameters:
+           - scenarioName: Name assosiated in `ScenarioEvent`  .
+        */
     public static func getOngoingScenarioIds(_ scenarioName: Name, _ completion: @escaping ([ScenarioID]) -> Void) {
         storage.fetchScenarios(by: scenarioName) {
             completion($0.compactMap { $0.id })

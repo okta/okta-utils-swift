@@ -209,6 +209,7 @@
 		E251E809248AD1B800EF466D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E251E80B248AD1B800EF466D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E2E7C95225196D83006B8DAE /* OktaLoggerDefaultPropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaLoggerDefaultPropertiesTests.swift; sourceTree = "<group>"; };
+		F3575F232A37DFFB00BF92B7 /* OktaSQLiteStorageTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = OktaSQLiteStorageTests.xctestplan; path = "/Users/sp/okta/okta-logger-swift/Tests/OktaSQLiteStorageTests.xctestplan"; sourceTree = "<absolute>"; };
 		F3575F2C2A0AD1840008A965 /* OktaAnalytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaAnalytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3575F2E2A0AD1850008A965 /* OktaAnalytics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaAnalytics.h; sourceTree = "<group>"; };
 		F3575F2F2A0AD1850008A965 /* OktaAnalytics.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = OktaAnalytics.docc; sourceTree = "<group>"; };
@@ -378,6 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				9F4F57E029FC482E00E10771 /* OktaSQLiteStorage.xctestplan */,
+				F3575F232A37DFFB00BF92B7 /* OktaSQLiteStorageTests.xctestplan */,
 				9F4F57DB29F9F42700E10771 /* SQLiteStorageTests.swift */,
 				9F4F57DD29FC36F600E10771 /* SQLiteConnectionBuilderTests.swift */,
 			);

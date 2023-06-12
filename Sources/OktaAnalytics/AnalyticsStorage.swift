@@ -34,7 +34,8 @@ class AnalyticsStorage {
                 return
             }
             self.logger.info(eventName: "DBURL", message: dbURL.absoluteString, properties: nil, file: #file, line: #line, funcName: #function)
-            let schema = SQLiteSchema(schema: self.schema, version: DBVersions.v1)
+            let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: self.schema)
+            let schema = SQLiteSchema(schemaType: rawSQLSchema, version: DBVersions.v1)
             Task(priority: .high) {
                 do {
                     let sqliteStorage = try await SQLiteStorageBuilder()

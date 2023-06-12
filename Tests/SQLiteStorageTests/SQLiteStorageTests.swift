@@ -27,10 +27,11 @@ final class SQLiteStorageTests: XCTestCase {
                 try? FileManager.default.removeItem(at: fileURL)
             }
             dbURL = cacheURL.appendingPathComponent("sqlite.db")
+            try? FileManager.default.removeItem(at: dbURL)
         }
     }
 
-    func testCreation() throws {
+    func testCreation_rawSQL() throws {
 
         let readFromDBExpectation = expectation(description: "Read from db expectation")
         let writeToDBExpectation = expectation(description: "Write from db expectation")
@@ -42,7 +43,47 @@ final class SQLiteStorageTests: XCTestCase {
             );
             """
 
-            let schema = SQLiteSchema(schema: schemaQueries, version: SchemaVersions.v1)
+            let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: schemaQueries)
+            let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
+            let storage = try await SQLiteStorageBuilder()
+                .setWALMode(enabled: true)
+                .build(schema: schema, storagePath: dbURL)
+            try await storage.initialize(storageMigrator: SQLiteMigratorMock())
+
+            XCTAssertEqual(storage.sqliteURL, dbURL)
+            try await storage.sqlitePool.write { db in
+                try db.execute(literal: "INSERT INTO Example (id) VALUES (1) ")
+                writeToDBExpectation.fulfill()
+            }
+
+            try await storage.sqlitePool.read { db in
+                let db_version = try Int.fetchOne(db, sql: "PRAGMA user_version")
+                XCTAssertEqual(db_version, SchemaVersions.v1.rawValue)
+                let userData = try Int.fetchOne(db, sql: "SELECT id FROM Example WHERE id=1")
+                XCTAssertEqual(userData, 1)
+                readFromDBExpectation.fulfill()
+            }
+        }
+
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
+    }
+
+    func testCreation_delegatedQueries() throws {
+
+        let readFromDBExpectation = expectation(description: "Read from db expectation")
+        let writeToDBExpectation = expectation(description: "Write from db expectation")
+
+        Task {
+            let buildDBClosure: (Database, Int) throws -> Void = { db, version in
+                if version == SchemaVersions.v1.rawValue {
+                    try db.create(table: "Example", body: { tableDefinitions in
+                        tableDefinitions.column("id", .text).notNull()
+                    })
+                }
+            }
+
+            let delegatedSchema = SQLiteSchemaType.delegated(build: buildDBClosure)
+            let schema = SQLiteSchema(schemaType: delegatedSchema, version: SchemaVersions.v1)
             let storage = try await SQLiteStorageBuilder()
                 .setWALMode(enabled: true)
                 .build(schema: schema, storagePath: dbURL)
@@ -67,7 +108,7 @@ final class SQLiteStorageTests: XCTestCase {
     }
 
     func testMigration() throws {
-        try testCreation()
+        try testCreation_rawSQL()
         let readFromDBExpectation = expectation(description: "Read from db expectation")
         let writeToDBExpectation = expectation(description: "Write from db expectation")
 
@@ -79,7 +120,8 @@ final class SQLiteStorageTests: XCTestCase {
             );
             """
 
-            let schema = SQLiteSchema(schema: schemaQueries, version: SchemaVersions.v2)
+            let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: schemaQueries)
+            let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v2)
             let storage = try await SQLiteStorageBuilder()
                 .setWALMode(enabled: true)
                 .build(schema: schema, storagePath: dbURL)
@@ -110,7 +152,8 @@ final class SQLiteStorageTests: XCTestCase {
 
         Task {
             do {
-                let schema = SQLiteSchema(schema: "", version: SchemaVersions.v1)
+                let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: "")
+                let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
                 let storage = try await SQLiteStorageBuilder()
                     .setWALMode(enabled: true)
                     .build(schema: schema, storagePath: dbURL)
@@ -136,7 +179,9 @@ final class SQLiteStorageTests: XCTestCase {
             }
 
             do {
-                let schema = SQLiteSchema(schema: "", version: UnexpectedSchemaVersions.v1)
+                
+                let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: "")
+                let schema = SQLiteSchema(schemaType: rawSQLSchema, version: UnexpectedSchemaVersions.v1)
                 let storage = try await SQLiteStorageBuilder()
                     .setWALMode(enabled: true)
                     .build(schema: schema, storagePath: dbURL)

@@ -11,13 +11,19 @@
 */
 
 import Foundation
+import GRDB
 
 public struct SQLiteSchema {
-    public let schema: String
+    public let schemaType: SQLiteSchemaType
     public let version: any SchemaVersionType
 
-    public init(schema: String, version: any SchemaVersionType) {
-        self.schema = schema
+    public init(schemaType: SQLiteSchemaType, version: any SchemaVersionType) {
+        self.schemaType = schemaType
         self.version = version
     }
+}
+
+public enum SQLiteSchemaType {
+    case rawSQLSchema(sql: String)
+    case delegated(build: (Database, Int) throws -> Void)
 }

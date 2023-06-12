@@ -93,20 +93,6 @@
 			remoteGlobalIDString = D5C824D32469DBF1005CF747;
 			remoteInfo = OktaLogger;
 		};
-		F3575F212A2EAA0800BF92B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E251E7FA248AD1B400EF466D;
-			remoteInfo = OktaLoggerDemoApp;
-		};
-		F3D5EA1B2A283E5F00530838 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F3575F2B2A0AD1840008A965;
-			remoteInfo = OktaAnalytics;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -699,8 +685,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				F3D5EA1C2A283E5F00530838 /* PBXTargetDependency */,
-				F3575F222A2EAA0800BF92B7 /* PBXTargetDependency */,
 			);
 			name = OktaAnalyticsTests;
 			productName = OktaAnalyticsTests;
@@ -1165,16 +1149,6 @@
 			isa = PBXTargetDependency;
 			target = D5C824D32469DBF1005CF747 /* OktaLogger */;
 			targetProxy = DE5D6F5724E6D05500AD95FD /* PBXContainerItemProxy */;
-		};
-		F3575F222A2EAA0800BF92B7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E251E7FA248AD1B400EF466D /* OktaLoggerDemoApp */;
-			targetProxy = F3575F212A2EAA0800BF92B7 /* PBXContainerItemProxy */;
-		};
-		F3D5EA1C2A283E5F00530838 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F3575F2B2A0AD1840008A965 /* OktaAnalytics */;
-			targetProxy = F3D5EA1B2A283E5F00530838 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

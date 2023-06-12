@@ -12,8 +12,8 @@
 
 import XCTest
 @testable import OktaAnalytics
-@testable import OktaLogger
-@testable import AppCenterAnalytics
+import OktaLogger
+import AppCenterAnalytics
 
 class OktaAnalyticsTests: XCTestCase {
 

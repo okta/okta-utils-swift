@@ -29,6 +29,7 @@ final class SQLiteConnectionBuilderTests: XCTestCase {
             }
             cacheDirectory = cacheURL
             dbURL = cacheURL.appendingPathComponent("sqlite.db")
+            try? FileManager.default.removeItem(at: dbURL)
         }
     }
 

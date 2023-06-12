@@ -119,9 +119,17 @@ class SQLiteStorage: SQLiteStorageProtocol {
     }
 
     fileprivate func buildDatabaseSchema() throws {
-        try sqlitePool.write { db in
-            try db.execute(sql: schema.schema)
-            try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+        switch schema.schemaType {
+        case .rawSQLSchema(let sql):
+            try sqlitePool.write { db in
+                try db.execute(sql: sql)
+                try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+            }
+        case .delegated(let build):
+            try sqlitePool.write { db in
+                try build(db, schema.version.rawValue)
+                try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+            }
         }
     }
 }

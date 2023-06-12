@@ -32,6 +32,7 @@ target 'OktaSQLiteStorageTests' do
 end
 
 target 'OktaAnalyticsTests' do
+  pod 'OktaAnalytics', :path => '.'
   pod 'OktaSQLiteStorage', :path => '.'
   pod 'AppCenter', '~>4.3.0'
 end

@@ -36,7 +36,8 @@ CREATE TABLE 'Example' (
 """
 
 // 1.
-let schema = SQLiteSchema(schema: queries, version: SchemaVersions.v1)
+let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: queries)
+let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
 
 // 2.
 let sqliteStorage = try await SQLiteStorageBuilder()
@@ -51,6 +52,39 @@ let query = "INSERT INTO Example (id) VALUES (1)"
 try sqliteStorage.sqlitePool.write { db in
     try db.execute(sql: query)
 }
+```
+
+## Define database schema
+
+There are two ways how you can define schema for your database
+ 
+1. Prepare raw SQL statements and inject into SQLiteSchema object
+
+```swift
+let queries =
+"""
+CREATE TABLE 'Example' (
+'id' TEXT NOT NULL
+);
+"""
+
+let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: queries)
+let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
+```
+
+2. Define closure that will be called by the SDK when database file is created
+
+```swift
+let buildDBClosure: (Database, Int) throws -> Void = { db, version in
+    if version == SchemaVersions.v1.rawValue {
+        try db.create(table: "Example", body: { tableDefinitions in
+            tableDefinitions.column("id", .text).notNull()
+        })
+    }
+}
+
+let delegatedSchema = SQLiteSchemaType.delegated(build: buildDBClosure)
+let schema = SQLiteSchema(schemaType: delegatedSchema, version: SchemaVersions.v1)
 ```
 
 ## Databse migration

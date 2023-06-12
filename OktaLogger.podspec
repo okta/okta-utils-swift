@@ -11,14 +11,13 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.14'
   s.watchos.deployment_target = '6.0'
   s.swift_version = '5.0'
-  s.dependency 'SwiftLint'
   s.default_subspec = "Complete"
 
   # Subspec
   s.subspec "Complete" do |complete|
     complete.dependency 'OktaLogger/FileLogger'
     complete.dependency 'OktaLogger/FirebaseCrashlytics'
-    complete.dependency 'OktaLogger/InstabugLogger'
+    complete.ios.dependency 'OktaLogger/InstabugLogger'
   end
 
   s.subspec 'FileLogger' do |fileLogger|
@@ -38,11 +37,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'InstabugLogger' do |instabugLogger|
-      instabugLogger.ios.source_files = [
-        'Sources/OktaLogger/InstabugLogger/*'
-      ]
-      instabugLogger.ios.dependency 'Instabug', '~> 11.5'
-      instabugLogger.ios.dependency 'OktaLogger/Core'
+      instabugLogger.source_files = 'Sources/OktaLogger/InstabugLogger/*.{h,m,swift}'
+      instabugLogger.dependency 'Instabug', '~> 11'
+      instabugLogger.dependency 'OktaLogger/Core'
   end
 
   s.subspec "Core" do |core|

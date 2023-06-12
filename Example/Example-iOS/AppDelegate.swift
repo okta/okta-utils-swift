@@ -13,30 +13,24 @@ import UIKit
 import Firebase
 import OktaLogger
 import OktaAnalytics
-import AppCenterAnalytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    let appCenterAnalyticsProvider: AnalyticsProviderProtocol = {
-        let logger = OktaLogger()
-        logger.addDestination(
-            OktaLoggerConsoleLogger(
-                identifier: "com.okta.loggerDemo.console",
-                level: OktaLoggerLogLevel.debug,
-                defaultProperties: nil
-            )
-        )
-        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger, appCenter: AppCenterAnalytics.Analytics.self)
-        appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
-        return appCenterAnalyticsProvider
-    }()
-
-    var timer: Timer?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
-        OktaAnalytics.addProvider(appCenterAnalyticsProvider)
-        OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
         return true
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationDidEnterBackground", value: "5")])
+    }
+
+    func applicationWillEnterForeground(_ application:UIApplication) {
+        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillEnterForeground", value: "6")])
+    }
+
+    func applicationWillTerminate(_ application:UIApplication) {
+        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillTerminate", value: "7")])
+        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Finished")
     }
 }

@@ -1,6 +1,12 @@
 version: 2.1
 
 commands:
+  cleanup_simulators:
+    description: "Clear Simulator Caches"
+    steps:
+      - run:
+         name: Clear Simulator caches"
+         command: xcrun simctl shutdown all && xcrun simctl erase all && rm -rf ~/Library/Developer/Xcode/DerivedData && rm -rf ~/Library/Caches/com.apple.dt.Xcode && rm -rf ~/Library/Developer/Xcode/Archives
   install_dependencies:
     description: "Install Dependencies"
     steps:
@@ -14,16 +20,20 @@ commands:
     description: "Run tests"
     steps:
       - run:
+         name: OktaAnalytics unit tests"
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalytics" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14 Pro Max" test
+      - run:
          name: OktaSQLiteStorage unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14 Pro Max" test
       - run:
          name: OktaLogger unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14 Pro Max" test
 jobs:
   build-and-test:
     macos:
       xcode: 14.2.0
     steps:
+      - cleanup_simulators
       - checkout
       - install_dependencies
       - pods

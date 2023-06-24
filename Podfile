@@ -16,7 +16,7 @@ end
 target 'OktaAnalytics' do
     pod 'OktaLogger/Core', :path => '.'
     pod 'OktaSQLiteStorage', :path => '.'
-    pod 'AppCenter', '~>4.3.0'
+    pod 'AppCenter', '~>5.0.0'
     pod 'SwiftLint', '0.51'
 end
 
@@ -37,5 +37,5 @@ end
 target 'OktaAnalyticsTests' do
   pod 'OktaAnalytics', :path => '.'
   pod 'OktaSQLiteStorage', :path => '.'
-  pod 'AppCenter', '~>4.3.0'
+  pod 'AppCenter', '~>5.0.0'
 end

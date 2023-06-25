@@ -182,7 +182,7 @@ extension OktaAnalytics {
             }
         }
         Self.providers.forEach {
-            $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "\(scenarioEvent.name) created", properties: nil, file: #file, line: #line, funcName: #function)
+            $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "\(scenarioEvent.name) created with \(scenarioEvent.id)", properties: nil, file: #file, line: #line, funcName: #function)
         }
     }
 

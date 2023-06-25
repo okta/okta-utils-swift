@@ -1,11 +1,11 @@
 PODS:
-  - AppCenter (4.3.0):
-    - AppCenter/Analytics (= 4.3.0)
-    - AppCenter/Crashes (= 4.3.0)
-  - AppCenter/Analytics (4.3.0):
+  - AppCenter (5.0.0):
+    - AppCenter/Analytics (= 5.0.0)
+    - AppCenter/Crashes (= 5.0.0)
+  - AppCenter/Analytics (5.0.0):
     - AppCenter/Core
-  - AppCenter/Core (4.3.0)
-  - AppCenter/Crashes (4.3.0):
+  - AppCenter/Core (5.0.0)
+  - AppCenter/Crashes (5.0.0):
     - AppCenter/Core
   - CocoaLumberjack/Core (3.6.2)
   - CocoaLumberjack/Swift (3.6.2):
@@ -54,9 +54,9 @@ PODS:
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
   - OktaAnalytics (2.0.0):
-    - AppCenter (= 4.3.0)
+    - AppCenter (= 5.0.0)
     - OktaLogger/Core (~> 1)
-    - OktaSQLiteStorage (~> 0.0.2)
+    - OktaSQLiteStorage (~> 0.0.3)
   - OktaLogger (1.3.14):
     - OktaLogger/Complete (= 1.3.14)
   - OktaLogger/Complete (1.3.14):
@@ -73,13 +73,13 @@ PODS:
   - OktaLogger/InstabugLogger (1.3.14):
     - Instabug (~> 11)
     - OktaLogger/Core
-  - OktaSQLiteStorage (0.0.2):
+  - OktaSQLiteStorage (0.0.3):
     - GRDB.swift (~> 5)
   - PromisesObjC (2.2.0)
   - SwiftLint (0.51.0)
 
 DEPENDENCIES:
-  - AppCenter (~> 4.3.0)
+  - AppCenter (~> 5.0.0)
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (~> 10.4.0)
   - GRDB.swift (~> 5)
@@ -116,7 +116,7 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  AppCenter: 883369ab78427b0561c688158d689dfe1f993ea9
+  AppCenter: 30ac5adefc8fc41d9530f1cc91829810a6af4c93
   CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
   Firebase: ba3501b5142a57747eac74d27c96d2b313bdec90
   FirebaseCore: b8697a177690b69b0dbce9d612b69b893be70469
@@ -128,12 +128,12 @@ SPEC CHECKSUMS:
   GRDB.swift: e98cd55ec99dea5da99355d588149063e4cfa0eb
   Instabug: 7c9b72efb697e0f11c21ddf74e5d57a2b67ce9f7
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  OktaAnalytics: ae0d5524ccb56937c5d0e7d48da1f8ac9694ef78
+  OktaAnalytics: c851d7faeb358c04c1dd88c6b196bd192e1b0bb7
   OktaLogger: d8fc64350272598ba23c70ffa431a1599ffd6d01
-  OktaSQLiteStorage: f512b3aca1d4d497a12a9527c59b0b08f4701a51
+  OktaSQLiteStorage: 5d85db0ba3185686b466ec4516c709175e72e671
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
 
-PODFILE CHECKSUM: dcaad0e870204d054e2008083e4972e4730c5a20
+PODFILE CHECKSUM: 51bb971916de2e4f23c89b50357887555dfe8f00
 
 COCOAPODS: 1.12.1

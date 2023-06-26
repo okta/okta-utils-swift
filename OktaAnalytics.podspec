@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/okta/okta-logger-swift"
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.author           = { "Okta Developers" => "developer@okta.com" }
-  s.source           = { :git => "https://github.com/okta/okta-logger-swift.git",  :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/okta/okta-logger-swift.git",  :tag => "OktaAnalytics-"+s.version.to_s }
   
   s.osx.deployment_target = '11.0'
   s.ios.deployment_target = '13.0'

@@ -128,8 +128,8 @@ SPEC CHECKSUMS:
   GRDB.swift: e98cd55ec99dea5da99355d588149063e4cfa0eb
   Instabug: 7c9b72efb697e0f11c21ddf74e5d57a2b67ce9f7
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  OktaAnalytics: c851d7faeb358c04c1dd88c6b196bd192e1b0bb7
-  OktaLogger: d8fc64350272598ba23c70ffa431a1599ffd6d01
+  OktaAnalytics: 27227ae547b3e9f2557ebae9c3e6deefed1ab70d
+  OktaLogger: 7839f9c82ef90568708981b3647f315d0dcb37d5
   OktaSQLiteStorage: 5d85db0ba3185686b466ec4516c709175e72e671
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5

@@ -40,6 +40,15 @@ final class SQLiteConnectionBuilderTests: XCTestCase {
         let dbPool = try connectionBuilder.databasePool(at: dbURL, walModeEnabled: true, configuration: configuration)
         let expectedWALFileLocation = cacheDirectory.appendingPathComponent("sqlite.db-wal").path
         XCTAssertTrue(FileManager.default.fileExists(atPath: expectedWALFileLocation))
+        
         XCTAssertEqual(dbPool.configuration.maximumReaderCount, configuration.maximumReaderCount)
+        
+        try dbPool.write { db in
+            try db.create(table: "player") { t in
+                t.primaryKey("id", .text)
+                t.column("name", .text).notNull()
+                t.column("score", .integer).notNull()
+            }
+        }
     }
 }

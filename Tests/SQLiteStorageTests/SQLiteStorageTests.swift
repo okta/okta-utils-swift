@@ -46,13 +46,21 @@ final class SQLiteStorageTests: XCTestCase {
             let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: schemaQueries)
             let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
             let storage = try await SQLiteStorageBuilder()
-                .setWALMode(enabled: true)
+                //.setWALMode(enabled: true)
                 .build(schema: schema, storagePath: dbURL)
+            
+            try await storage.sqlitePool.write { db in
+                try db.create(table: "player") { t in
+                    t.primaryKey("id", .text)
+                    t.column("name", .text).notNull()
+                    t.column("score", .integer).notNull()
+                }
+            }
             try await storage.initialize(storageMigrator: SQLiteMigratorMock())
 
             XCTAssertEqual(storage.sqliteURL, dbURL)
             try await storage.sqlitePool.write { db in
-                try db.execute(literal: "INSERT INTO Example (id) VALUES (1) ")
+                try db.execute(literal: "INSERT INTO Example (id) VALUES (1)")
                 writeToDBExpectation.fulfill()
             }
 

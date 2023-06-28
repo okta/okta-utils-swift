@@ -16,7 +16,11 @@ import GRDB
 class SQLiteStorage: SQLiteStorageProtocol {
     let schema: SQLiteSchema
     let sqliteURL: URL
-    let sqlitePool: DatabasePool
+    let sqlitePool: DatabaseQueue
+
+    deinit {
+        print("")
+    }
 
     init(at sqliteURL: URL,
          schema: SQLiteSchema,
@@ -34,7 +38,7 @@ class SQLiteStorage: SQLiteStorageProtocol {
             }
             let coordinator = NSFileCoordinator(filePresenter: nil)
             var coordinatorError: NSError?
-            var dbPool: DatabasePool!
+            var dbPool: DatabaseQueue!
             var dbError: Error?
             let coordinationBlock: (URL) -> Void = { url in
                 do {
@@ -56,25 +60,26 @@ class SQLiteStorage: SQLiteStorageProtocol {
 
     func initialize(storageMigrator: any SQLiteMigratable) async throws {
         do {
-            try await sqlitePool.read { db in
-                let sqlUserVersion = try Int.fetchOne(db, sql: "PRAGMA user_version") ?? 0
-                if sqlUserVersion == self.schema.version.rawValue {
-                    // db schema is up to date
-                    return
-                } else if sqlUserVersion == 0 {
-                    // need to build db schema and update schema version
-                    try self.buildDatabaseSchema()
-                } else {
-                    guard let currentVersion = self.schema.version.versionByRawValue(sqlUserVersion) as (any SchemaVersionType)? else {
-                        throw SQLiteStorageError.migrationError(.downgradeAttempt)
-                    }
-                    // Perform migration from the last known version to the current version declared by versionable storage, one-by-one in "cascade" fashion
-                    //try storageMigrator.willStartIncrementalStorageMigrationSequence(startVersion: currentVersion, endVersion: schema.version)
-                    try self.migrateToTargetVersion(
-                                fromVersion: currentVersion,
-                                targetVersionRawValue: self.schema.version.rawValue,
-                                migrator: storageMigrator)
+            let sqlUserVersion = try await sqlitePool.read { db in
+                return try Int.fetchOne(db, sql: "PRAGMA user_version") ?? 0
+            }
+
+            if sqlUserVersion == self.schema.version.rawValue {
+                // db schema is up to date
+                return
+            } else if sqlUserVersion == 0 {
+                // need to build db schema and update schema version
+                try await self.buildDatabaseSchema()
+            } else {
+                guard let currentVersion = self.schema.version.versionByRawValue(sqlUserVersion) as (any SchemaVersionType)? else {
+                    throw SQLiteStorageError.migrationError(.downgradeAttempt)
                 }
+                // Perform migration from the last known version to the current version declared by versionable storage, one-by-one in "cascade" fashion
+                //try storageMigrator.willStartIncrementalStorageMigrationSequence(startVersion: currentVersion, endVersion: schema.version)
+                try self.migrateToTargetVersion(
+                            fromVersion: currentVersion,
+                            targetVersionRawValue: self.schema.version.rawValue,
+                            migrator: storageMigrator)
             }
         } catch let error as SQLiteStorageError {
             throw error
@@ -118,17 +123,17 @@ class SQLiteStorage: SQLiteStorageProtocol {
         migrator.didFinishStorageIncrementalMigrationSequence(startVersion: fromVersion as! S.Version, endVersion: schema.version as! S.Version)
     }
 
-    fileprivate func buildDatabaseSchema() throws {
+    fileprivate func buildDatabaseSchema() async throws {
         switch schema.schemaType {
         case .rawSQLSchema(let sql):
-            try sqlitePool.write { db in
+            try await sqlitePool.write { db in
                 try db.execute(sql: sql)
-                try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+                try db.execute(sql: "PRAGMA user_version=\(self.schema.version.rawValue)")
             }
         case .delegated(let build):
-            try sqlitePool.write { db in
-                try build(db, schema.version.rawValue)
-                try db.execute(sql: "PRAGMA user_version=\(schema.version.rawValue)")
+            try await sqlitePool.write { db in
+                try build(db, self.schema.version.rawValue)
+                try db.execute(sql: "PRAGMA user_version=\(self.schema.version.rawValue)")
             }
         }
     }

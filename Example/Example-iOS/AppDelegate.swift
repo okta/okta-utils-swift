@@ -12,7 +12,7 @@
 import UIKit
 import Firebase
 import OktaLogger
-import OktaAnalytics
+//import OktaAnalytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,15 +22,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationDidEnterBackground", value: "5")])
+        //OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationDidEnterBackground", value: "5")])
     }
 
     func applicationWillEnterForeground(_ application:UIApplication) {
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillEnterForeground", value: "6")])
+        //OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillEnterForeground", value: "6")])
     }
 
     func applicationWillTerminate(_ application:UIApplication) {
-        OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillTerminate", value: "7")])
-        OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Finished")
+        //OktaAnalytics.updateScenario(scenarioID, [Property(key: "AppDelegate.applicationWillTerminate", value: "7")])
+        //OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Finished")
     }
 }

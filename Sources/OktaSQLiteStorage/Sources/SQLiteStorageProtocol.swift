@@ -16,7 +16,7 @@ import GRDB
 /// Wraps a database pool that grants concurrent accesses to an SQLite database
 public protocol SQLiteStorageProtocol {
     /// Use database pool in order to read or write data
-    var sqlitePool: DatabasePool { get }
+    var sqlitePool: DatabaseQueue { get }
 
     /// Location of a database
     var sqliteURL: URL { get }

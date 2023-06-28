@@ -44,9 +44,8 @@ PODS:
   - "GoogleUtilities/NSData+zlib (7.11.1)"
   - GoogleUtilities/UserDefaults (7.11.1):
     - GoogleUtilities/Logger
-  - GRDB.swift (5.26.1):
-    - GRDB.swift/standard (= 5.26.1)
-  - GRDB.swift/standard (5.26.1)
+  - GRDB.swift/SQLCipher (5.26.1):
+    - SQLCipher (>= 3.4.0)
   - Instabug (11.7.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
@@ -74,20 +73,27 @@ PODS:
     - Instabug (~> 11)
     - OktaLogger/Core
   - OktaSQLiteStorage (0.0.3):
-    - GRDB.swift (~> 5)
+    - GRDB.swift/SQLCipher (~> 5)
+    - SQLCipher (~> 4)
   - PromisesObjC (2.2.0)
+  - SQLCipher (4.5.4):
+    - SQLCipher/standard (= 4.5.4)
+  - SQLCipher/common (4.5.4)
+  - SQLCipher/standard (4.5.4):
+    - SQLCipher/common
   - SwiftLint (0.51.0)
 
 DEPENDENCIES:
   - AppCenter (~> 5.0.0)
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (~> 10.4.0)
-  - GRDB.swift (~> 5)
+  - GRDB.swift/SQLCipher (~> 5)
   - Instabug (= 11.7.0)
   - OktaAnalytics (from `.`)
   - OktaLogger (from `.`)
   - OktaLogger/Core (from `.`)
   - OktaSQLiteStorage (from `.`)
+  - SQLCipher (~> 4.0)
   - SwiftLint (= 0.51)
 
 SPEC REPOS:
@@ -105,6 +111,7 @@ SPEC REPOS:
     - Instabug
     - nanopb
     - PromisesObjC
+    - SQLCipher
     - SwiftLint
 
 EXTERNAL SOURCES:
@@ -130,10 +137,11 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OktaAnalytics: 27227ae547b3e9f2557ebae9c3e6deefed1ab70d
   OktaLogger: 7839f9c82ef90568708981b3647f315d0dcb37d5
-  OktaSQLiteStorage: 5d85db0ba3185686b466ec4516c709175e72e671
+  OktaSQLiteStorage: ff64e82ec8fac8e6daa63d3e7a765a8108a216bf
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
+  SQLCipher: 905b145f65f349f26da9e60a19901ad24adcd381
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
 
-PODFILE CHECKSUM: 51bb971916de2e4f23c89b50357887555dfe8f00
+PODFILE CHECKSUM: bcc5ed902bd6a5fb1601f139761c965581b8f05e
 
 COCOAPODS: 1.12.1

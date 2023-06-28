@@ -198,6 +198,52 @@ final class SQLiteStorageTests: XCTestCase {
 
         wait(for: [endOfAsycTest2], timeout: 1)
     }
+
+    func testCreation_rawSQL_Enrypted() throws {
+
+        let readFromDBExpectation = expectation(description: "Read from db expectation")
+        let writeToDBExpectation = expectation(description: "Write from db expectation")
+
+        Task {
+            let schemaQueries = """
+            CREATE TABLE 'Example' (
+            'id' TEXT NOT NULL
+            );
+            """
+
+            let rawSQLSchema = SQLiteSchemaType.rawSQLSchema(sql: schemaQueries)
+            let schema = SQLiteSchema(schemaType: rawSQLSchema, version: SchemaVersions.v1)
+            let builder = SQLiteStorageBuilder()
+            var configuration = Configuration()
+            var prepareDatabaseCalled = false
+            configuration.prepareDatabase { db in
+                try db.usePassphrase("secret")
+                prepareDatabaseCalled = true
+            }
+            let storage = try await builder
+                .setWALMode(enabled: true)
+                .setSQLiteConfiguration(configuration)
+                .build(schema: schema, storagePath: dbURL)
+            try await storage.initialize(storageMigrator: SQLiteMigratorMock())
+            XCTAssertTrue(prepareDatabaseCalled)
+
+            XCTAssertEqual(storage.sqliteURL, dbURL)
+            try await storage.sqlitePool.write { db in
+                try db.execute(literal: "INSERT INTO Example (id) VALUES (1) ")
+                writeToDBExpectation.fulfill()
+            }
+
+            try await storage.sqlitePool.read { db in
+                let db_version = try Int.fetchOne(db, sql: "PRAGMA user_version")
+                XCTAssertEqual(db_version, SchemaVersions.v1.rawValue)
+                let userData = try Int.fetchOne(db, sql: "SELECT id FROM Example WHERE id=1")
+                XCTAssertEqual(userData, 1)
+                readFromDBExpectation.fulfill()
+            }
+        }
+
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
+    }
 }
 
 enum SchemaVersions: Int, SchemaVersionType {

@@ -16,5 +16,6 @@ Okta SQLite storage wrapper on top of GRDB framework
   s.osx.deployment_target = '11.0'
   s.source_files = 'Sources/OktaSQLiteStorage/Sources/*.{h,m,swift}'
 
-  s.dependency 'GRDB.swift','~>5'
+  s.dependency 'GRDB.swift/SQLCipher','~> 5'
+  s.dependency 'SQLCipher','~> 4'
 end

@@ -9,7 +9,8 @@ target 'OktaLogger' do
 end
 
 target 'OktaSQLiteStorage' do
-    pod 'GRDB.swift', '~>5'
+    pod 'GRDB.swift/SQLCipher','~>5'
+    pod 'SQLCipher', '~> 4.0'
     pod 'SwiftLint', '0.51'
 end
 

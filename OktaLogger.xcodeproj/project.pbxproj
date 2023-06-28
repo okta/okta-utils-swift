@@ -24,7 +24,6 @@
 		806FF25E24B95A3300994D4D /* OktaLoggerFileLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806FF25D24B95A3300994D4D /* OktaLoggerFileLogger.swift */; };
 		80AA110224BE799800981074 /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80AA110124BE799800981074 /* DemoTableViewCell.swift */; };
 		8DCF5EB8263CACAD008698CD /* DDLogFileManagerCustomName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCF5EB7263CACAC008698CD /* DDLogFileManagerCustomName.swift */; };
-		9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F26660629F728530064EF50 /* OktaSQLiteStorage.framework */; };
 		9F26663029F747490064EF50 /* SQLiteConnectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662A29F747490064EF50 /* SQLiteConnectionBuilder.swift */; };
 		9F26663129F747490064EF50 /* SQLitePersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662B29F747490064EF50 /* SQLitePersistentStorage.swift */; };
 		9F26663229F747490064EF50 /* SQLiteStorageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F26662C29F747490064EF50 /* SQLiteStorageProtocol.swift */; };
@@ -72,13 +71,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9F26660F29F728540064EF50 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9F26660529F728530064EF50;
-			remoteInfo = OktaSQLiteStorage;
-		};
 		D54461C4246A02C800C755F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D5C824CB2469DBF1005CF747 /* Project object */;
@@ -222,7 +214,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9F26660E29F728540064EF50 /* OktaSQLiteStorage.framework in Frameworks */,
 				267DBA321DB541728E814174 /* libPods-OktaSQLiteStorageTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -587,7 +578,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				9F26661029F728540064EF50 /* PBXTargetDependency */,
 			);
 			name = OktaSQLiteStorageTests;
 			productName = OktaSQLiteStorageTests;
@@ -1137,11 +1127,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9F26661029F728540064EF50 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9F26660529F728530064EF50 /* OktaSQLiteStorage */;
-			targetProxy = 9F26660F29F728540064EF50 /* PBXContainerItemProxy */;
-		};
 		D54461C5246A02C800C755F1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D5C824D32469DBF1005CF747 /* OktaLogger */;

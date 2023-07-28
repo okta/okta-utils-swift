@@ -251,7 +251,7 @@ extension OktaAnalytics {
                 }
                 return
             }
-            var propertiesDict: Dictionary = .init(uniqueKeysWithValues: properties.lazy.map { ($0.key, $0.value) })
+            var propertiesDict: Dictionary = .init(properties.lazy.map { ($0.key, $0.value) }, uniquingKeysWith: { (_, last) in last })
             propertiesDict["DurationMS"] = "\(scenario.startTime.distance(to: Date()) * 1000)"
             trackEvent(eventDisplayName, withProperties: propertiesDict)
             storage.deleteScenariosByIds([scenarioID])
@@ -267,7 +267,7 @@ extension OktaAnalytics {
     public static func endScenario(_ name: Name) {
         storage.fetchScenarios(by: name) {
             $0.forEach { scenario in
-                var properties: Dictionary = .init(uniqueKeysWithValues: scenario.properties.lazy.map { ($0.key, $0.value) })
+                var properties: Dictionary = .init(scenario.properties.lazy.map { ($0.key, $0.value) }, uniquingKeysWith: { (_, last) in last })
                     properties["DurationMS"] = "\(scenario.startTime.distance(to: Date()) * 1000)"
                     trackEvent(scenario.displayName, withProperties: properties)
             }

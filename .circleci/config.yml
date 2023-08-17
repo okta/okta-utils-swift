@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  general-platform-helpers: okta/general-platform-helpers@1.7.6
+
 commands:
   cleanup_simulators:
     description: "Clear Simulator Caches"
@@ -40,6 +43,14 @@ jobs:
       - test
 
 workflows:
+  semgrep:
+    jobs:
+      - general-platform-helpers/job-semgrep-prepare:
+          name: semgrep-prepare
+      - general-platform-helpers/job-semgrep-scan:
+          name: semgrep-scan
+          requires:
+            - semgrep-prepare
   test:
     jobs:
       - build-and-test

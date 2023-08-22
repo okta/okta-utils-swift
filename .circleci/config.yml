@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   general-platform-helpers: okta/general-platform-helpers@1.7.6
+  platform-helpers-general: atko-devices/eng-services-platform-helpers-general@1.8
 
 commands:
   cleanup_simulators:
@@ -41,6 +42,18 @@ jobs:
       - install_dependencies
       - pods
       - test
+  snyk-scan:
+    docker:
+      - image: cimg/openjdk:13.0
+    steps:
+      - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
+          at: ~/project
+      - platform-helpers-general/step-load-dependencies
+      - run: | # Install your projects dependencies here or in the build job. Note: Here if Python.
+          pip install -r requirements.txt 
+      - platform-helpers-general/step-run-snyk-monitor:
+          scan-all-projects: true
+          skip-unresolved: false
 
 workflows:
   semgrep:
@@ -54,4 +67,8 @@ workflows:
   test:
     jobs:
       - build-and-test
+      - snyk-scan:
+          name: execute-snyk
+          requires:
+            - prepare-snyk
 

@@ -67,6 +67,10 @@ workflows:
   test:
     jobs:
       - build-and-test
+      - platform-helpers-general/job-snyk-prepare:
+          name: prepare-snyk
+          requires:
+            - build
       - snyk-scan:
           name: execute-snyk
           requires:

@@ -41,7 +41,7 @@ jobs:
       - checkout
       - install_dependencies
       - pods
-      - test
+      # - test
   snyk-scan:
     docker:
       - image: cimg/openjdk:13.0

@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   general-platform-helpers: okta/general-platform-helpers@1.7.6
-  platform-helpers-general: atko-devices/eng-services-platform-helpers-general@1.8
+  platform-helpers-general: okta/eng-services-platform-helpers-general@1.8
 
 commands:
   cleanup_simulators:

@@ -53,7 +53,6 @@ jobs:
       - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
           at: ~/project
       - general-platform-helpers/step-load-dependencies
-      - pods
       - general-platform-helpers/step-run-snyk-monitor:
           scan-all-projects: true
           skip-unresolved: false
@@ -67,7 +66,7 @@ workflows:
           name: semgrep-scan
           requires:
             - semgrep-prepare
-  test:
+  build-test:
     jobs:
       - build-and-test
       - general-platform-helpers/job-snyk-prepare:

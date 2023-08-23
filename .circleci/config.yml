@@ -4,6 +4,11 @@ orbs:
   general-platform-helpers: okta/general-platform-helpers@1.8
   # platform-helpers-general: okta/eng-services-platform-helpers-general@1.8
 
+executors:
+  apple-ci-x86-medium:
+    macos:
+      xcode: "13.4.1"
+    resource_class: macos.x86.medium.gen2
 commands:
   cleanup_simulators:
     description: "Clear Simulator Caches"
@@ -34,9 +39,7 @@ commands:
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
 jobs:
   build-and-test:
-    macos:
-      xcode: 14.3.1
-    resource_class: macos.m1.medium.gen1
+    executor: apple-ci-x86-medium
     steps:
       - cleanup_simulators
       - checkout
@@ -48,9 +51,7 @@ jobs:
             - .
       # - test
   snyk-scan:
-    macos:
-      xcode: 14.3.1
-    resource_class: macos.m1.medium.gen1
+    executor: apple-ci-x86-medium
     steps:
       - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
           at: ~/project

@@ -75,6 +75,7 @@ workflows:
             - build-and-test
       - snyk-scan:
           name: execute-snyk
+          run-on-non-main: true # TODO replace with master check
           requires:
             - prepare-snyk
 

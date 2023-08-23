@@ -47,6 +47,8 @@ jobs:
             - .
       # - test
   snyk-scan:
+    macos:
+      xcode: 14.2.0
     steps:
       - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
           at: ~/project

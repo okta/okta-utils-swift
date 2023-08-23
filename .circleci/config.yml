@@ -47,8 +47,6 @@ jobs:
             - .
       # - test
   snyk-scan:
-    docker:
-      - image: cimg/openjdk:13.0
     steps:
       - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
           at: ~/project

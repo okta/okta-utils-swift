@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   general-platform-helpers: okta/general-platform-helpers@1.8
-  # platform-helpers-general: okta/eng-services-platform-helpers-general@1.8
 
 apple-exec-common: &apple-exec-common
   macos:
@@ -51,7 +50,7 @@ jobs:
       - checkout
       - install_dependencies
       - pods
-      - persist_to_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
+      - persist_to_workspace:
           root: ~/project
           paths:
             - .
@@ -73,8 +72,8 @@ jobs:
       - general-platform-helpers/step-run-snyk-monitor:
           scan-all-projects: true
           skip-unresolved: false
-          run-on-non-main: true
           os: macos
+          # run-on-non-main: true #To run on topic branch
 
 workflows:
   semgrep:

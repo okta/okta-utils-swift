@@ -44,7 +44,7 @@ commands:
 #         name: OktaAnalytics unit tests"
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
 jobs:
-  build-and-test:
+  setup:
     executor: apple-ci-arm-medium
     steps:
       - cleanup_simulators
@@ -56,12 +56,19 @@ jobs:
           paths:
             - .
       # - test
+  test:
+    executor: apple-ci-arm-medium
+    - attach_workspace:
+        at: ~/project
+    - test
   snyk-scan:
     executor: apple-ci-x86-medium
+    - attach_workspace:
+        at: ~/project
     steps:
       - run:
-         name: run swift package show dependencies
-         command: swift package show-dependencies
+          name: run swift package show dependencies
+          command: swift package show-dependencies
       - general-platform-helpers/step-load-dependencies
       - general-platform-helpers/step-run-snyk-monitor:
           scan-all-projects: true
@@ -80,9 +87,14 @@ workflows:
             - semgrep-prepare
   build-test:
     jobs:
-      - build-and-test
+      - setup
+      - test
+          requires:
+            - setup
       - general-platform-helpers/job-snyk-prepare:
           name: prepare-snyk
+          requires:
+            - setup
       - snyk-scan:
           name: execute-snyk
           requires:

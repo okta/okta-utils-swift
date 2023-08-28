@@ -3,17 +3,12 @@ version: 2.1
 orbs:
   general-platform-helpers: okta/general-platform-helpers@1.8
 
-apple-exec-common: &apple-exec-common
-  macos:
-    xcode: "13.4.1"
-
 executors:
-  apple-ci-x86-medium:
-    <<: [ *apple-exec-common ]
-    resource_class: macos.x86.medium.gen2
   apple-ci-arm-medium:
-    <<: [ *apple-exec-common ]
+    macos:
+      xcode: 14.3.1
     resource_class: macos.m1.medium.gen1
+    
 commands:
   cleanup_simulators:
     description: "Clear Simulator Caches"
@@ -76,7 +71,7 @@ jobs:
           scan-all-projects: true
           skip-unresolved: false
           os: macos
-          run-on-non-main: true #To run on topic branch
+          # run-on-non-main: true #To run on topic branch
 
 workflows:
   semgrep:
@@ -96,17 +91,17 @@ workflows:
             - setup
       - general-platform-helpers/job-snyk-prepare:
           name: prepare-snyk
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - setup
       - snyk-scan:
           name: execute-snyk
-          # filters:
-          #   branches:
-          #     only:
-          #       - master
+          filters:
+            branches:
+              only:
+                - master
           requires:
             - prepare-snyk

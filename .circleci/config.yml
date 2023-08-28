@@ -65,7 +65,7 @@ jobs:
     executor: apple-ci-x86-medium
     steps:
       - attach_workspace:
-        at: ~/project
+          at: ~/project
       - run:
           name: run swift package show dependencies
           command: swift package show-dependencies

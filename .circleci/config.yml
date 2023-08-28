@@ -55,7 +55,7 @@ jobs:
           root: ~/project
           paths:
             - .
-  test:
+  run_tests:
     executor: apple-ci-arm-medium
     steps:
       - attach_workspace:
@@ -88,7 +88,7 @@ workflows:
   build-test:
     jobs:
       - setup
-      - test:
+      - run_tests:
           name: tests
           requires:
             - setup

@@ -55,17 +55,17 @@ jobs:
           root: ~/project
           paths:
             - .
-      # - test
   test:
     executor: apple-ci-arm-medium
-    - attach_workspace:
-        at: ~/project
-    - test
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - test
   snyk-scan:
     executor: apple-ci-x86-medium
-    - attach_workspace:
-        at: ~/project
     steps:
+      - attach_workspace:
+        at: ~/project
       - run:
           name: run swift package show dependencies
           command: swift package show-dependencies
@@ -88,7 +88,8 @@ workflows:
   build-test:
     jobs:
       - setup
-      - test
+      - test:
+          name: tests
           requires:
             - setup
       - general-platform-helpers/job-snyk-prepare:
@@ -99,4 +100,3 @@ workflows:
           name: execute-snyk
           requires:
             - prepare-snyk
-

@@ -61,10 +61,13 @@ jobs:
           at: ~/project
       - test
   snyk-scan:
-    executor: apple-ci-x86-medium
+    executor: apple-ci-arm-medium
     steps:
       - attach_workspace:
           at: ~/project
+      - run:
+          name: Install rosetta # Needed for snyk to work on M1 machines.
+          command: softwareupdate --install-rosetta --agree-to-license
       - run:
           name: run swift package show dependencies
           command: swift package show-dependencies
@@ -73,7 +76,7 @@ jobs:
           scan-all-projects: true
           skip-unresolved: false
           os: macos
-          # run-on-non-main: true #To run on topic branch
+          run-on-non-main: true #To run on topic branch
 
 workflows:
   semgrep:

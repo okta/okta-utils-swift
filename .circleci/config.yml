@@ -55,12 +55,18 @@ jobs:
           root: ~/project
           paths:
             - .
+      - run:
+         name: run swift package show dependencies
+         command: swift package show-dependencies
       # - test
   snyk-scan:
     executor: apple-ci-x86-medium
     steps:
       - attach_workspace: # Allows for sharing of build-workspace (containing downloaded dependencies) (optional)
           at: ~/project
+      - run:
+         name: run swift package show dependencies
+         command: swift package show-dependencies
       - general-platform-helpers/step-load-dependencies
       - general-platform-helpers/step-run-snyk-monitor:
           scan-all-projects: true

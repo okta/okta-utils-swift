@@ -1,8 +1,14 @@
 version: 2.1
 
 orbs:
-  general-platform-helpers: okta/general-platform-helpers@1.7.6
+  general-platform-helpers: okta/general-platform-helpers@1.8
 
+executors:
+  apple-ci-arm-medium:
+    macos:
+      xcode: 14.3.1
+    resource_class: macos.m1.medium.gen1
+    
 commands:
   cleanup_simulators:
     description: "Clear Simulator Caches"
@@ -32,15 +38,40 @@ commands:
 #         name: OktaAnalytics unit tests"
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
 jobs:
-  build-and-test:
-    macos:
-      xcode: 14.2.0
+  setup:
+    executor: apple-ci-arm-medium
     steps:
       - cleanup_simulators
       - checkout
       - install_dependencies
       - pods
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
+  run_tests:
+    executor: apple-ci-arm-medium
+    steps:
+      - attach_workspace:
+          at: ~/project
       - test
+  snyk-scan:
+    executor: apple-ci-arm-medium
+    steps:
+      - attach_workspace:
+          at: ~/project
+      - run:
+          name: Install rosetta # Needed for snyk to work on M1 machines.
+          command: softwareupdate --install-rosetta --agree-to-license
+      - run:
+          name: run swift package show dependencies
+          command: swift package show-dependencies
+      - general-platform-helpers/step-load-dependencies
+      - general-platform-helpers/step-run-snyk-monitor:
+          scan-all-projects: true
+          skip-unresolved: false
+          os: macos
+          # run-on-non-main: true #To run on topic branch
 
 workflows:
   semgrep:
@@ -51,7 +82,26 @@ workflows:
           name: semgrep-scan
           requires:
             - semgrep-prepare
-  test:
+  build-test:
     jobs:
-      - build-and-test
-
+      - setup
+      - run_tests:
+          name: tests
+          requires:
+            - setup
+      - general-platform-helpers/job-snyk-prepare:
+          name: prepare-snyk
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - setup
+      - snyk-scan:
+          name: execute-snyk
+          filters:
+            branches:
+              only:
+                - master
+          requires:
+            - prepare-snyk

@@ -29,14 +29,14 @@ OktaAnalytics.addProvider(appCenterAnalyticsProvider)
 
 ## Dependencies
 
- - [OktaLogger](https://github.com/okta/okta-logger-swift/tree/master/Sources/OktaLogger)
- - [OktaSQLiteStorage](https://github.com/okta/okta-logger-swift/tree/master/Sources/OktaSQLiteStorage)
+ - [OktaLogger](https://github.com/okta/okta-utils-swift/tree/master/Sources/OktaLogger)
+ - [OktaSQLiteStorage](https://github.com/okta/okta-utils-swift/tree/master/Sources/OktaSQLiteStorage)
  - [AppCenter](https://github.com/microsoft/appcenter-sdk-apple)
 
 ## Scenario Design
-![](https://github.com/okta/okta-logger-swift/assets/130079620/48ac1514-8a09-40bb-a1f9-620f161bb77f)
+![](https://github.com/okta/okta-utils-swift/assets/130079620/48ac1514-8a09-40bb-a1f9-620f161bb77f)
  
  Sceanrio is the way of tracking the user flow to Analytics provider.
  
  ## Scenario DB Design
- ![](https://github.com/okta/okta-logger-swift/assets/130079620/83b08e25-e362-40a5-b46c-db3387ab9222)
+ ![](https://github.com/okta/okta-utils-swift/assets/130079620/83b08e25-e362-40a5-b46c-db3387ab9222)

@@ -6,10 +6,10 @@ Pod::Spec.new do |s|
 Okta SQLite storage wrapper on top of GRDB framework
                        DESC
   s.platforms        = { :ios => "13.0", :osx => "12.0" }
-  s.homepage         = 'https://github.com/okta/okta-logger-swift.git'
+  s.homepage         = 'https://github.com/okta/okta-utils-swift'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com" }
-  s.source           = { :git => 'https://github.com/okta/okta-logger-swift.git', :tag => "OktaSQLiteStorage-"+s.version.to_s }
+  s.source           = { :git => 'https://github.com/okta/okta-utils-swift.git', :tag => "OktaSQLiteStorage-"+s.version.to_s }
   s.swift_version = '5.0'
 
   s.ios.deployment_target = '13.0'

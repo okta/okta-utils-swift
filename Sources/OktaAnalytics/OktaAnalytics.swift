@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2020-Present, Okta, Inc. and/or its affiliates. All rights reserved.
- * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
- *
- * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *
- * See the License for the specific language governing permissions and limitations under the License.
- */
+* Copyright (c) 2023, Okta, Inc. and/or its affiliates. All rights reserved.
+* The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+*
+* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+*
+* See the License for the specific language governing permissions and limitations under the License.
+*/
 import Foundation
 import Combine
 import OktaLogger
@@ -155,31 +155,43 @@ public final class OktaAnalytics: NSObject {
 }
 
 // Extensions
-public extension Dictionary {
-    // Merge the contents of one dictionary into another, favoring the content of right
-    static func mergeRecursive(left: inout Self, right: Self?) {
-        left.merge(right ?? [:]) { current, _ in current }
-    }
-}
-
-// Extensions
 extension OktaAnalytics {
     /**
-        Starts an event scenario with the specified name.
+        Starts an event scenario with the specified `ScenarioEvent`. Watch for console logs if scenario is created successfully
 
         - Parameters:
-           - eventName: The name of the event scenario to start.
+           - scenarioEvent: The `ScenarioEvent` to start.
+        */
+    public static func startScenario(_ scenarioEvent: ScenarioEvent) {
+        storage.insertScenario(scenarioEvent) { scenarioID in
+           guard let _ = scenarioID else {
+               Self.providers.forEach {
+                   $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "Failed to create \(scenarioEvent.name)", properties: nil, file: #file, line: #line, funcName: #function)
+               }
+               return
+            }
+        }
+        Self.providers.forEach {
+            $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "\(scenarioEvent.name) created with \(scenarioEvent.id)", properties: nil, file: #file, line: #line, funcName: #function)
+        }
+    }
+    /**
+        Starts an event scenario with the specified `ScenarioEvent`.
+
+        - Parameters:
+           - scenarioEvent: The `ScenarioEvent` to start.
+           - completion: returns `ScenarioID` in completion after it created, otherwise `nil` is returned.
         */
     public static func startScenario(_ scenarioEvent: ScenarioEvent, _ completion: @escaping (ScenarioID?) -> Void) {
-        completion(scenarioEvent.id)
         storage.insertScenario(scenarioEvent) { scenarioID in
-           guard let scenarioID = scenarioID else {
+           guard let _ = scenarioID else {
                completion(nil)
                Self.providers.forEach {
                    $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "Failed to create \(scenarioEvent.name)", properties: nil, file: #file, line: #line, funcName: #function)
                }
                return
             }
+            completion(scenarioEvent.id)
         }
         Self.providers.forEach {
             $1.logger?.log(level: .debug, eventName: scenarioEvent.name, message: "\(scenarioEvent.name) created with \(scenarioEvent.id)", properties: nil, file: #file, line: #line, funcName: #function)
@@ -289,5 +301,13 @@ extension OktaAnalytics {
     /// Note: events wont be reported to providers
     public static func disposeAllScenarios() {
         storage.deleteScenarios()
+    }
+}
+
+// Extensions
+public extension Dictionary {
+    // Merge the contents of one dictionary into another, favoring the content of right
+    static func mergeRecursive(left: inout Self, right: Self?) {
+        left.merge(right ?? [:]) { current, _ in current }
     }
 }

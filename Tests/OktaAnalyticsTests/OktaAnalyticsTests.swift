@@ -80,6 +80,43 @@ class OktaAnalyticsTests: XCTestCase {
         wait(for: insertExpectations + deleteExpectations, timeout: 20)
     }
 
+    func testScenarioWithScenarioIDFromClient() throws {
+        let count = 30
+        var insertExpectations = [XCTestExpectation]()
+        var deleteExpectations = [XCTestExpectation]()
+        for i in 0..<count {
+            insertExpectations.append(XCTestExpectation(description: "\(i)"))
+            deleteExpectations.append(XCTestExpectation(description: "\(i)"))
+        }
+
+        DispatchQueue.concurrentPerform(iterations: count) { index in
+            var scenarioID = ""
+
+            OktaAnalytics.startScenario(ScenarioEvent(scenarioID: UUID().uuidString, name: "Test \(index)", displayName: " \(index)")) {
+                scenarioID = $0 ?? ""
+            }
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test1", value: "1")])
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test2", value: "2")])
+            OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test3", value: "3")])
+
+            Thread.sleep(forTimeInterval: 0.5)
+            OktaAnalytics.getScenarioEventByID(scenarioID) {
+                XCTAssertNotNil($0)
+                insertExpectations[index].fulfill()
+            }
+
+            OktaAnalytics.endScenario(scenarioID, eventDisplayName: "Test\(index)")
+
+            Thread.sleep(forTimeInterval: 0.5)
+            OktaAnalytics.getScenarioEventByID(scenarioID) {
+                XCTAssertNil($0)
+                deleteExpectations[index].fulfill()
+            }
+        }
+
+        wait(for: insertExpectations + deleteExpectations, timeout: 40)
+    }
+
     override class func tearDown() {
         OktaAnalytics.disposeAll()
     }

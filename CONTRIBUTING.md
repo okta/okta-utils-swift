@@ -16,16 +16,16 @@ _Lets get started!!!_
 Fork the code
 -------------
 
-In your browser, navigate to: [https://github.com/okta/okta-logger-swift](https://github.com/okta/okta-os)
+In your browser, navigate to: [okta-utils-swift](https://github.com/okta/okta-utils-swift)
 
 Fork the repository by clicking on the 'Fork' button on the top right hand side.  The fork will happen and you will be taken to your own fork of the repository.  Copy the Git repository URL by clicking on the clipboard next to the URL on the right hand side of the page under '**HTTPS** clone URL'.  You will paste this URL when doing the following `git clone` command.
 
 On your computer, follow these steps to setup a local repository for working on the Okta Logger SDK:
 
 ``` bash
-$ git clone https://github.com/YOUR_ACCOUNT/okta-logger-swift.git
-$ cd okta-logger-swift
-$ git remote add upstream https://github.com/okta/okta-logger-swift.git
+$ git clone https://github.com/YOUR_ACCOUNT/okta-utils-swift.git
+$ cd okta-utils-swift
+$ git remote add upstream https://github.com/okta/okta-utils-swift.git
 $ git checkout master
 $ git fetch upstream
 $ git rebase upstream/master
@@ -88,7 +88,7 @@ Now that the `feature_x` branch has been pushed to your GitHub repository, you c
 
 To initiate the pull request, do the following:
 
-1. In your browser, navigate to your forked repository: [https://github.com/YOUR_ACCOUNT/okta-logger-swift](https://github.com/YOUR_ACCOUNT/okta-logger-swift)
+1. In your browser, navigate to your forked repository: [https://github.com/YOUR_ACCOUNT/okta-utils-swift](https://github.com/YOUR_ACCOUNT/okta-utils-swift)
 2. Click the new button called '**Compare & pull request**' that showed up just above the main area in your forked repository
 3. Validate the pull request will be into the upstream `master` and will be from your `feature_x` branch
 4. Enter a detailed description of the work you have done and then click '**Send pull request**'

@@ -3,12 +3,12 @@ Pod::Spec.new do |s|
   s.version          = "1.3.15"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
-  s.homepage         = "https://github.com/okta/okta-logger-swift"
+  s.homepage         = "https://github.com/okta/okta-utils-swift"
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.author           = { "Okta Developers" => "developer@okta.com" }
-  s.source           = { :git => "https://github.com/okta/okta-logger-swift.git",  :tag => "OktaLogger-"+s.version.to_s }
-  s.ios.deployment_target = '11.0'
-  s.osx.deployment_target = '10.14'
+  s.source           = { :git => "https://github.com/okta/okta-utils-swift.git",  :tag => "OktaLogger-"+s.version.to_s }
+  s.ios.deployment_target = '13.0'
+  s.osx.deployment_target = '11.0'
   s.watchos.deployment_target = '6.0'
   s.swift_version = '5.0'
   s.default_subspec = "Complete"

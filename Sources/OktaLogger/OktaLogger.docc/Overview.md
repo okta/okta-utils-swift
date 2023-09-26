@@ -28,7 +28,7 @@ OktaLogger is a proxy-based logging SDK for allowing an app to log to many desti
 This SDK is available through [CocoaPods](https://cocoapods.org). To install it, add the following line to your Podfile:
 
 ```
-pod 'OktaLogger', :git => 'https://github.com/okta/okta-logger-swift.git'
+pod 'OktaLogger', :git => 'https://github.com/okta/okta-utils-swift.git'
 ```
 
 There are few available subspecs:
@@ -42,7 +42,7 @@ There are few available subspecs:
 
 This SDK is available through Swift Package Manager. To install it, import it from the following url:
 ```
-https://github.com/okta/okta-logger-swift.git
+https://github.com/okta/okta-utils-swift.git
 ```
 There are few available products available to import:
 

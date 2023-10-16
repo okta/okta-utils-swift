@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaSQLiteStorage'
-  s.version          = '0.0.4'
+  s.version          = '0.0.5'
   s.summary          = 'Okta SQLite storage framework'
   s.description      = <<-DESC
 Okta SQLite storage wrapper on top of GRDB framework
@@ -16,6 +16,6 @@ Okta SQLite storage wrapper on top of GRDB framework
   s.osx.deployment_target = '11.0'
   s.source_files = 'Sources/OktaSQLiteStorage/Sources/*.{h,m,swift}'
 
-  s.dependency 'GRDB.swift/SQLCipher','~> 5'
-  s.dependency 'SQLCipher','~> 4'
+  s.dependency 'GRDB.swift/SQLCipher','6.20.2'
+  s.dependency 'SQLCipher','4.5.5'
 end

@@ -152,6 +152,25 @@ class AnalyticsStorage {
         }
     }
 
+    func fetchScenariosAndProperties(createdBy secondsAgo: UInt, completion: @escaping ([Scenario], [ScenarioProperty]) -> Void) {
+        queue.async {
+            do {
+                try self.databasePool?.read {
+                    let scenarios = try Scenario.fetchAll($0, sql: "SELECT * FROM Scenario WHERE startTime < DATETIME('now', '-\(secondsAgo) seconds')")
+
+                    // https://github.com/groue/GRDB.swift/issues/18#issuecomment-696574502
+                    let scenariosIds = scenarios.map { $0.id }
+                    let request: SQLRequest<ScenarioProperty> = "SELECT * FROM ScenarioProperty WHERE ScenarioID IN \(scenariosIds)"
+                    let scenarioProperties = try request.fetchAll($0)
+                    completion(scenarios, scenarioProperties)
+                }
+            } catch {
+                self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
+                completion([], [])
+            }
+        }
+    }
+
     func deleteScenariosByIds(_ scenarioIDs: [ScenarioID]) {
         queue.async {
             do {

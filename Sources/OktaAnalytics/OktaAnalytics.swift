@@ -25,6 +25,9 @@ public final class OktaAnalytics: NSObject {
     private static var providers = [String: AnalyticsProviderProtocol]()
     private static var lock = ReadWriteLock()
 
+    // Expiration period for scenario events. The default value is 24 hours.
+    private(set) static var expirationPeriodForScenarioEvents: UInt = 24 * 60 * 60
+
     private static var storage: AnalyticsStorage = {
         let logger = OktaLogger()
         logger.addDestination(
@@ -36,6 +39,18 @@ public final class OktaAnalytics: NSObject {
         )
         return AnalyticsStorage(logger: logger)
     }()
+
+    /**
+     Adds provider to collection
+
+     - Parameters:
+        - securityAppGroupIdentifier: shared group Identifier to be data shared between app, extensions, app and widgets.
+        - expirationPeriodForScenarioEvents: expiration period for scenario events.
+     */
+    public static func initializeStorageWith(securityAppGroupIdentifier: String, expirationPeriodForScenarioEvents: UInt) {
+        self.expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents
+        storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
+    }
 
     /**
      Adds provider to collection
@@ -284,6 +299,33 @@ extension OktaAnalytics {
                     trackEvent(scenario.displayName, withProperties: properties)
             }
             disposeScenario(name)
+        }
+    }
+
+    /**
+        Returns in completion `[ScenarioEvent]` objects that were created the specified number of seconds ago, if exists.
+
+        - Parameters:
+           - shouldBeDeleted: Delete fetched events and properties from the storage. The default value is true.
+        */
+    public static func getExpiredScenarioEvents(shouldBeDeleted: Bool = true,
+                                                _ completion: @escaping ([ScenarioEvent]) -> Void) {
+        storage.fetchScenariosAndProperties(createdBy: expirationPeriodForScenarioEvents) { scenarios, scenarioProperties in
+            let scenarioEvents = scenarios.map { scenario in
+                let properties = scenarioProperties.filter {
+                    $0.scenarioID == scenario.id
+                }.map { property in
+                    Property(key: property.key, value: property.value)
+                }
+                return ScenarioEvent(scenarioID: scenario.id,
+                                     name: scenario.name,
+                                     displayName: scenario.displayName,
+                                     properties: properties)
+            }
+            if shouldBeDeleted {
+                storage.deleteScenariosByIds(scenarioEvents.map { $0.id })
+            }
+            completion(scenarioEvents)
         }
     }
 

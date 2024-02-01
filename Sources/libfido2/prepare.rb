@@ -61,9 +61,9 @@ if update_openssl
     
     FileUtils.cp('libssl.a', '../built-libs/openssl/arm64/')
     FileUtils.cp('libcrypto.a', '../built-libs/openssl/arm64/')
-    FileUtils.cp('providers/fips.dylib', '../built-libs/openssl/fips-arm64/')
+    FileUtils.cp('providers/fips.dylib', '../built-libs/openssl/fips-arm64/fips-arm64.dylib')
     FileUtils.cp('providers/fipsmodule.cnf', '../built-libs/openssl/fips-arm64/')
-    FileUtils.cp('apps/openssl.cnf', '../built-libs/openssl/fips-arm64/')
+    FileUtils.cp('apps/openssl.cnf', '../built-libs/openssl/fips-arm64/openssl-arm64.cnf')
     system('git clean -fX')
     
     # Build openssl for x86_64
@@ -75,20 +75,20 @@ if update_openssl
     
     FileUtils.cp('libssl.a', '../built-libs/openssl/x86_64/')
     FileUtils.cp('libcrypto.a', '../built-libs/openssl/x86_64/')
-    FileUtils.cp('providers/fips.dylib', '../built-libs/openssl/fips-x86_64/')
+    FileUtils.cp('providers/fips.dylib', '../built-libs/openssl/fips-x86_64/fips-x86_64.dylib')
     FileUtils.cp('providers/fipsmodule.cnf', '../built-libs/openssl/fips-x86_64/')
-    FileUtils.cp('apps/openssl.cnf', '../built-libs/openssl/fips-x86_64/')
+    FileUtils.cp('apps/openssl.cnf', '../built-libs/openssl/fips-x86_64/openssl-x86_64.cnf')
 
     # Copy fips cnf into openssl cnf
-    openssl_cnf_arm64 = File.read('../built-libs/openssl/fips-arm64/openssl.cnf')
+    openssl_cnf_arm64 = File.read('../built-libs/openssl/fips-arm64/openssl-arm64.cnf')
     fips_cnf_arm64 = File.read('../built-libs/openssl/fips-arm64/fipsmodule.cnf').gsub('activate = 1', '# activate = 1')
     changed_openssl_cnf_arm64 = openssl_cnf_arm64.gsub('# .include fipsmodule.cnf', fips_cnf_arm64).gsub('# fips = fips_sect', 'fips = fips_sect')
-    File.open('../built-libs/openssl/fips-arm64/openssl.cnf', 'w') { |file| file << changed_openssl_cnf_arm64 }
+    File.open('../built-libs/openssl/fips-arm64/openssl-arm64.cnf', 'w') { |file| file << changed_openssl_cnf_arm64 }
     
-    openssl_cnf_x86_64 = File.read('../built-libs/openssl/fips-x86_64/openssl.cnf')
+    openssl_cnf_x86_64 = File.read('../built-libs/openssl/fips-x86_64/openssl-x86_64.cnf')
     fips_cnf_x86_64 = File.read('../built-libs/openssl/fips-x86_64/fipsmodule.cnf').gsub('activate = 1', '# activate = 1')
     changed_openssl_cnf_x86_64 = openssl_cnf_x86_64.gsub('# .include fipsmodule.cnf', fips_cnf_x86_64).gsub('# fips = fips_sect', 'fips = fips_sect')
-    File.open('../built-libs/openssl/fips-x86_64/openssl.cnf', 'w') { |file| file << changed_openssl_cnf_x86_64 }
+    File.open('../built-libs/openssl/fips-x86_64/openssl-x86_64.cnf', 'w') { |file| file << changed_openssl_cnf_x86_64 }
 
     FileUtils.rm_f('../built-libs/openssl/fips-arm64/fipsmodule.cnf')
     FileUtils.rm_f('../built-libs/openssl/fips-x86_64/fipsmodule.cnf')
@@ -248,7 +248,7 @@ if update_libfido2
     s.preserve_paths = 'Sources/libfido2/headers/private/**/*.h'
     s.header_mappings_dir = 'Sources/libfido2/headers/public'
     s.vendored_libraries = 'Sources/libfido2/built-libs/libcbor/libcbor.a', 'Sources/libfido2/built-libs/openssl/libcrypto.a', 'Sources/libfido2/built-libs/openssl/libssl.a'
-    s.resources = ['Sources/libfido2/built-libs/openssl/fips-arm64/fips.dylib', 'Sources/libfido2/built-libs/openssl/fips-x86_64/fips.dylib', 'Sources/libfido2/built-libs/openssl/fips-arm64/openssl.cnf', 'Sources/libfido2/built-libs/openssl/fips-x86_64/openssl.cnf']
+    s.resources = ['Sources/libfido2/built-libs/openssl/fips-arm64/fips-arm64.dylib', 'Sources/libfido2/built-libs/openssl/fips-x86_64/fips-x86_64.dylib', 'Sources/libfido2/built-libs/openssl/fips-arm64/openssl-arm64.cnf', 'Sources/libfido2/built-libs/openssl/fips-x86_64/openssl-x86_64.cnf']
     s.libraries = 'z'
     s.ios.deployment_target = '16.0'
     s.osx.deployment_target = '12.0'

@@ -10,7 +10,7 @@
     s.preserve_paths = 'Sources/libfido2/headers/private/**/*.h'
     s.header_mappings_dir = 'Sources/libfido2/headers/public'
     s.vendored_libraries = 'Sources/libfido2/built-libs/libcbor/libcbor.a', 'Sources/libfido2/built-libs/openssl/libcrypto.a', 'Sources/libfido2/built-libs/openssl/libssl.a'
-    s.resources = ['Sources/libfido2/built-libs/openssl/fips-arm64/fips.dylib', 'Sources/libfido2/built-libs/openssl/fips-x86_64/fips.dylib', 'Sources/libfido2/built-libs/openssl/fips-arm64/openssl.cnf', 'Sources/libfido2/built-libs/openssl/fips-x86_64/openssl.cnf']
+    s.resources = ['Sources/libfido2/built-libs/openssl/fips-arm64/fips-arm64.dylib', 'Sources/libfido2/built-libs/openssl/fips-x86_64/fips-x86_64.dylib', 'Sources/libfido2/built-libs/openssl/fips-arm64/openssl-arm64.cnf', 'Sources/libfido2/built-libs/openssl/fips-x86_64/openssl-x86_64.cnf']
     s.libraries = 'z'
     s.ios.deployment_target = '16.0'
     s.osx.deployment_target = '12.0'

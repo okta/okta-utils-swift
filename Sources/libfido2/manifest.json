@@ -1,0 +1,5 @@
+{
+  "openssl": "openssl-3.0.9",
+  "libcbor": "v0.10.2",
+  "libfido2": "1.14.0"
+}

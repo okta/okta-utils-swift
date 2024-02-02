@@ -13,12 +13,17 @@ openssl_new_version = arguments["openssl"].to_s
 libcbor_new_version = arguments["libcbor"].to_s
 libfido2_new_version = arguments["libfido2"].to_s
 
+if openssl_new_version.empty? || libcbor_new_version.empty? || libfido2_new_version.empty?
+    puts "error - invalid arguments"
+    return
+end
+
 openssl_current_version = ""
 libcbor_current_version = ""
 libfido2_current_version = ""
 
 if File.exist?('manifest.json') == false
-    puts "manifest missing"
+    puts "error - manifest missing"
     return
 end
 
@@ -31,7 +36,7 @@ File.open('manifest.json') do | manifest |
 end
 
 if openssl_current_version.empty? || libcbor_current_version.empty? || libfido2_current_version.empty?
-    puts "invalid manifest"
+    puts "error - invalid manifest"
     return
 end
 
@@ -119,6 +124,8 @@ if update_openssl
     Dir.chdir('../..')
 
     manifest_json["openssl"] = openssl_new_version
+else
+    puts("openssl is up to date")
 end
 
 if update_libcbor
@@ -151,6 +158,8 @@ if update_libcbor
     FileUtils.rm_rf('libcbor')
     
     manifest_json["libcbor"] = libcbor_new_version
+else
+    puts("libcbor is up to date")
 end
 
 if update_libfido2
@@ -269,6 +278,8 @@ if update_libfido2
     Dir.chdir('Sources/libfido2')
     
     manifest_json["libfido2"] = libfido2_new_version
+else
+    puts("libfido2 is up to date")
 end
 
 File.open('manifest.json', "w") do | manifest |

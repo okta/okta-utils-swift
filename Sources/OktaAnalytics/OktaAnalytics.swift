@@ -26,7 +26,7 @@ public final class OktaAnalytics: NSObject {
     private static var lock = ReadWriteLock()
 
     // Expiration period for scenario events. The default value is 24 hours.
-    private(set) static var expirationPeriodForScenarioEvents: UInt = 24 * 60 * 60
+    private static var expirationPeriodForScenarioEvents: UInt = 24 * 60 * 60
 
     private static var storage: AnalyticsStorage = {
         let logger = OktaLogger()
@@ -47,18 +47,10 @@ public final class OktaAnalytics: NSObject {
         - securityAppGroupIdentifier: shared group Identifier to be data shared between app, extensions, app and widgets.
         - expirationPeriodForScenarioEvents: expiration period for scenario events.
      */
-    public static func initializeStorageWith(securityAppGroupIdentifier: String, expirationPeriodForScenarioEvents: UInt) {
-        self.expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents
-        storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
-    }
-
-    /**
-     Adds provider to collection
-
-     - Parameters:
-        - securityAppGroupIdentifier: shared group Identifier to be data shared between app, extensions, app and widgets.
-     */
-    public static func initializeStorageWith(securityAppGroupIdentifier: String) {
+    public static func initializeStorageWith(securityAppGroupIdentifier: String, expirationPeriodForScenarioEvents: UInt? = nil) {
+        if let expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents {
+            self.expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents
+        }
         storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
     }
 
@@ -308,9 +300,8 @@ extension OktaAnalytics {
         - Parameters:
            - shouldBeDeleted: Delete fetched events and properties from the storage. The default value is true.
         */
-    public static func getExpiredScenarioEvents(shouldBeDeleted: Bool = true,
-                                                _ completion: @escaping ([ScenarioEvent]) -> Void) {
-        storage.fetchScenariosAndProperties(createdBy: expirationPeriodForScenarioEvents) { scenarios, scenarioProperties in
+    public static func reportAndDeleteExpiredEvents(completion: @escaping ([ScenarioEvent]) -> Void) {
+        storage.fetchScenariosAndProperties(expirationPeriod: expirationPeriodForScenarioEvents) { scenarios, scenarioProperties in
             let scenarioEvents = scenarios.map { scenario in
                 let properties = scenarioProperties.filter {
                     $0.scenarioID == scenario.id
@@ -322,9 +313,7 @@ extension OktaAnalytics {
                                      displayName: scenario.displayName,
                                      properties: properties)
             }
-            if shouldBeDeleted {
-                storage.deleteScenariosByIds(scenarioEvents.map { $0.id })
-            }
+            storage.deleteScenariosByIds(scenarioEvents.map { $0.id })
             completion(scenarioEvents)
         }
     }

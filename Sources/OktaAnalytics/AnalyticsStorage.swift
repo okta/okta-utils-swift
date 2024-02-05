@@ -152,7 +152,7 @@ class AnalyticsStorage {
         }
     }
 
-    func fetchScenariosAndProperties(createdBy secondsAgo: UInt, completion: @escaping ([Scenario], [ScenarioProperty]) -> Void) {
+    func fetchScenariosAndProperties(expirationPeriod secondsAgo: UInt, completion: @escaping ([Scenario], [ScenarioProperty]) -> Void) {
         queue.async {
             do {
                 try self.databasePool?.read {

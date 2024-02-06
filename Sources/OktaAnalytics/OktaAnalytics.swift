@@ -296,23 +296,9 @@ extension OktaAnalytics {
 
     /**
         Returns in completion `[ScenarioEvent]` objects that were created the specified number of seconds ago, if exists.
-
-        - Parameters:
-           - shouldBeDeleted: Delete fetched events and properties from the storage. The default value is true.
         */
     public static func reportAndDeleteExpiredEvents(completion: @escaping ([ScenarioEvent]) -> Void) {
-        storage.fetchScenariosAndProperties(expirationPeriod: expirationPeriodForScenarioEvents) { scenarios, scenarioProperties in
-            let scenarioEvents = scenarios.map { scenario in
-                let properties = scenarioProperties.filter {
-                    $0.scenarioID == scenario.id
-                }.map { property in
-                    Property(key: property.key, value: property.value)
-                }
-                return ScenarioEvent(scenarioID: scenario.id,
-                                     name: scenario.name,
-                                     displayName: scenario.displayName,
-                                     properties: properties)
-            }
+        storage.fetchScenariosAndProperties(expirationPeriod: expirationPeriodForScenarioEvents) { scenarioEvents in
             storage.deleteScenariosByIds(scenarioEvents.map { $0.id })
             completion(scenarioEvents)
         }

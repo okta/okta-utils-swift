@@ -152,7 +152,7 @@ class AnalyticsStorage {
         }
     }
 
-    func fetchScenariosAndProperties(expirationPeriod secondsAgo: UInt, completion: @escaping ([Scenario], [ScenarioProperty]) -> Void) {
+    func fetchScenariosAndProperties(expirationPeriod secondsAgo: UInt, completion: @escaping ([ScenarioEvent]) -> Void) {
         queue.async {
             do {
                 try self.databasePool?.read {
@@ -162,11 +162,22 @@ class AnalyticsStorage {
                     let scenariosIds = scenarios.map { $0.id }
                     let request: SQLRequest<ScenarioProperty> = "SELECT * FROM ScenarioProperty WHERE ScenarioID IN \(scenariosIds)"
                     let scenarioProperties = try request.fetchAll($0)
-                    completion(scenarios, scenarioProperties)
+                    let scenarioEvents = scenarios.map { scenario in
+                        let properties = scenarioProperties.filter {
+                            $0.scenarioID == scenario.id
+                        }.map { property in
+                            Property(key: property.key, value: property.value)
+                        }
+                        return ScenarioEvent(scenarioID: scenario.id,
+                                             name: scenario.name,
+                                             displayName: scenario.displayName,
+                                             properties: properties)
+                    }
+                    completion(scenarioEvents)
                 }
             } catch {
                 self.logger.log(error: error as NSError, file: #file, line: #line, funcName: #function)
-                completion([], [])
+                completion([])
             }
         }
     }

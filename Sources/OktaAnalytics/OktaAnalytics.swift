@@ -26,7 +26,7 @@ public final class OktaAnalytics: NSObject {
     private static var lock = ReadWriteLock()
 
     // Expiration period for scenario events. The default value is 24 hours.
-    private static var expirationPeriodForScenarioEvents: UInt = 24 * 60 * 60
+    public static var defaultExpirationPeriodForScenarioEvents: UInt = 24 * 60 * 60
 
     private static var storage: AnalyticsStorage = {
         let logger = OktaLogger()
@@ -45,12 +45,8 @@ public final class OktaAnalytics: NSObject {
 
      - Parameters:
         - securityAppGroupIdentifier: shared group Identifier to be data shared between app, extensions, app and widgets.
-        - expirationPeriodForScenarioEvents: expiration period for scenario events.
      */
     public static func initializeStorageWith(securityAppGroupIdentifier: String, expirationPeriodForScenarioEvents: UInt? = nil) {
-        if let expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents {
-            self.expirationPeriodForScenarioEvents = expirationPeriodForScenarioEvents
-        }
         storage.initializeDB(forSecurityApplicationGroupIdentifier: securityAppGroupIdentifier)
     }
 
@@ -296,9 +292,13 @@ extension OktaAnalytics {
 
     /**
         Returns in completion `[ScenarioEvent]` objects that were created the specified number of seconds ago, if exists.
-        */
-    public static func reportAndDeleteExpiredEvents(completion: @escaping ([ScenarioEvent]) -> Void) {
-        storage.fetchScenariosAndProperties(expirationPeriod: expirationPeriodForScenarioEvents) { scenarioEvents in
+     
+        - Parameters:
+            - expirationPeriod: expiration period for scenario events.
+     */
+    public static func reportAndDeleteExpiredEvents(expirationPeriod: UInt = defaultExpirationPeriodForScenarioEvents,
+                                                    completion: @escaping ([ScenarioEvent]) -> Void) {
+        storage.fetchScenariosAndProperties(expirationPeriod: expirationPeriod) { scenarioEvents in
             storage.deleteScenariosByIds(scenarioEvents.map { $0.id })
             completion(scenarioEvents)
         }

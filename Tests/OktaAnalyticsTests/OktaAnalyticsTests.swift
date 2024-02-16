@@ -103,7 +103,7 @@ class OktaAnalyticsTests: XCTestCase {
 
     func testExpiredScenarioEvents() throws {
 
-        setupOktaAnalytics(expirationPeriodForScenarioEvents: 3)
+        setupOktaAnalytics()
         
         let fetchedExpiredEventsExpectation = XCTestExpectation(description: "Fetched expired events")
         let emptyExpiredEventsExpectation = XCTestExpectation(description: "No any expired events")
@@ -128,14 +128,14 @@ class OktaAnalyticsTests: XCTestCase {
         }
         Thread.sleep(forTimeInterval: 5)
 
-        OktaAnalytics.reportAndDeleteExpiredEvents { scenarioEvents in
+        OktaAnalytics.reportAndDeleteExpiredEvents(expirationPeriod: 3, completion: { scenarioEvents in
             let fetchedScenarioIDs = scenarioEvents.map {
                 $0.id
             }
             XCTAssertEqual(scenarioEvents.count, count)
             XCTAssertEqual(scenarioIDs.subtracting(fetchedScenarioIDs).count, 0)
             fetchedExpiredEventsExpectation.fulfill()
-        }
+        })
         Thread.sleep(forTimeInterval: 1)
         
         OktaAnalytics.reportAndDeleteExpiredEvents { scenarioEvents in
@@ -157,7 +157,7 @@ class OktaAnalyticsTests: XCTestCase {
         }
     }
 
-    private func setupOktaAnalytics(expirationPeriodForScenarioEvents: UInt? = nil) {
+    private func setupOktaAnalytics() {
         let appCenterAnalyticsProvider: AnalyticsProviderProtocol = {
             let logger = OktaLogger()
             logger.addDestination(
@@ -171,8 +171,7 @@ class OktaAnalyticsTests: XCTestCase {
             appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
             return appCenterAnalyticsProvider
         }()
-        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: "",
-                                            expirationPeriodForScenarioEvents: expirationPeriodForScenarioEvents)
+        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: "")
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
     }
 }

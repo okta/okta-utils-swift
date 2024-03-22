@@ -31,6 +31,36 @@ class DDLogFileManagerCustomName: DDLogFileManagerDefault {
     }
 
     override func isLogFile(withName fileName: String) -> Bool {
-        return self.fileName == fileName
+        let fileExtension = (self.fileName as NSString).pathExtension
+        let parameterFileExtension = (fileName as NSString).pathExtension
+        guard fileExtension == parameterFileExtension else {
+            return false
+        }
+        let fileNameWithoutExtension = (self.fileName as NSString).deletingPathExtension
+        return fileName.hasPrefix(fileNameWithoutExtension)
+    }
+
+    override func didArchiveLogFile(atPath logFilePath: String) {
+        archiveLog(at: logFilePath)
+    }
+
+    override func didRollAndArchiveLogFile(atPath logFilePath: String) {
+        archiveLog(at: logFilePath)
+    }
+
+    private func archiveLog(at logFilePath: String) {
+        let fileManager = FileManager.default
+        if let attributes = try? fileManager.attributesOfItem(atPath: logFilePath) as [FileAttributeKey: Any],
+           let creationDate = attributes[FileAttributeKey.creationDate] as? Date {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
+            let creationDateString = dateFormatter.string(from: creationDate)
+            var fileNameWithExtension = (logFilePath as NSString).lastPathComponent
+            let fileName = (fileNameWithExtension as NSString).deletingPathExtension
+            let fileExtension = (fileNameWithExtension as NSString).pathExtension
+            let newFileName = fileName + " \(creationDateString)" + ".\(fileExtension)"
+            let newFilePath = (logFilePath as NSString).deletingLastPathComponent + "/\(newFileName)"
+            try? fileManager.copyItem(atPath: logFilePath, toPath: newFilePath)
+        }
     }
 }

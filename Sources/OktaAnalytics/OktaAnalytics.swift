@@ -292,7 +292,7 @@ extension OktaAnalytics {
 
     /**
         Returns in completion `[ScenarioEvent]` objects that were created the specified number of seconds ago, if exists.
-     
+
         - Parameters:
             - expirationPeriod: expiration period for scenario events.
      */

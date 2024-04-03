@@ -27,11 +27,11 @@ class FileTestsHelper {
         return lineCount
     }
 
-    static func getPaths(testObject: LumberjackLoggerDelegate) -> [URL] {
+    static func getPaths(testObject: LumberjackLoggerDelegate, withArchived: Bool = false) -> [URL] {
         let logFileInfos = testObject.fileLogger.logFileManager.sortedLogFileInfos
         var logFilePathArray = [URL]()
         for logFileInfo in logFileInfos {
-            if logFileInfo.isArchived {
+            if logFileInfo.isArchived && !withArchived {
                 continue
             }
             let logFilePath = logFileInfo.filePath

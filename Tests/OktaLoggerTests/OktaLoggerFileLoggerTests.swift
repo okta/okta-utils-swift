@@ -110,4 +110,59 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         XCTAssertEqual(actualPaths, extectedPaths)
         testObject.purgeLogs()
     }
+    
+    func testLumberjackCustomNameMultipleFilesLogger() {
+        let config = FileTestsHelper.defaultFileConfig
+        config.maximumNumberOfLogFiles = 7
+        config.rollingFrequency = 1
+        config.logFileName = "TestOktaVerify.log"
+        let testObject = LumberjackLoggerDelegate(config)
+
+        // default rolling frequency
+        XCTAssertEqual(testObject.fileLogger.rollingFrequency, config.rollingFrequency)
+        XCTAssertNotNil(testObject.directoryPath())
+        XCTAssertEqual(testObject.logsCanBePurged(), true)
+
+        // Call log method 5 times
+        for i in 1...5 {
+            testObject.log(.debug, "log \(i)")
+            testObject.log(.debug, "log \(i)")
+            sleep(2)
+        }
+
+        // Verify that log files contains exactly 5 lines and purge logs
+        var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        var logs: [Data] = []
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 20.0)
+        for logData in logs {
+            XCTAssertEqual(FileTestsHelper.countLines(logData), 2)
+        }
+
+        // Verify that actual log files paths same as expected
+        var extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
+        var actualPaths = Set(testObject.getLogPaths())
+        XCTAssertEqual(actualPaths, extectedPaths)
+
+        testObject.purgeLogs()
+
+        testObject.log(.debug, "After purge")
+        testObject.log(.info, "After purge")
+        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        testObject.getLogs { result in
+            logs = result
+            receiveLogsExpectation.fulfill()
+        }
+        wait(for: [receiveLogsExpectation], timeout: 20.0)
+        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
+
+        // Verify that actual log files paths same as expected
+        extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
+        actualPaths = Set(testObject.getLogPaths())
+        XCTAssertEqual(actualPaths, extectedPaths)
+        testObject.purgeLogs()
+    }
 }

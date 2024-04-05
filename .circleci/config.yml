@@ -3,6 +3,11 @@ version: 2.1
 orbs:
   general-platform-helpers: okta/general-platform-helpers@1.8
 
+parameters:
+  run-on-non-main:
+    type: boolean
+    default: false
+
 executors:
   apple-ci-arm-medium:
     macos:
@@ -66,22 +71,19 @@ jobs:
       - run:
           name: run swift package show dependencies
           command: swift package show-dependencies
-      - general-platform-helpers/step-load-dependencies
       - general-platform-helpers/step-run-snyk-monitor:
           scan-all-projects: true
           skip-unresolved: false
           os: macos
-          # run-on-non-main: true #To run on topic branch
+          run-on-non-main: <<pipeline.parameters.run-on-non-main>>
 
 workflows:
   semgrep:
     jobs:
-      - general-platform-helpers/job-semgrep-prepare:
-          name: semgrep-prepare
       - general-platform-helpers/job-semgrep-scan:
+          context:
+            - static-analysis
           name: semgrep-scan
-          requires:
-            - semgrep-prepare
   build-test:
     jobs:
       - setup
@@ -89,19 +91,13 @@ workflows:
           name: tests
           requires:
             - setup
-      - general-platform-helpers/job-snyk-prepare:
-          name: prepare-snyk
-          filters:
-            branches:
-              only:
-                - master
-          requires:
-            - setup
       - snyk-scan:
+          context:
+            - static-analysis
           name: execute-snyk
           filters:
             branches:
               only:
                 - master
           requires:
-            - prepare-snyk
+            - setup

@@ -119,15 +119,15 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     func log(_ level: OktaLoggerLogLevel, _ message: String) {
         switch level {
         case .debug:
-            return DDLogDebug(message)
+            return DDLogDebug("\(message)")
         case .info, .uiEvent:
-            return DDLogInfo(message)
+            return DDLogInfo("\(message)")
         case .error:
-            return DDLogError(message)
+            return DDLogError("\(message)")
         case .warning:
-            return DDLogWarn(message)
+            return DDLogWarn("\(message)")
         default:
-            return DDLogInfo(message)
+            return DDLogInfo("\(message)")
         }
     }
 

@@ -55,7 +55,7 @@ class DDLogFileManagerCustomName: DDLogFileManagerDefault {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd HH-mm-ss"
             let creationDateString = dateFormatter.string(from: creationDate)
-            var fileNameWithExtension = (logFilePath as NSString).lastPathComponent
+            let fileNameWithExtension = (logFilePath as NSString).lastPathComponent
             let fileName = (fileNameWithExtension as NSString).deletingPathExtension
             let fileExtension = (fileNameWithExtension as NSString).pathExtension
             let newFileName = fileName + " \(creationDateString)" + ".\(fileExtension)"

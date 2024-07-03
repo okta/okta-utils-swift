@@ -77,7 +77,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
         }
-
+        sleep(2)
         // Verify that log files contains exactly 5 lines and purge logs
         var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
         var logs: [Data] = []
@@ -86,7 +86,11 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             receiveLogsExpectation.fulfill()
         }
         wait(for: [receiveLogsExpectation], timeout: 10.0)
-        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 5)
+        guard let testLog = logs.first else {
+            XCTFail("No logs")
+            return
+        }
+        XCTAssertEqual(FileTestsHelper.countLines(testLog), 5)
 
         // Verify that actual log files paths same as expected
         var extectedPaths = FileTestsHelper.getPaths(testObject: testObject)
@@ -96,13 +100,19 @@ class OktaLoggerFileLoggerTests: XCTestCase {
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
+        sleep(2)
         receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
         testObject.getLogs { result in
             logs = result
             receiveLogsExpectation.fulfill()
         }
+        
         wait(for: [receiveLogsExpectation], timeout: 10.0)
-        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
+        guard let logAfterPurge = logs.first else {
+            XCTFail("No logs after purge")
+            return
+        }
+        XCTAssertEqual(FileTestsHelper.countLines(logAfterPurge), 2)
 
         // Verify that actual log files paths same as expected
         extectedPaths = FileTestsHelper.getPaths(testObject: testObject)
@@ -127,7 +137,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
             testObject.log(.debug, "log \(i)")
-            sleep(2)
+            sleep(3)
         }
 
         // Verify that log files contains exactly 5 lines and purge logs

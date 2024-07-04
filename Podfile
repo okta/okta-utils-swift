@@ -4,7 +4,7 @@ use_modular_headers!
 target 'OktaLogger' do
     pod 'Firebase/Crashlytics', '~>9.4.0'
     pod 'CocoaLumberjack/Swift', '~>3.6.0'
-    pod 'Instabug', '11.7.0'
+    pod 'Instabug', '13.3.0'
     pod 'SwiftLint', '0.51'
 end
 

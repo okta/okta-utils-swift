@@ -13,14 +13,15 @@ executors:
     macos:
       xcode: 14.3.1
     resource_class: macos.m1.medium.gen1
-    
+
 commands:
   cleanup_simulators:
     description: "Clear Simulator Caches"
     steps:
       - run:
-         name: Clear Simulator caches"
-         command: xcrun simctl shutdown all && xcrun simctl erase all && rm -rf ~/Library/Developer/Xcode/DerivedData && rm -rf ~/Library/Caches/com.apple.dt.Xcode && rm -rf ~/Library/Developer/Xcode/Archives
+          name: Clear Simulator caches"
+          command: xcrun simctl shutdown all && xcrun simctl erase all && rm -rf ~/Library/Developer/Xcode/DerivedData
+            && rm -rf ~/Library/Caches/com.apple.dt.Xcode && rm -rf ~/Library/Developer/Xcode/Archives
   install_dependencies:
     description: "Install Dependencies"
     steps:
@@ -34,11 +35,15 @@ commands:
     description: "Run tests"
     steps:
       - run:
-         name: OktaSQLiteStorage unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14 Pro Max" test
+          name: OktaSQLiteStorage unit tests"
+          command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace"
+            -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone
+            14 Pro Max" test
       - run:
-         name: OktaLogger unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14 Pro Max" test
+          name: OktaLogger unit tests"
+          command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace"
+            -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone
+            14 Pro Max" test
 #      - run:
 #         name: OktaAnalytics unit tests"
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test

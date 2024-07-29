@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.3.17"
+  s.version          = "1.3.18"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.subspec "Complete" do |complete|
     complete.dependency 'OktaLogger/FileLogger'
     complete.dependency 'OktaLogger/FirebaseCrashlytics'
-    complete.ios.dependency 'OktaLogger/InstabugLogger'
+    complete.dependency 'OktaLogger/InstabugLogger'
   end
 
   s.subspec 'FileLogger' do |fileLogger|
@@ -32,12 +32,14 @@ Pod::Spec.new do |s|
     crashlytics.source_files = [
       'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
     ]
-    crashlytics.dependency 'Firebase/Crashlytics', '~>9'
+    crashlytics.dependency 'Firebase/Crashlytics', '~> 9'
     crashlytics.dependency 'OktaLogger/Core'
   end
 
   s.subspec 'InstabugLogger' do |instabugLogger|
-      instabugLogger.ios.source_files = 'Sources/OktaLogger/InstabugLogger/*.{h,m,swift}'
+      instabugLogger.ios.source_files = [
+        'Sources/OktaLogger/InstabugLogger/*'
+      ]
       instabugLogger.ios.dependency 'Instabug', '~> 11'
       instabugLogger.dependency 'OktaLogger/Core'
   end

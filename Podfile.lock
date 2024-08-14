@@ -52,7 +52,7 @@ PODS:
     - GoogleUtilities/Logger
   - GRDB.swift/SQLCipher (6.20.2):
     - SQLCipher (>= 3.4.2)
-  - Instabug (11.7.0)
+  - Instabug (13.3.0)
   - nanopb (2.30909.0):
     - nanopb/decode (= 2.30909.0)
     - nanopb/encode (= 2.30909.0)
@@ -62,28 +62,22 @@ PODS:
     - AppCenter (~> 5)
     - OktaLogger/Core (~> 1)
     - OktaSQLiteStorage (~> 0.0.4)
-  - OktaLogger (1.3.18):
-    - OktaLogger/Complete (= 1.3.18)
-    - SwiftLint
-  - OktaLogger/Complete (1.3.18):
+  - OktaLogger (1.3.19):
+    - OktaLogger/Complete (= 1.3.19)
+  - OktaLogger/Complete (1.3.19):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
     - OktaLogger/InstabugLogger
-    - SwiftLint
-  - OktaLogger/Core (1.3.18):
-    - SwiftLint
-  - OktaLogger/FileLogger (1.3.18):
+  - OktaLogger/Core (1.3.19)
+  - OktaLogger/FileLogger (1.3.19):
     - CocoaLumberjack/Swift (~> 3)
     - OktaLogger/Core
-    - SwiftLint
-  - OktaLogger/FirebaseCrashlytics (1.3.18):
+  - OktaLogger/FirebaseCrashlytics (1.3.19):
     - Firebase/Crashlytics (~> 9)
     - OktaLogger/Core
-    - SwiftLint
-  - OktaLogger/InstabugLogger (1.3.18):
-    - Instabug (~> 11)
+  - OktaLogger/InstabugLogger (1.3.19):
+    - Instabug (~> 13)
     - OktaLogger/Core
-    - SwiftLint
   - OktaSQLiteStorage (0.0.5):
     - GRDB.swift/SQLCipher (= 6.20.2)
     - SQLCipher (= 4.5.5)
@@ -100,7 +94,7 @@ DEPENDENCIES:
   - CocoaLumberjack/Swift (~> 3.6.0)
   - Firebase/Crashlytics (~> 9.4.0)
   - GRDB.swift/SQLCipher (= 6.20.2)
-  - Instabug (= 11.7.0)
+  - Instabug (= 13.3.0)
   - OktaAnalytics (from `.`)
   - OktaLogger (from `.`)
   - OktaLogger/Core (from `.`)
@@ -147,15 +141,15 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 54dee9d48d14580407f8f5fbf2f496e92437a2f2
   GoogleUtilities: 13e2c67ede716b8741c7989e26893d151b2b2084
   GRDB.swift: 3eb7447131d897afb420d6877a45fd8bfca313c1
-  Instabug: 7c9b72efb697e0f11c21ddf74e5d57a2b67ce9f7
+  Instabug: 4f26295103a330ec0236918359eef7ccaa74e2fa
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   OktaAnalytics: 5ce95139d4a7bdcfe89df8f5a5132fc0fe5505c0
-  OktaLogger: 8a0c03137aeca764a2e5cbafd1df00ae5879789a
+  OktaLogger: 26fd2a28ab9feb06291cc13a7207d7c8635ed0d6
   OktaSQLiteStorage: 4761bb59ed2d6fc2ba6184a4fdd79f2fbeadc50c
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   SQLCipher: f2e96b3822e3006b379181a0e4fd145f6de29b56
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
 
-PODFILE CHECKSUM: 670c9b1c8a40341cdf6fbaca2fbfaadb078be470
+PODFILE CHECKSUM: b5606fd74aae580c6990d3df9493058ba982af97
 
 COCOAPODS: 1.15.2

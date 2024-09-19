@@ -162,16 +162,66 @@ class OktaAnalyticsTests: XCTestCase {
             let logger = OktaLogger()
             logger.addDestination(
                 OktaLoggerConsoleLogger(
-                    identifier: "com.okta.loggerDemo.console",
+                    identifier: "com.okta.appcenter.loggerDemo.console",
                     level: OktaLoggerLogLevel.debug,
                     defaultProperties: nil
                 )
             )
-            let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger)
+            let appCenterAnalyticsProvider = AppCenterAnalyticsProviderMock(name: "AppCenter", defaultProperties: [:], logger: logger)
             appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
             return appCenterAnalyticsProvider
         }()
-        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: "")
-        OktaAnalytics.addProvider(appCenterAnalyticsProvider)
+        
+        let firebaseCenterAnalyticsProvider: AnalyticsProviderProtocol = {
+            let logger = OktaLogger()
+            logger.addDestination(
+                OktaLoggerConsoleLogger(
+                    identifier: "com.okta.firebase.loggerDemo.console",
+                    level: OktaLoggerLogLevel.debug,
+                    defaultProperties: nil
+                )
+            )
+            let firebaseCenterAnalyticsProvider = FirebaseAnalyticsProviderMock(name: "Firebase", defaultProperties: [:], logger: logger)
+            return firebaseCenterAnalyticsProvider
+        }()
+
+        OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: "com.oktaanalytics")
+        OktaAnalytics.addProviders([appCenterAnalyticsProvider, firebaseCenterAnalyticsProvider])
+    }
+}
+
+class AppCenterAnalyticsProviderMock: AnalyticsProviderProtocol {
+    var name: String
+    var logger: OktaLoggerProtocol?
+    var defaultProperties: Properties
+
+    required init(name: String, defaultProperties: Properties, logger: OktaLoggerProtocol?) {
+        self.name = name
+        self.defaultProperties = defaultProperties
+        self.logger = logger
+    }
+    
+    func trackEvent(_ eventName: Name, withProperties: Properties) {
+        
+    }
+    
+    public func start(withAppSecret appSecret: String, services: [AnyClass]) {
+      
+    }
+}
+
+class FirebaseAnalyticsProviderMock: AnalyticsProviderProtocol {
+    var name: String
+    var logger: OktaLoggerProtocol?
+    var defaultProperties: Properties
+
+    required init(name: String, defaultProperties: Properties, logger: OktaLoggerProtocol?) {
+        self.name = name
+        self.defaultProperties = defaultProperties
+        self.logger = logger
+    }
+    
+    func trackEvent(_ eventName: Name, withProperties: Properties) {
+        
     }
 }

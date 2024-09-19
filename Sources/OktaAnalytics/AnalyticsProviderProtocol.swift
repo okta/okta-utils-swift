@@ -20,13 +20,19 @@ import OktaLogger
 public protocol AnalyticsProviderProtocol: AnyObject {
 
     /// The name of the provider, e.g. Firebase, AppCenter, etc.
-    var name: String { get set }
-
-    /// The logger to post logs on its destination
-    var logger: OktaLoggerProtocol? { get set }
+    var name: String { get }
 
     /// The default properties that are posted with all events
-    var defaultProperties: Properties { get set }
+    var defaultProperties: Properties { get }
+
+    /// The logger to post logs on its destination
+    var logger: OktaLoggerProtocol? { get }
+
+    /// - Parameters:
+    ///     - name: The name of the provider, e.g. Firebase, AppCenter, etc.
+    ///     - defaultProperties: The default properties that are posted with all events
+    ///     - logger: The logger to post logs on its destination
+    init(name: String, defaultProperties: Properties, logger: OktaLoggerProtocol?)
 
     /// Tracks an event to the provider
     func trackEvent(_ eventName: Name, withProperties: Properties)

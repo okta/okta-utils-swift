@@ -13,9 +13,10 @@
 import Foundation
 import Combine
 import OktaLogger
-import AppCenterAnalytics
+import FirebaseAnalytics
+import FirebaseCore
 
-public class AppCenterAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
+public class FirebaseAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
 
     // MARK: - Properties
 
@@ -23,17 +24,18 @@ public class AppCenterAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
     public let name: String
     public let logger: OktaLoggerProtocol?
 
-    private var appCenter: AppCenterAnalytics.Analytics.Type = AppCenterAnalytics.Analytics.self
-    private var isServicesStarted = false
-
+    private var firebase: Analytics.Type = Analytics.self
     // MARK: - Initializer
        /**
-        Initializes an instance of `AppCenterAnalyticsProvider`.
+        Initializes an instance of `FirebaseAnalyticsProvider`.
         */
     public required init(name: String, defaultProperties: Properties, logger: OktaLoggerProtocol? = OktaLogger()) {
         self.name = name
         self.defaultProperties = defaultProperties
         self.logger = logger
+        if FirebaseApp.allApps == nil {
+            FirebaseApp.configure()
+        }
     }
 
     // MARK: - Public methods
@@ -46,23 +48,9 @@ public class AppCenterAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
         - withProperties: An optional dictionary of properties to include with the event.
      */
     public func trackEvent(_ eventName: String, withProperties: [String: String]?) {
-        if !isServicesStarted {
-            assert(false, "Services should start before trackEvent(_ eventName: withProperties:)")
-        }
         var properties = withProperties ?? [:]
         Dictionary.mergeRecursive(left: &properties, right: defaultProperties)
-        appCenter.trackEvent(eventName, withProperties: properties)
+        firebase.logEvent(eventName, parameters: properties)
         logger?.log(level: .debug, eventName: eventName, message: nil, properties: properties, file: #file, line: #line, funcName: #function)
-    }
-
-    /**
-     start the services for the`AppCenter` provider
-     - Parameters:
-     - appSecret: app secret for `AppCenter`
-     - services: services to be registered with `AppCenter`
-     */
-    public func start(withAppSecret appSecret: String, services: [AnyClass]) {
-        AppCenter.start(withAppSecret: appSecret, services: services)
-        isServicesStarted = true
     }
 }

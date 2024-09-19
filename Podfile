@@ -19,6 +19,7 @@ target 'OktaAnalytics' do
     pod 'OktaSQLiteStorage', :path => '.'
     pod 'AppCenter', '~>5.0.0'
     pod 'SwiftLint', '0.51'
+    pod 'Firebase/AnalyticsWithoutAdIdSupport'
 end
 
 target 'OktaLoggerDemoApp' do

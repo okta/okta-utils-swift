@@ -14,6 +14,7 @@ import Firebase
 import OktaLogger
 import OktaAnalytics
 import AppCenterAnalytics
+import FirebaseAnalytics
 
 var scenarioID: ScenarioID = ""
 
@@ -30,18 +31,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 defaultProperties: nil
             )
         )
-        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", logger: logger)
+        let appCenterAnalyticsProvider = AppCenterAnalyticsProvider(name: "AppCenter", defaultProperties: [:], logger: logger)
         appCenterAnalyticsProvider.start(withAppSecret: "App Secret", services: [AppCenterAnalytics.Analytics.self])
         return appCenterAnalyticsProvider
+    }()
+
+    let firebaseAnalyticsProvider: AnalyticsProviderProtocol = {
+        let logger = OktaLogger()
+        logger.addDestination(
+            OktaLoggerConsoleLogger(
+                identifier: "com.okta.loggerDemo.console",
+                level: OktaLoggerLogLevel.debug,
+                defaultProperties: nil
+            )
+        )
+        let firebaseAnalyticsProvider = FirebaseAnalyticsProvider(name: "Firebase Analytics", defaultProperties: [:], logger: logger)
+        return firebaseAnalyticsProvider
     }()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        FirebaseApp.configure()
         OktaAnalytics.initializeStorageWith(securityAppGroupIdentifier: Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String ?? "")
         OktaAnalytics.addProvider(appCenterAnalyticsProvider)
+        OktaAnalytics.addProvider(firebaseAnalyticsProvider)
         OktaAnalytics.trackEvent("applicationDidFinishLaunchingWithOptions", withProperties: nil)
         OktaAnalytics.startScenario(ScenarioEvent(name: "Application", properties: [Property(key: "AppDelegate.application.didFinishLaunchingWithOptions", value: "1")])) {
             scenarioID = $0 ?? ""

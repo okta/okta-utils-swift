@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaLogger"
-  s.version          = "1.3.19"
+  s.version          = "1.3.20"
   s.summary          = "Logging proxy for standardized logging interface across products"
   s.description      = "Standard interface for all logging in Okta apps + SDK. Supports file, console, firebase logging destinations."
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
     crashlytics.source_files = [
       'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
     ]
-    crashlytics.dependency 'Firebase/Crashlytics', '~> 9'
+    crashlytics.dependency 'Firebase/Crashlytics', '~> 10'
     crashlytics.dependency 'OktaLogger/Core'
   end
 

@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.author           = { "Okta Developers" => "developer@okta.com" }
   s.source           = { :git => "https://github.com/okta/okta-logger-swift.git",  :tag => "OktaLogger-"+s.version.to_s }
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.0'
   s.osx.deployment_target = '10.14'
   s.watchos.deployment_target = '6.0'
   s.swift_version = '5.0'
@@ -32,7 +32,7 @@ Pod::Spec.new do |s|
     crashlytics.source_files = [
       'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
     ]
-    crashlytics.dependency 'Firebase/Crashlytics', '~> 10'
+    crashlytics.dependency 'Firebase/Crashlytics', '~> 11'
     crashlytics.dependency 'OktaLogger/Core'
   end
 

@@ -79,6 +79,7 @@ class OktaAnalyticsTests: XCTestCase {
             OktaAnalytics.startScenario(ScenarioEvent(scenarioID: UUID().uuidString, name: "Test \(index)", displayName: " \(index)")) {
                 scenarioID = $0 ?? ""
             }
+            sleep(1)
             OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test1", value: "1")])
             OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test2", value: "2")])
             OktaAnalytics.updateScenario(scenarioID, [Property(key: "Test3", value: "3")])

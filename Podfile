@@ -2,7 +2,8 @@ platform :ios, '13.0'
 use_modular_headers!
 
 target 'OktaLogger' do
-    pod 'Firebase/Crashlytics', '~>9.4.0'
+    pod 'Firebase/AnalyticsWithoutAdIdSupport'
+    pod 'Firebase/Crashlytics', '~>11.3.0'
     pod 'CocoaLumberjack/Swift', '~>3.6.0'
     pod 'Instabug', '13.3.0'
     pod 'SwiftLint', '0.51'
@@ -25,7 +26,7 @@ end
 target 'OktaLoggerDemoApp' do
     pod 'OktaLogger', :path => '.'
     pod 'OktaAnalytics', :path => '.'
-    pod 'Firebase/Crashlytics', '~>9.4.0'
+    pod 'Firebase/Crashlytics', '~>11.3.0'
 
     target 'OktaLoggerTests' do
       inherit! :search_paths

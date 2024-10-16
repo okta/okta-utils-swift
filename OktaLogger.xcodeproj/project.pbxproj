@@ -588,6 +588,7 @@
 				D5C824D22469DBF1005CF747 /* Resources */,
 				80DDE78E24B962C900D0E2F3 /* Embed Frameworks */,
 				7B0C4EE7276D1DAC0033BDC6 /* SwiftLint */,
+				74D61838C0B5CF075047C1B4 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -607,6 +608,7 @@
 				D5C824DA2469DBF1005CF747 /* Frameworks */,
 				D5C824DB2469DBF1005CF747 /* Resources */,
 				8A04A3992610D1FAF3446F06 /* [CP] Embed Pods Frameworks */,
+				3DC8220AD478472683310979 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -628,6 +630,7 @@
 				E251E7F9248AD1B400EF466D /* Resources */,
 				DEC5276724DBFE6C0022B698 /* ShellScript */,
 				B6A235592A5E2CBBF90E51EE /* [CP] Embed Pods Frameworks */,
+				0B381B23C8AFF19DC939F232 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -648,6 +651,7 @@
 				F3575F282A0AD1840008A965 /* Sources */,
 				F3575F292A0AD1840008A965 /* Frameworks */,
 				F3575F2A2A0AD1840008A965 /* Resources */,
+				B0C0072AF7A19504676FD526 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -666,6 +670,7 @@
 				F3D5EA122A283E5E00530838 /* Sources */,
 				F3D5EA132A283E5E00530838 /* Frameworks */,
 				F3D5EA142A283E5E00530838 /* Resources */,
+				E838532ECED9A96DCCFBAEFD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -794,6 +799,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0B381B23C8AFF19DC939F232 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		0F2298F77B72900393068192 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -860,6 +882,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		3DC8220AD478472683310979 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		58278EF008B42FA45AF4BBBA /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -880,6 +919,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		74D61838C0B5CF075047C1B4 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLogger/Pods-OktaLogger-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaLogger/Pods-OktaLogger-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLogger/Pods-OktaLogger-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7906DFF612F22A1930DEE58D /* [CP] Check Pods Manifest.lock */ = {
@@ -939,6 +995,23 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaLoggerTests/Pods-OktaLoggerTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B0C0072AF7A19504676FD526 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalytics/Pods-OktaAnalytics-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalytics/Pods-OktaAnalytics-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaAnalytics/Pods-OktaAnalytics-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B6A235592A5E2CBBF90E51EE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -995,6 +1068,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		E838532ECED9A96DCCFBAEFD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		F26A1DAF665C501039D40073 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

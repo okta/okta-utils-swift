@@ -22,30 +22,18 @@ let package = Package(
         .library(
             name: "OktaFileLogger",
             targets: ["FileLogger"]),
-        .library(
-            name: "OktaFirebaseCrashlyticsLogger",
-            targets: ["FirebaseCrashlyticsLogger"]),
-        .library(
-            name: "OktaInstabugLogger",
-            targets: ["InstabugLogger"])
     ],
     dependencies: [
-        .package(url: "https://github.com/Instabug/Instabug-SP", .upToNextMajor(from: "11.2.0")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "9.6.0")),
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", .upToNextMajor(from: "3.6.0")),
-        .package(url: "https://github.com/microsoft/appcenter-sdk-apple.git", .upToNextMajor(from: "4.0.0"))
     ],
     targets: [
         .target(
             name: "OktaLogger",
             dependencies: [
                 .target(name: "FileLogger"),
-                .target(name: "FirebaseCrashlyticsLogger"),
-                .target(name: "InstabugLogger"),
                 .target(name: "LoggerCore"),
             ],
-            exclude: ["AppCenterLogger",
-                      "FileLoggers",
+            exclude: ["FileLoggers",
                       "FirebaseCrashlyticsLogger",
                       "InstabugLogger",
                       "LoggerCore",
@@ -56,18 +44,6 @@ let package = Package(
                 .target(name: "LoggerCore")
                ],
                 path: "Sources/OktaLogger/FileLoggers"),
-        .target(name: "FirebaseCrashlyticsLogger",
-                dependencies: [
-                    .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
-                    .target(name: "LoggerCore")
-                ],
-                path: "Sources/OktaLogger/FirebaseCrashlyticsLogger"),
-        .target(name: "InstabugLogger",
-               dependencies: [
-                    .product(name: "Instabug", package: "Instabug-SP"),
-                    .target(name: "LoggerCore")
-               ],
-                path: "Sources/OktaLogger/InstabugLogger"),
         .target(
             name: "LoggerCore",
             dependencies: [],

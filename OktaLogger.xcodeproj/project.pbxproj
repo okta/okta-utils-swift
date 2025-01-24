@@ -36,6 +36,7 @@
 		A5EE1CAAED18D1855CF2AD9D /* libPods-OktaLoggerDemoApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E550F471F7327DDB6E1D46AC /* libPods-OktaLoggerDemoApp.a */; };
 		AF440CECA17F54C6A76918E4 /* libPods-OktaSQLiteStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F629A90EB36B561056639A11 /* libPods-OktaSQLiteStorage.a */; };
 		B4097F2B3E75E54D45A1009F /* libPods-OktaAnalyticsTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E765F1F6491E4477B4B829F4 /* libPods-OktaAnalyticsTests.a */; };
+		B82C62702D4450F300378CB3 /* FirebaseAnalyticsProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82C626E2D444B3B00378CB3 /* FirebaseAnalyticsProviderTests.swift */; };
 		D54461C6246A02CF00C755F1 /* OktaLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5C824D42469DBF1005CF747 /* OktaLogger.framework */; };
 		D5B22D0B246CA47E007ECC2F /* MockLoggerDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5B22D0A246CA47E007ECC2F /* MockLoggerDestination.swift */; };
 		D5C824E32469DBF1005CF747 /* OktaLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C824E22469DBF1005CF747 /* OktaLoggerTests.swift */; };
@@ -148,6 +149,7 @@
 		A2E088AB328FFC328F8E4B01 /* Pods-OktaAnalyticsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaAnalyticsTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaAnalyticsTests/Pods-OktaAnalyticsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A98DCB66D1308CC91F19CECF /* Pods-OktaSQLiteStorageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaSQLiteStorageTests.debug.xcconfig"; path = "Target Support Files/Pods-OktaSQLiteStorageTests/Pods-OktaSQLiteStorageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		AB97EA576638C766A84A9DCD /* libPods-OktaLoggerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OktaLoggerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B82C626E2D444B3B00378CB3 /* FirebaseAnalyticsProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsProviderTests.swift; sourceTree = "<group>"; };
 		C405B4030120FF72171FD9DA /* Pods-OktaLoggerDemoApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OktaLoggerDemoApp.release.xcconfig"; path = "Target Support Files/Pods-OktaLoggerDemoApp/Pods-OktaLoggerDemoApp.release.xcconfig"; sourceTree = "<group>"; };
 		D55F2C1C246F153200680A96 /* MockLoggerDestination.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MockLoggerDestination.h; sourceTree = "<group>"; };
 		D55F2C1D246F153200680A96 /* MockLoggerDestination.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MockLoggerDestination.m; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 			isa = PBXGroup;
 			children = (
 				F3C0913B2A16EFC90015E9FC /* OktaAnalyticsTests.swift */,
+				B82C626E2D444B3B00378CB3 /* FirebaseAnalyticsProviderTests.swift */,
 				F3D5EA112A283D0F00530838 /* OktaAnalytics.xctestplan */,
 			);
 			path = OktaAnalyticsTests;
@@ -1204,6 +1207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B82C62702D4450F300378CB3 /* FirebaseAnalyticsProviderTests.swift in Sources */,
 				F3D5EA202A283E9700530838 /* OktaAnalyticsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

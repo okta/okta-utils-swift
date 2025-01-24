@@ -23,6 +23,7 @@ public class FirebaseAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
     public let defaultProperties: [String: String]?
     public let name: String
     public let logger: OktaLoggerProtocol?
+    static let maxPropertyLength = 100
 
     private var firebase: Analytics.Type = Analytics.self
     // MARK: - Initializer
@@ -50,7 +51,12 @@ public class FirebaseAnalyticsProvider: NSObject, AnalyticsProviderProtocol {
     public func trackEvent(_ eventName: String, withProperties: [String: String]?) {
         var properties = withProperties ?? [:]
         Dictionary.mergeRecursive(left: &properties, right: defaultProperties)
-        firebase.logEvent(eventName, parameters: properties)
+        let trimmedProperties = FirebaseAnalyticsProvider.trimProperties(properties: properties)
+        firebase.logEvent(eventName, parameters: trimmedProperties)
         logger?.log(level: .debug, eventName: eventName, message: nil, properties: properties, file: #file, line: #line, funcName: #function)
+    }
+
+    public static func trimProperties(properties: [String: String]) -> [String: String] {
+        return properties.mapValues({ String($0.prefix(maxPropertyLength)) })
     }
 }

@@ -21,6 +21,7 @@ final class FirebaseAnalyticsProviderTests: XCTestCase {
         let properties = ["prop1": "value",
                           "prop2": "valuevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevaluevalue"
                             ]
+        XCTAssertTrue(properties["prop2"]!.count > 100)
         let trimmedProperties = FirebaseAnalyticsProvider.trimProperties(properties: properties)
         trimmedProperties.forEach { key, value in
             // All value lengths should be under the limit

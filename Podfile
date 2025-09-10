@@ -5,7 +5,7 @@ target 'OktaLogger' do
     pod 'Firebase/AnalyticsWithoutAdIdSupport'
     pod 'Firebase/Crashlytics', '~>11.3.0'
     pod 'CocoaLumberjack/Swift', '~>3.6.0'
-    pod 'Instabug', '13.3.0'
+    pod 'Instabug', '16.0.3'
     pod 'SwiftLint', '0.51'
 end
 

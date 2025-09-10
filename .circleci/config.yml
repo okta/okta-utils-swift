@@ -35,13 +35,13 @@ commands:
     steps:
       - run:
          name: OktaSQLiteStorage unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15 Pro Max" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
       - run:
          name: OktaLogger unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15 Pro Max" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
 #      - run:
 #         name: OktaAnalytics unit tests"
-#         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+#         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16" test
 jobs:
   setup:
     executor: apple-ci-arm-medium

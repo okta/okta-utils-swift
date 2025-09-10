@@ -78,12 +78,6 @@ jobs:
           run-on-non-main: <<pipeline.parameters.run-on-non-main>>
 
 workflows:
-  semgrep:
-    jobs:
-      - general-platform-helpers/job-semgrep-scan:
-          context:
-            - static-analysis
-          name: semgrep-scan
   build-test:
     jobs:
       - setup

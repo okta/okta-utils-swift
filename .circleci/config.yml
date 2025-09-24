@@ -39,6 +39,8 @@ commands:
       - run:
          name: OktaLogger unit tests"
          command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
+      - store_artifacts:
+         path: /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test
 #      - run:
 #         name: OktaAnalytics unit tests"
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16" test

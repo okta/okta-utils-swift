@@ -77,7 +77,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
         }
-        sleep(2)
+        sleep(4)
         // Verify that log files contains exactly 5 lines and purge logs
         var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
         var logs: [Data] = []
@@ -100,7 +100,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
-        sleep(2)
+        sleep(4)
         receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
         testObject.getLogs { result in
             logs = result

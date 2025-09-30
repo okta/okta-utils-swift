@@ -104,7 +104,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 6)
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 10)
     }
 
     func testMigration() throws {

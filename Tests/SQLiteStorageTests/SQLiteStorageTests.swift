@@ -65,7 +65,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 3)
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
     }
 
     func testCreation_delegatedQueries() throws {
@@ -104,7 +104,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 10)
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
     }
 
     func testMigration() throws {
@@ -143,7 +143,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
         
-        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 3)
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
     }
 
     func testDBDowngrade() throws {
@@ -168,7 +168,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [endOfAsycTest1], timeout: 3)
+        wait(for: [endOfAsycTest1], timeout: 1)
 
         let endOfAsycTest2 = expectation(description: "End of async test")
 
@@ -196,7 +196,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [endOfAsycTest2], timeout: 3)
+        wait(for: [endOfAsycTest2], timeout: 1)
     }
 
     func testCreation_rawSQL_Enrypted() throws {
@@ -242,7 +242,7 @@ final class SQLiteStorageTests: XCTestCase {
             }
         }
 
-        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 6)
+        wait(for: [readFromDBExpectation, writeToDBExpectation], timeout: 1)
     }
 }
 

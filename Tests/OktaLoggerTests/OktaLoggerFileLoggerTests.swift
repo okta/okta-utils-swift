@@ -152,7 +152,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
             XCTAssertEqual(FileTestsHelper.countLines(logData), 2)
         }
 
-        // Verify that actual log files paths same as expected
+        // Verify that actual log files paths are same as expected
         var extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
         var actualPaths = Set(testObject.getLogPaths())
         XCTAssertEqual(actualPaths, extectedPaths)
@@ -169,7 +169,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         wait(for: [receiveLogsExpectation], timeout: 20.0)
         XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
 
-        // Verify that actual log files paths same as expected
+        // Verify that actual log files paths are same as expected
         extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
         actualPaths = Set(testObject.getLogPaths())
         XCTAssertEqual(actualPaths, extectedPaths)

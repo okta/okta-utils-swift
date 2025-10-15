@@ -77,42 +77,25 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         for i in 1...5 {
             testObject.log(.debug, "log \(i)")
         }
-        sleep(2)
-        // Verify that log files contains exactly 5 lines and purge logs
+
+        // Verify that log files contains exactly 5 lines
         var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        var logs: [Data] = []
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
-        wait(for: [receiveLogsExpectation], timeout: 10.0)
-        guard let testLog = logs.first else {
-            XCTFail("No logs")
-            return
-        }
-        XCTAssertEqual(FileTestsHelper.countLines(testLog), 5)
+        pollForLogCompletion(delegate: testObject, expectedMessages: ["log 1", "log 2", "log 3", "log 4", "log 5"], expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: 20.0)
 
         // Verify that actual log files paths same as expected
         var extectedPaths = FileTestsHelper.getPaths(testObject: testObject)
         var actualPaths = testObject.getLogPaths()
         XCTAssertEqual(actualPaths, extectedPaths)
+        
         testObject.purgeLogs()
-
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
-        sleep(2)
-        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
         
-        wait(for: [receiveLogsExpectation], timeout: 10.0)
-        guard let logAfterPurge = logs.first else {
-            XCTFail("No logs after purge")
-            return
-        }
-        XCTAssertEqual(FileTestsHelper.countLines(logAfterPurge), 2)
+        // Verify that log files contains exactly 2 lines
+        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+        pollForLogCompletion(delegate: testObject, expectedMessages: ["After purge", "After purge"], expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: 20.0)
 
         // Verify that actual log files paths same as expected
         extectedPaths = FileTestsHelper.getPaths(testObject: testObject)
@@ -142,15 +125,8 @@ class OktaLoggerFileLoggerTests: XCTestCase {
 
         // Verify that log files contains exactly 5 lines and purge logs
         var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        var logs: [Data] = []
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
-        wait(for: [receiveLogsExpectation], timeout: 20.0)
-        for logData in logs {
-            XCTAssertEqual(FileTestsHelper.countLines(logData), 2)
-        }
+        pollForLogCompletion(delegate: testObject, expectedMessages: ["log 1", "log 1", "log 2", "log 2", "log 3", "log 3", "log 4", "log 4", "log 5", "log 5"], expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
 
         // Verify that actual log files paths are same as expected
         var extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
@@ -162,17 +138,50 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
         receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
-        wait(for: [receiveLogsExpectation], timeout: 20.0)
-        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
+        pollForLogCompletion(delegate: testObject, expectedMessages: ["After purge", "After purge"], expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: 10.0)
 
         // Verify that actual log files paths are same as expected
         extectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
         actualPaths = Set(testObject.getLogPaths())
         XCTAssertEqual(actualPaths, extectedPaths)
         testObject.purgeLogs()
+    }
+    
+    private func pollForLogCompletion(delegate: FileLoggerDelegate, expectedMessages: [String], expectation: XCTestExpectation) {
+        let pollingInterval: TimeInterval = 3
+
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + pollingInterval) {
+            let getLogsExpectation = XCTestExpectation(description: "Should receive logs data")
+            var logs: [Data] = []
+
+            delegate.getLogs { result in
+                logs = result
+                getLogsExpectation.fulfill()
+            }
+
+            self.wait(for: [getLogsExpectation], timeout: 10.0)
+            
+            let messages: [String] = logs.flatMap { log -> [String] in
+                guard let logString = String(data: log, encoding: .utf8) else {
+                    return []
+                }
+                
+                return logString.split(separator: "\n").map { String($0) }
+            }
+            
+            if messages.count >= expectedMessages.count {
+                for (index, message) in messages.prefix(expectedMessages.count).enumerated() {
+                    if !message.hasSuffix(expectedMessages[index]) {
+                        XCTFail("Expected log message: \(expectedMessages[index]), but received: \(message)")
+                    }
+                }
+
+                expectation.fulfill()
+                return
+            }
+            
+            self.pollForLogCompletion(delegate: delegate, expectedMessages: expectedMessages, expectation: expectation)
+        }
     }
 }

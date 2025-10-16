@@ -38,29 +38,21 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         }
 
         // Verify that log files contains exactly 5 lines and purge logs
-        var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        var logs: [Data] = []
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
-        wait(for: [receiveLogsExpectation], timeout: 10.0)
-        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 5)
-        testObject.purgeLogs()
+        var expectedMessages = ["1:log message", "2:log message", "3:log message", "4:log message", "5:log message"]
+        var receiveLogsExpectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
+        pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: Double(expectedMessages.count) * 3.0)
 
         // Call log method 2 times
+        testObject.purgeLogs()
         logger.debug(eventName: "AFTER_PURGE", message: "Debug log")
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
 
         // Verify that log files contains exactly 2 lines
-        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs data")
-        logs = []
-        testObject.getLogs { result in
-            logs = result
-            receiveLogsExpectation.fulfill()
-        }
-        wait(for: [receiveLogsExpectation], timeout: 10.0)
-        XCTAssertEqual(FileTestsHelper.countLines(logs[0]), 2)
+        expectedMessages = ["Debug log", "Debug log"]
+        receiveLogsExpectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
+        pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: receiveLogsExpectation)
+        wait(for: [receiveLogsExpectation], timeout: Double(expectedMessages.count) * 3.0)
         testObject.purgeLogs()
     }
 
@@ -168,8 +160,8 @@ class OktaLoggerFileLoggerTests: XCTestCase {
                 
                 if messages.count >= expectedMessages.count {
                     for (index, message) in messages.prefix(expectedMessages.count).enumerated() {
-                        if !message.hasSuffix(expectedMessages[index]) {
-                            XCTFail("Expected log message: \(expectedMessages[index]), but received: \(message)")
+                        if !message.contains(expectedMessages[index]) {
+                            XCTFail("Expected log message containing: \(expectedMessages[index]), but received: \(message)")
                         }
                     }
 

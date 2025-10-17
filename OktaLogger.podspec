@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
       instabugLogger.ios.source_files = [
         'Sources/OktaLogger/InstabugLogger/*'
       ]
-      instabugLogger.ios.dependency 'Instabug', '~> 13'
+      instabugLogger.ios.dependency 'Instabug', '~> 16'
       instabugLogger.dependency 'OktaLogger/Core'
   end
 

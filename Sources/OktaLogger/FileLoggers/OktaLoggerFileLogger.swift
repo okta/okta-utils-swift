@@ -16,7 +16,7 @@ import LoggerCore
 #endif
 
 @objc
-public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
+public class OktaLoggerFileLogger: OktaLoggerDestinationBase, FileLoggerDelegate {
 
     var delegate: FileLoggerDelegate
 
@@ -43,7 +43,13 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
      Log file path
      */
     @objc
+    @available(*, deprecated, message: "Use directoryPath() instead.")
     public func logDirectoryAbsolutePath() -> String? {
+        return delegate.directoryPath()
+    }
+
+    @objc
+    func directoryPath() -> String? {
         return delegate.directoryPath()
     }
 
@@ -89,7 +95,12 @@ public class OktaLoggerFileLogger: OktaLoggerDestinationBase {
     /**
      Translate log message  into DDLog message
      */
+    @available(*, deprecated, message: "Use log(_ level: OktaLoggerLogLevel, _ message: String) instead.")
     func log(level: OktaLoggerLogLevel, message: String) {
+       delegate.log(level, message)
+    }
+
+    func log(_ level: OktaLoggerLogLevel, _ message: String) {
        delegate.log(level, message)
     }
 }

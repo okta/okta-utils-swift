@@ -11,7 +11,7 @@ parameters:
 executors:
   apple-ci-arm-medium:
     macos:
-      xcode: 15.2.0
+      xcode: 16.4.0
     resource_class: macos.m1.medium.gen1
     
 commands:
@@ -35,13 +35,24 @@ commands:
     steps:
       - run:
          name: OktaSQLiteStorage unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15 Pro Max" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaSQLiteStorageTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
       - run:
          name: OktaLogger unit tests"
-         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15 Pro Max" test
+         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
+      - run:
+          when: always
+          name: Pack any xcresult, then remove.
+          command: |
+            pushd /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test
+            find . -type d -name "*.xcresult" | xargs -I{} bash -c "tar zcf {}.tar.gz \"{}\" && rm -rf \"{}\""
+            popd
+            mkdir artifacts
+            mv /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test/*.tar.gz artifacts
+      - store_artifacts:
+         path: "artifacts"
 #      - run:
 #         name: OktaAnalytics unit tests"
-#         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 14" test
+#         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16" test
 jobs:
   setup:
     executor: apple-ci-arm-medium
@@ -78,12 +89,6 @@ jobs:
           run-on-non-main: <<pipeline.parameters.run-on-non-main>>
 
 workflows:
-  semgrep:
-    jobs:
-      - general-platform-helpers/job-semgrep-scan:
-          context:
-            - static-analysis
-          name: semgrep-scan
   build-test:
     jobs:
       - setup

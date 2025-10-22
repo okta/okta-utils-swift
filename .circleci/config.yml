@@ -39,6 +39,17 @@ commands:
       - run:
          name: OktaLogger unit tests"
          command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaLoggerTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16 Pro Max" test
+      - run:
+          when: always
+          name: Pack any xcresult, then remove.
+          command: |
+            pushd /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test
+            find . -type d -name "*.xcresult" | xargs -I{} bash -c "tar zcf {}.tar.gz \"{}\" && rm -rf \"{}\""
+            popd
+            mkdir artifacts
+            mv /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test/*.tar.gz artifacts
+      - store_artifacts:
+         path: "artifacts"
 #      - run:
 #         name: OktaAnalytics unit tests"
 #         command: set -o pipefail && xcodebuild -workspace "OktaLogger.xcworkspace" -scheme "OktaAnalyticsTests" -destination "platform=iOS Simulator,OS=latest,name=iPhone 16" test

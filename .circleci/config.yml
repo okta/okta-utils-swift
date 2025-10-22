@@ -43,11 +43,11 @@ commands:
           when: always
           name: Pack any xcresult, then remove.
           command: |
-            pushd /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test
+            pushd ~/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test
             find . -type d -name "*.xcresult" | xargs -I{} bash -c "tar zcf {}.tar.gz \"{}\" && rm -rf \"{}\""
             popd
             mkdir artifacts
-            mv /Users/distiller/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test/*.tar.gz artifacts
+            mv ~/Library/Developer/Xcode/DerivedData/OktaLogger-brtczdmizdnmmgceswezmvcdqias/Logs/Test/*.tar.gz artifacts
       - store_artifacts:
          path: "artifacts"
 #      - run:

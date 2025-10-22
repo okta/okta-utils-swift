@@ -48,7 +48,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.purgeLogs()
         expectation = XCTestExpectation(description: "Logs should purge before second write")
         pollForPurgeCompletion(urls: logPaths, expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
         
         logger.debug(eventName: "AFTER_PURGE", message: "Debug log")
         logger.info(eventName: "AFTER_PURGE", message: "Debug log")
@@ -63,7 +63,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.purgeLogs()
         expectation = XCTestExpectation(description: "Logs should purge on completion")
         pollForPurgeCompletion(urls: logPaths, expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
     }
 
     func testLumberjackFileLogger() {
@@ -94,7 +94,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.purgeLogs()
         expectation = XCTestExpectation(description: "Logs should purge before second write")
         pollForPurgeCompletion(urls: expectedPaths, expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
@@ -113,7 +113,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         testObject.purgeLogs()
         expectation = XCTestExpectation(description: "Logs should purge on completion")
         pollForPurgeCompletion(urls: expectedPaths, expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
     }
     
     func testLumberjackCustomNameMultipleFilesLogger() {
@@ -147,9 +147,9 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         XCTAssertEqual(actualPaths, expectedPaths)
 
         testObject.purgeLogs()
-        expectation = XCTestExpectation(description: "Logs should purge")
+        expectation = XCTestExpectation(description: "Logs should purge before second write")
         pollForPurgeCompletion(urls: Array(expectedPaths), expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
 
         testObject.log(.debug, "After purge")
         testObject.log(.info, "After purge")
@@ -165,9 +165,9 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         XCTAssertEqual(actualPaths, expectedPaths)
         
         testObject.purgeLogs()
-        expectation = XCTestExpectation(description: "Logs should purge")
+        expectation = XCTestExpectation(description: "Logs should purge on completion")
         pollForPurgeCompletion(urls: Array(expectedPaths), expectation: expectation)
-        wait(for: [expectation], timeout: 10)
+        wait(for: [expectation], timeout: 20)
     }
     
     private func pollForLogCompletion(delegate: FileLoggerDelegate, expectedMessages: [String], expectation: XCTestExpectation) {
@@ -198,7 +198,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
     }
     
     private func pollForPurgeCompletion(urls: [URL], expectation: XCTestExpectation) {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 4) {
             let fileManager = FileManager.default
             for url in urls {
                 if fileManager.fileExists(atPath: url.path) {

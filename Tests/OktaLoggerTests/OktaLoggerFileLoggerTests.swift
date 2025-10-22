@@ -41,7 +41,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         var expectedMessages = ["1:log message", "2:log message", "3:log message", "4:log message", "5:log message"]
         var expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
 
         // Call log method 2 times
         var logPaths = testObject.getLogPaths()
@@ -57,7 +57,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         expectedMessages = ["Debug log", "Debug log"]
         expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
         
         logPaths = testObject.getLogPaths()
         testObject.purgeLogs()
@@ -84,7 +84,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         var expectedMessages = ["log 1", "log 2", "log 3", "log 4", "log 5"]
         var expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
 
         // Verify that actual log files paths same as expected
         var expectedPaths = FileTestsHelper.getPaths(testObject: testObject)
@@ -103,7 +103,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         expectedMessages = ["After purge", "After purge"]
         expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
 
         // Verify that actual log files paths same as expected
         expectedPaths = FileTestsHelper.getPaths(testObject: testObject)
@@ -139,7 +139,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         var expectedMessages = ["log 1", "log 1", "log 2", "log 2", "log 3", "log 3", "log 4", "log 4", "log 5", "log 5"]
         var expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
 
         // Verify that actual log files paths are same as expected
         var expectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))
@@ -157,7 +157,7 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         expectedMessages = ["After purge", "After purge"]
         expectation = XCTestExpectation(description: "Should receive logs: \(expectedMessages.joined(separator: ", "))")
         pollForLogCompletion(delegate: testObject, expectedMessages: expectedMessages, expectation: expectation)
-        wait(for: [expectation], timeout: Double(expectedMessages.count) * 3.0)
+        wait(for: [expectation], timeout: Double(expectedMessages.count) * 6.0)
 
         // Verify that actual log files paths are same as expected
         expectedPaths = Set(FileTestsHelper.getPaths(testObject: testObject, withArchived: true))

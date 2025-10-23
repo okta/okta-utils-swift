@@ -37,9 +37,24 @@ final class SQLiteConnectionBuilderTests: XCTestCase {
         let connectionBuilder = SQLiteConnectionBuilder()
         var configuration = Configuration()
         configuration.maximumReaderCount = 10
+
         let dbPool = try connectionBuilder.databasePool(at: dbURL, walModeEnabled: true, configuration: configuration)
-        let expectedWALFileLocation = cacheDirectory.appendingPathComponent("sqlite.db-wal").path
-        XCTAssertTrue(FileManager.default.fileExists(atPath: expectedWALFileLocation))
+
+        let expectedWALFileLocation = cacheDirectory.appendingPathComponent("sqlite.db-wal")
+        let expectation = XCTestExpectation(description: "WAL file should exist")
+        pollForExistance(url: expectedWALFileLocation, expectation: expectation)
+
+        wait(for: [expectation], timeout: 20)
         XCTAssertEqual(dbPool.configuration.maximumReaderCount, configuration.maximumReaderCount)
+    }
+
+    private func pollForExistance(url: URL, expectation: XCTestExpectation) {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 4) {
+            guard FileManager.default.fileExists(atPath: url.path) else {
+                self.pollForExistance(url: url, expectation: expectation)
+                return
+            }
+            expectation.fulfill()
+        }
     }
 }

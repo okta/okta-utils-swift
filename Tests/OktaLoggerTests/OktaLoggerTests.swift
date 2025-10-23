@@ -187,15 +187,18 @@ class OktaLoggerTests: XCTestCase {
      Verify that massive multithreading along with log level setting does not break
      */
     func testMassiveMultithreading() {
+        let threads = 1000
 
-        var expectation = XCTestExpectation(description: "all logging complete")
         let destination = MockLoggerDestination(identifier: "hello.world", level: .all, defaultProperties: nil)
         var logger = OktaLogger(destinations: [destination])
 
-        var completed = 0
-        let threads = 1000
         let serialQueue = DispatchQueue(label: "serial")
         let concQueue = DispatchQueue(label: "hello", qos: .userInteractive, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        let loggerAccessQueue = DispatchQueue(label: "logger.access")
+
+        var completed = 0
+        var expectation = XCTestExpectation(description: "all logging complete")
+
         for i in 0..<threads {
             concQueue.async {
                 logger.debug(eventName: "\(i)", message: "Thread count: \(i)")
@@ -223,19 +226,24 @@ class OktaLoggerTests: XCTestCase {
 
         // Delete and recreate the logger instance many times throughout the test
         completed = 0
-        expectation = XCTestExpectation(description: "all logging complete")
+        expectation = XCTestExpectation(description: "all logging complete, second run")
+
         for i in 0..<threads {
             concQueue.async {
-                logger.debug(eventName: "\(i)", message: "Thread count: \(i)")
+                loggerAccessQueue.sync {
+                    logger.debug(eventName: "\(i)", message: "Thread count: \(i)")
+                }
             }
             concQueue.async {
-                logger.setLogLevel(level: .all, identifiers: [destination.identifier])
+                loggerAccessQueue.sync {
+                    logger.setLogLevel(level: .all, identifiers: [destination.identifier])
+                }
             }
 
             if i % 10 == 0 {
                 concQueue.async {
                     // update logger to new instance
-                    DispatchQueue.main.async {
+                    loggerAccessQueue.async {
                         let dest = MockLoggerDestination(identifier: UUID().uuidString, level: .all, defaultProperties: nil)
                         logger = OktaLogger(destinations: [dest])
                     }

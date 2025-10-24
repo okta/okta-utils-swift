@@ -108,20 +108,20 @@ PODS:
     - Firebase/AnalyticsWithoutAdIdSupport
     - OktaLogger/Core (~> 1)
     - OktaSQLiteStorage (~> 0.0.4)
-  - OktaLogger (1.3.20):
-    - OktaLogger/Complete (= 1.3.20)
-  - OktaLogger/Complete (1.3.20):
+  - OktaLogger (1.4.1):
+    - OktaLogger/Complete (= 1.4.1)
+  - OktaLogger/Complete (1.4.1):
     - OktaLogger/FileLogger
     - OktaLogger/FirebaseCrashlytics
     - OktaLogger/InstabugLogger
-  - OktaLogger/Core (1.3.20)
-  - OktaLogger/FileLogger (1.3.20):
+  - OktaLogger/Core (1.4.1)
+  - OktaLogger/FileLogger (1.4.1):
     - CocoaLumberjack/Swift (~> 3)
     - OktaLogger/Core
-  - OktaLogger/FirebaseCrashlytics (1.3.20):
+  - OktaLogger/FirebaseCrashlytics (1.4.1):
     - Firebase/Crashlytics (~> 11)
     - OktaLogger/Core
-  - OktaLogger/InstabugLogger (1.3.20):
+  - OktaLogger/InstabugLogger (1.4.1):
     - Instabug (~> 16)
     - OktaLogger/Core
   - OktaSQLiteStorage (0.0.5):
@@ -202,13 +202,13 @@ SPEC CHECKSUMS:
   Instabug: b6290ceceb5d98966aa6f10fbd7970026a916f65
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   OktaAnalytics: ef69be5de7b323a9dc21d76b27a7d5899104a114
-  OktaLogger: 6dbe971237ce7a4ef1d82694acdd3af08d410ca3
+  OktaLogger: d1a706090565885eac739f2c645d4acb96a31702
   OktaSQLiteStorage: 4761bb59ed2d6fc2ba6184a4fdd79f2fbeadc50c
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   SQLCipher: f2e96b3822e3006b379181a0e4fd145f6de29b56
   SwiftLint: 1b7561918a19e23bfed960e40759086e70f4dba5
 
-PODFILE CHECKSUM: ecdf063974058b530adeb0f4a28f92453ba0b076
+PODFILE CHECKSUM: ce31ec112c7a178db3dbbe7a462ab8e546f76898
 
 COCOAPODS: 1.15.2

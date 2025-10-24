@@ -13,14 +13,12 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.default_subspec = "Complete"
 
-  # -------- Complete (iOS only) --------
   s.subspec "Complete" do |complete|
     complete.dependency 'OktaLogger/FileLogger'
     complete.dependency 'OktaLogger/FirebaseCrashlytics'
     complete.dependency 'OktaLogger/InstabugLogger'
   end
 
-  # -------- FileLogger (shared) --------
   s.subspec 'FileLogger' do |fileLogger|
       fileLogger.source_files = [
         'Sources/OktaLogger/FileLoggers/*.{h,m,swift}'
@@ -29,7 +27,6 @@ Pod::Spec.new do |s|
       fileLogger.dependency 'OktaLogger/Core'
   end
 
-  # -------- FirebaseCrashlytics (iOS only) --------
   s.subspec 'FirebaseCrashlytics' do |crashlytics|
     crashlytics.source_files = [
       'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
@@ -38,7 +35,6 @@ Pod::Spec.new do |s|
     crashlytics.dependency 'OktaLogger/Core'
   end
 
-  # -------- InstabugLogger (iOS only) --------
   s.subspec 'InstabugLogger' do |instabugLogger|
       instabugLogger.ios.source_files = [
         'Sources/OktaLogger/InstabugLogger/*'
@@ -47,7 +43,6 @@ Pod::Spec.new do |s|
       instabugLogger.dependency 'OktaLogger/Core'
   end
 
-  # -------- Core (shared) --------
   s.subspec "Core" do |core|
       core.source_files = 'Sources/OktaLogger/LoggerCore/*.{h,m,swift}'
       core.exclude_files = [

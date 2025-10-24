@@ -1,4 +1,4 @@
-platform :ios, '13.0'
+platform :ios, '15.0'
 use_modular_headers!
 
 target 'OktaLogger' do
@@ -41,4 +41,14 @@ target 'OktaAnalyticsTests' do
   pod 'OktaAnalytics', :path => '.'
   pod 'OktaSQLiteStorage', :path => '.'
   pod 'AppCenter', '~>5.0.0'
+end
+
+post_install do |installer_representation|
+  installer_representation.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      # use top level deployment target
+      config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      config.build_settings.delete 'MACOSX_DEPLOYMENT_TARGET'
+    end
+  end
 end

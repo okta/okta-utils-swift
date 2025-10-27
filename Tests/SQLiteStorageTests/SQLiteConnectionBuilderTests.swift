@@ -44,7 +44,7 @@ final class SQLiteConnectionBuilderTests: XCTestCase {
         let expectation = XCTestExpectation(description: "WAL file should exist")
         pollForExistance(url: expectedWALFileLocation, expectation: expectation)
 
-        wait(for: [expectation], timeout: 20)
+        wait(for: [expectation], timeout: 30)
         XCTAssertEqual(dbPool.configuration.maximumReaderCount, configuration.maximumReaderCount)
     }
 

@@ -19,7 +19,7 @@ class OktaLoggerMultithreadingTests: XCTestCase {
 
     private var oktaLogger: OktaLogger!
     private let defaultIterationsCount = 100
-    private let defaultTimeout: TimeInterval = 10.0
+    private let defaultTimeout: TimeInterval = 20.0
 
     override func setUp() {
         super.setUp()

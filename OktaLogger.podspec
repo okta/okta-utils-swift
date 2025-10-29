@@ -12,39 +12,7 @@ Pod::Spec.new do |s|
   s.swift_version = '5.0'
   s.default_subspec = "Complete"
 
-  s.subspec "Complete" do |complete|
-      complete.platforms = { :ios => '15.0', :osx => '10.15' }
-      complete.dependency 'OktaLogger/FileLogger'
-      complete.dependency 'OktaLogger/FirebaseCrashlytics'
-      complete.ios.dependency 'OktaLogger/InstabugLogger'
-  end
-
-  s.subspec 'FileLogger' do |fileLogger|
-      fileLogger.platforms = { :ios => '15.0', :osx => '10.15', :watchos => '7.0' }
-      fileLogger.source_files = [
-        'Sources/OktaLogger/FileLoggers/*.{h,m,swift}'
-      ]
-      fileLogger.dependency 'CocoaLumberjack/Swift', '~>3'
-      fileLogger.dependency 'OktaLogger/Core'
-  end
-
-  s.subspec 'FirebaseCrashlytics' do |crashlytics|
-      crashlytics.platforms = { :ios => '15.0', :osx => '10.15' }
-      crashlytics.source_files = [
-        'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
-      ]
-      crashlytics.dependency 'Firebase/Crashlytics', '~> 11'
-      crashlytics.dependency 'OktaLogger/Core'
-  end
-
-  s.subspec 'InstabugLogger' do |instabugLogger|
-      instabugLogger.platform = :ios, '15.0'
-      instabugLogger.ios.source_files = [
-        'Sources/OktaLogger/InstabugLogger/*'
-      ]
-      instabugLogger.ios.dependency 'Instabug', '~> 16'
-      instabugLogger.dependency 'OktaLogger/Core'
-  end
+  # -------- Cross-platform --------
 
   s.subspec "Core" do |core|
       core.platforms = { :ios => '15.0', :osx => '10.15', :watchos => '7.0' }
@@ -56,6 +24,44 @@ Pod::Spec.new do |s|
         'Sources/OktaLogger/Info.plist',
         'Sources/OktaLogger/InstabugLogger'
       ]
+  end
+
+  s.subspec 'FileLogger' do |fileLogger|
+      fileLogger.platforms = { :ios => '15.0', :osx => '10.15', :watchos => '7.0' }
+      fileLogger.source_files = [
+        'Sources/OktaLogger/FileLoggers/*.{h,m,swift}'
+      ]
+      fileLogger.dependency 'CocoaLumberjack/Swift', '~>3'
+      fileLogger.dependency 'OktaLogger/Core'
+  end
+
+  # -------- iOS & macOS --------
+
+  s.subspec 'FirebaseCrashlytics' do |crashlytics|
+      crashlytics.platforms = { :ios => '15.0', :osx => '10.15' }
+      crashlytics.source_files = [
+        'Sources/OktaLogger/FirebaseCrashlyticsLogger/OktaLoggerFirebaseCrashlyticsLogger.swift'
+      ]
+      crashlytics.dependency 'Firebase/Crashlytics', '~> 11'
+      crashlytics.dependency 'OktaLogger/Core'
+  end
+
+  s.subspec "Complete" do |complete|
+        complete.platforms = { :ios => '15.0', :osx => '10.15' }
+        complete.dependency 'OktaLogger/FileLogger'
+        complete.dependency 'OktaLogger/FirebaseCrashlytics' # no watchOS support
+        complete.ios.dependency 'OktaLogger/InstabugLogger'  # iOS-only
+  end
+
+  # -------- iOS --------
+
+  s.subspec 'InstabugLogger' do |instabugLogger|
+      instabugLogger.platform = :ios, '15.0'
+      instabugLogger.ios.source_files = [
+        'Sources/OktaLogger/InstabugLogger/*'
+      ]
+      instabugLogger.ios.dependency 'Instabug', '~> 16'
+      instabugLogger.dependency 'OktaLogger/Core'
   end
 
 end

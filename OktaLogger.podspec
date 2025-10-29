@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'FileLogger' do |fileLogger|
-      fileLogger.platforms = { :ios => '15.0', :osx => '10.15' }
+      fileLogger.platforms = { :ios => '15.0', :osx => '10.15', :watchos => '7.0' }
       fileLogger.source_files = [
         'Sources/OktaLogger/FileLoggers/*.{h,m,swift}'
       ]
@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec "Core" do |core|
-      core.platforms = { :ios => '15.0', :osx => '10.15' }
+      core.platforms = { :ios => '15.0', :osx => '10.15', :watchos => '7.0' }
       core.source_files = 'Sources/OktaLogger/LoggerCore/*.{h,m,swift}'
       core.exclude_files = [
         'Sources/OktaAnalytics',

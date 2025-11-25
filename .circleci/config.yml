@@ -1,18 +1,13 @@
 version: 2.1
 
 orbs:
-  general-platform-helpers: okta/general-platform-helpers@1.8
-
-parameters:
-  run-on-non-main:
-    type: boolean
-    default: false
+  general-platform-helpers: okta/general-platform-helpers@1.9.4
 
 executors:
   apple-ci-arm-medium:
     macos:
       xcode: 16.4.0
-    resource_class: macos.m1.medium.gen1
+    resource_class: m4pro.medium
     
 commands:
   cleanup_simulators:
@@ -86,23 +81,22 @@ jobs:
           scan-all-projects: true
           skip-unresolved: false
           os: macos
-          run-on-non-main: <<pipeline.parameters.run-on-non-main>>
+          run-on-non-main: true
 
 workflows:
+  security-scan:
+    jobs:
+      - setup
+      - snyk-scan:
+          name: execute-snyk
+          requires:
+            - setup
+          context:
+            - static-analysis
   build-test:
     jobs:
       - setup
       - run_tests:
-          name: tests
-          requires:
-            - setup
-      - snyk-scan:
-          context:
-            - static-analysis
-          name: execute-snyk
-          filters:
-            branches:
-              only:
-                - master
+          name: run-tests
           requires:
             - setup

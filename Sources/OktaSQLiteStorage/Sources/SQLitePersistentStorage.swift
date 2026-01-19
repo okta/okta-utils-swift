@@ -45,12 +45,11 @@ class SQLiteStorage: SQLiteStorageProtocol {
             }
             coordinator.coordinate(writingItemAt: sqliteURL, options: .forMerging, error: &coordinatorError, byAccessor: coordinationBlock)
             if let error = dbError ?? coordinatorError {
-                throw SQLiteStorageError.sqliteError(error.localizedDescription)
+                throw error
             }
             self.sqlitePool = dbPool
         } catch {
-            //logger.error(eventName: "Error on sqlitePool initialization", message: "Error: \(error)")
-            throw SQLiteStorageError.sqliteError(error.localizedDescription)
+            throw SQLiteStorageError.sqliteError(error)
         }
     }
 
@@ -79,7 +78,7 @@ class SQLiteStorage: SQLiteStorageProtocol {
         } catch let error as SQLiteStorageError {
             throw error
         } catch {
-            throw SQLiteStorageError.sqliteError(error.localizedDescription)
+            throw SQLiteStorageError.sqliteError(error)
         }
     }
 

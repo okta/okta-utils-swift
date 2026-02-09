@@ -15,7 +15,7 @@ import Foundation
 public enum SQLiteStorageError: Error {
     case generalError(String)
     case migrationError(MigrationError)
-    case sqliteError(String)
+    case sqliteError(Error)
     case internalError(String)
 }
 

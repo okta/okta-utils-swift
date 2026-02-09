@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "OktaAnalytics"
-  s.version          = "2.2"
+  s.version          = "3.0"
   s.summary          = "Implementation of Analytics logger destination"
   s.description      = "Implementation of Analytics logger destination. Requires OktaLogger/Core"
   s.homepage         = "https://github.com/okta/okta-logger-swift"
@@ -17,6 +17,6 @@ Pod::Spec.new do |s|
   s.source_files = 'Sources/OktaAnalytics/**/*.{h,m,swift}'
   s.dependency 'AppCenter','~>5'
   s.dependency 'OktaLogger/Core', '~>1'
-  s.dependency 'OktaSQLiteStorage', '~>0.0.4'
+  s.dependency 'OktaSQLiteStorage', '~>0.1.0'
   s.dependency 'Firebase/AnalyticsWithoutAdIdSupport'
 end

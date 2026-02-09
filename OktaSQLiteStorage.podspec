@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaSQLiteStorage'
-  s.version          = '0.0.5'
+  s.version          = '0.1.0'
   s.summary          = 'Okta SQLite storage framework'
   s.description      = <<-DESC
 Okta SQLite storage wrapper on top of GRDB framework

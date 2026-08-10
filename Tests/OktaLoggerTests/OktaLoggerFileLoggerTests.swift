@@ -170,6 +170,42 @@ class OktaLoggerFileLoggerTests: XCTestCase {
         wait(for: [expectation], timeout: 20)
     }
     
+    func testDebugMessageDoesNotLeakToErrorLog() {
+        let debugFileLogger = OktaLoggerFileLogger(
+            logConfig: FileTestsHelper.defaultFileConfig,
+            identifier: "com.test.debug",
+            level: .all,
+            defaultProperties: nil
+        )
+        let errorFileLogger = OktaLoggerFileLogger(
+            logConfig: FileTestsHelper.defaultFileConfig,
+            identifier: "com.test.error",
+            level: .error,
+            defaultProperties: nil
+        )
+
+        let logger = OktaLogger(destinations: [debugFileLogger, errorFileLogger])
+
+        // Log a debug message — OktaLogger correctly sends this only to debugFileLogger
+        // but the shared DDLog bus leaks it into errorFileLogger's file
+        logger.debug(eventName: "TEST", message: "debug only message")
+
+        let expectation = XCTestExpectation(description: "Error log should not contain debug message")
+
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
+            errorFileLogger.getLogs { logs in
+                let allContent = logs.compactMap { String(data: $0, encoding: .utf8) }.joined()
+                XCTAssertFalse(
+                    allContent.contains("debug only message"),
+                    "Debug message leaked into error log — shared DDLog bus bug"
+                )
+                expectation.fulfill()
+            }
+        }
+
+        wait(for: [expectation], timeout: 15)
+    }
+
     private func pollForLogCompletion(delegate: FileLoggerDelegate, expectedMessages: [String], expectation: XCTestExpectation) {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 3) {
             delegate.getLogs { result in

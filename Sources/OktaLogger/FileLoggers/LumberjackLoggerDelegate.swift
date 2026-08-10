@@ -21,6 +21,7 @@ import CocoaLumberjack
 class LumberjackLoggerDelegate: FileLoggerDelegate {
 
     var fileLogger: DDFileLogger
+    private let ddlog = DDLog()
 
     public init(_ logConfig: OktaLoggerFileLoggerConfig) {
         fileLogger = {
@@ -41,7 +42,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         if let maxFileSize = logConfig.maximumFileSize {
             fileLogger.maximumFileSize = maxFileSize
         }
-        DDLog.add(fileLogger)
+        ddlog.add(fileLogger)
     }
 
     /**
@@ -117,24 +118,34 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      Translate log message into DDLog message
      */
     func log(_ level: OktaLoggerLogLevel, _ message: String) {
-        switch level {
-        case .debug:
-            return DDLogDebug("\(message)")
-        case .info, .uiEvent:
-            return DDLogInfo("\(message)")
-        case .error:
-            return DDLogError("\(message)")
-        case .warning:
-            return DDLogWarn("\(message)")
-        default:
-            return DDLogInfo("\(message)")
-        }
+        let (ddLevel, ddFlag): (DDLogLevel, DDLogFlag) = {
+            switch level {
+            case .debug:          return (.debug, .debug)
+            case .info, .uiEvent: return (.info, .info)
+            case .error:          return (.error, .error)
+            case .warning:        return (.warning, .warning)
+            default:              return (.info, .info)
+            }
+        }()
+        let logMessage = DDLogMessage(
+            message: message,
+            level: ddLevel,
+            flag: ddFlag,
+            context: 0,
+            file: #file,
+            function: nil,
+            line: 0,
+            tag: nil,
+            options: .copyFile,
+            timestamp: nil
+        )
+        ddlog.log(asynchronous: true, message: logMessage)
     }
 
     /**
      Remove all Loggers during deallocate
      */
     deinit {
-        DDLog.remove(fileLogger)
+        ddlog.remove(fileLogger)
     }
 }

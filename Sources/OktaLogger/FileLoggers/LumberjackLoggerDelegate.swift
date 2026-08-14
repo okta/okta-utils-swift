@@ -118,28 +118,18 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      Translate log message into DDLog message
      */
     func log(_ level: OktaLoggerLogLevel, _ message: String) {
-        let (ddLevel, ddFlag): (DDLogLevel, DDLogFlag) = {
-            switch level {
-            case .debug:          return (.debug, .debug)
-            case .info, .uiEvent: return (.info, .info)
-            case .error:          return (.error, .error)
-            case .warning:        return (.warning, .warning)
-            default:              return (.info, .info)
-            }
-        }()
-        let logMessage = DDLogMessage(
-            message: message,
-            level: ddLevel,
-            flag: ddFlag,
-            context: 0,
-            file: #file,
-            function: nil,
-            line: 0,
-            tag: nil,
-            options: .copyFile,
-            timestamp: nil
-        )
-        ddlog.log(asynchronous: true, message: logMessage)
+        switch level {
+        case .debug:
+            return DDLogDebug("\(message)", ddlog: ddlog)
+        case .info, .uiEvent:
+            return DDLogInfo("\(message)", ddlog: ddlog)
+        case .error:
+            return DDLogError("\(message)", ddlog: ddlog)
+        case .warning:
+            return DDLogWarn("\(message)", ddlog: ddlog)
+        default:
+            return DDLogInfo("\(message)", ddlog: ddlog)
+        }
     }
 
     /**

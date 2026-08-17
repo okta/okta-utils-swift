@@ -21,6 +21,7 @@ import CocoaLumberjack
 class LumberjackLoggerDelegate: FileLoggerDelegate {
 
     var fileLogger: DDFileLogger
+    private let ddlog = DDLog()
 
     public init(_ logConfig: OktaLoggerFileLoggerConfig) {
         fileLogger = {
@@ -41,7 +42,7 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
         if let maxFileSize = logConfig.maximumFileSize {
             fileLogger.maximumFileSize = maxFileSize
         }
-        DDLog.add(fileLogger)
+        ddlog.add(fileLogger)
     }
 
     /**
@@ -119,15 +120,15 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
     func log(_ level: OktaLoggerLogLevel, _ message: String) {
         switch level {
         case .debug:
-            return DDLogDebug("\(message)")
+            return DDLogDebug("\(message)", ddlog: ddlog)
         case .info, .uiEvent:
-            return DDLogInfo("\(message)")
+            return DDLogInfo("\(message)", ddlog: ddlog)
         case .error:
-            return DDLogError("\(message)")
+            return DDLogError("\(message)", ddlog: ddlog)
         case .warning:
-            return DDLogWarn("\(message)")
+            return DDLogWarn("\(message)", ddlog: ddlog)
         default:
-            return DDLogInfo("\(message)")
+            return DDLogInfo("\(message)", ddlog: ddlog)
         }
     }
 
@@ -135,6 +136,6 @@ class LumberjackLoggerDelegate: FileLoggerDelegate {
      Remove all Loggers during deallocate
      */
     deinit {
-        DDLog.remove(fileLogger)
+        ddlog.remove(fileLogger)
     }
 }
